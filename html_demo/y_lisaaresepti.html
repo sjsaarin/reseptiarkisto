@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link href="../css/bootstrap.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css" rel="stylesheet">
+        <link href="../css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="y_reseptit.html">Reseptit</a></li>
+            <li><a href="y_ehdotetut.html">Ehdotetut</a></li>
+            <li><a href="y_menut.html">Menut</a></li>
+        </ul>    
+        <div class="container">
+            <h1>Lisaa resepti</h1>
+            <form class="form-vertical" role="form" action="#" method="POST">
+                <h3>Kuva</h3>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Lisaa kuva</button>
+                    </div>
+                </div>
+                <h3>Raakaineet</h3>
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Raakaine</th>
+                        <th>Määrä</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Pork chop</td>
+                        <td>300g</td>
+                        <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-cutlery"></span>muokkaa</button></td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Kielbasa tail</td>
+                        <td>50g</td>
+                        <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-cutlery"></span>muokkaa</button></td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Eiusmod bresaola</td>
+                        <td>3rkl</td>
+                        <td><button type="button" class="btn btn-xs btn-default"><span class="glyphicon glyphicon-cutlery"></span>muokkaa</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                    
+                <div class="form-group">
+                    <label for="inputRaakaine" class="col-md-2 control-label">Lisaa raakaine</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="inputRaakaine" name="raakaine" placeholder="raakaine">
+                    </div>
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Lisää</button>
+                    </div>
+                </div>
+                <h3>Valmistusohjeet</h3>
+                <p>Bacon ipsum dolor sit amet turducken ham hock sed deserunt pork chop shank porchetta. Consectetur tri-tip sint, ground round biltong dolor eu sausage elit turducken pork chop tenderloin mollit strip steak hamburger. Ex reprehenderit strip steak pariatur. In incididunt proident ea andouille shank elit nulla drumstick tenderloin tempor. Pastrami do flank rump pork ad meatball reprehenderit ut andouille beef ribs pariatur.</p>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Muokkaa</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Tallenna resepti</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

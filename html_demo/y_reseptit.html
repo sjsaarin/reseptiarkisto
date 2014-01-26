@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+    <link href="../css/bootstrap.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.css" rel="stylesheet">
+        <link href="../css/main.css" rel="stylesheet">
+    </head>
+    <body>
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="y_reseptit.html">Reseptit</a></li>
+            <li><a href="y_ehdotetut.html">Ehdotetut</a></li>
+            <li><a href="y_menut.html">Menut</a></li>
+        </ul>
+        <div class="container">
+            <br>
+            <br>
+            <p>
+                <a href="y_lisaaresepti.html">Lisää uusi resepti</a>
+            </p>
+            <h1>Hae reseptejä</h1>
+            <form class="form-vertical" role="form" action="#" method="POST">
+                <div class="form-group">
+                    <label for="inputHakusana" class="col-md-2 control-label">Hakusana</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="inputHakusana" name="hakusana" placeholder="Hakusana">
+                    </div>
+                </div>
+                <p>Rajoita hakua</p>
+                <div class="form-group">
+                    <label for="inputPassword1" class="col-md-2 control-label">Pääraakaine</label>
+                    <div class="col-md-10">
+                        <input type="password" class="form-control" id="inputPassword1" name="password" placeholder="Liha">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword1" class="col-md-2 control-label">Kategoria</label>
+                    <div class="col-md-10">
+                        <input type="password" class="form-control" id="inputPassword1" name="password" placeholder="Pääruoka">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Hae reseptiä</button>
+                </div>
+            </div>
+            </form>    
+            <h2>Tulokset</h2>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Resepti</th>
+                  <th>Kategoria</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><a href="y_resepti.html">Gumbo</a></td>
+                  <td>Pääruoka</td>
+                  <td><button type="button" class="btn btn-xs btn-default">muokkaa</button></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><a href="y_resepti.html">Ribsit</a></td>
+                  <td>Pääruoka</td>
+                  <td><button type="button" class="btn btn-xs btn-default">muokkaa</button></td>
+                <tr>
+                <tr>
+                  <td>3</td>
+                  <td><a href="y_resepti.html">Banoffee</a></td>
+                  <td>Jälkiruoka</td>
+                  <td><button type="button" class="btn btn-xs btn-default">muokkaa</button></td>
+                <tr>
+                <tr>
+                  <td>4</td>
+                  <td><a href="y_resepti.html">Moussaka</a></td>
+                  <td>Pääruoka</td>
+                  <td><button type="button" class="btn btn-xs btn-default">muokkaa</button></td>
+                <tr>
+                <tr>
+                  <td>5</td>
+                  <td><a href="y_resepti.html">Mezet</a></td>
+                  <td>Alkuruoka</td>
+                  <td><button type="button" class="btn btn-xs btn-default">muokkaa</button></td>
+                <tr>
+                <tr>
+                  <td>6</td>
+                  <td><a href="y_resepti.html">Sangria</a></td>
+                  <td>Juoma</td>
+                  <td><button type="button" class="btn btn-xs btn-default">muokkaa</button></td>
+                <tr>
+              </tbody>
+            </table>
+            <p><a href = "#"><< 1 2 3 4 >></a></p>
+        </div>
+    </body>
+</html>
