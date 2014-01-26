@@ -6,7 +6,7 @@
 <body>
   <h1><?php echo $tervehdys; ?></h1>
   <a href="esittelysivu.html">Esittelysivu</a>
-  <a href="html_demo/index.html">käyttöliittymädemo</a>
+  <a href="html-demo/index.html">käyttöliittymädemo</a>
   <a href="yhteystesti.php">yhteystesti</a>
 </body>
 </html>
