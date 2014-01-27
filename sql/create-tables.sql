@@ -1,69 +1,66 @@
 
-CREATE TABLE Kayttajat
+CREATE TABLE kayttajat
 (
-    ID SERIAL PRIMARY KEY,
-    EtuNimi varchar(30),
-    SukuNimi varchar(30),
-    Kayttajatunnus varchar(8) NOT NULL,
-    Salasana varchar(128) NOT NULL,
-    Rooli INTEGER NOT NULL
+    id SERIAL PRIMARY KEY,
+    etunimi varchar(30),
+    sukunimi varchar(30),
+    kayttajatunnus varchar(8) NOT NULL,
+    salasana varchar(128) NOT NULL,
+    rooli INTEGER NOT NULL
 );
 
-CREATE TABLE Raakaaineet
+CREATE TABLE raakaaineet
 (
-    ID SERIAL PRIMARY KEY,
-    Nimi varchar(30) NOT NULL,
-    Kalorit INTEGER,
-    Hiilarit INTEGER,
-    Proteiinit INTEGER,
-    Rasvat INTEGER,
-    Hinta INTEGER
+    id SERIAL PRIMARY KEY,
+    nimi varchar(30) NOT NULL,
+    kalorit INTEGER,
+    hiilarit INTEGER,
+    proteiinit INTEGER,
+    rasvat INTEGER,
+    hinta INTEGER
 );
 
-CREATE TABLE Kategoriat
+CREATE TABLE kategoriat
 (
-    ID SERIAL PRIMARY KEY,
-    Nimi varchar(20) NOT NULL
+    id SERIAL PRIMARY KEY,
+    nimi varchar(20) NOT NULL
 );
 
-CREATE TABLE Reseptit
+CREATE TABLE reseptit
 (
-    ID SERIAL PRIMARY KEY,
-    Nimi varchar(30) NOT NULL,
-    Kategoria INTEGER REFERENCES Kategoriat(ID),
-    Omistaja INTEGER REFERENCES Kayttajat(ID),
-    Juomasuositus varchar(50),
-    Valmistusohje varchar(3000)
+    id SERIAL PRIMARY KEY,
+    nimi varchar(30) NOT NULL,
+    kategoria INTEGER REFERENCES kategoriat(id),
+    omistaja INTEGER REFERENCES kayttajat(id),
+    lahde varchar(100),
+    juomasuositus varchar(50),
+    valmistusohje varchar(3000)
 );
 
-CREATE TABLE ReseptinRaakaaineet
+CREATE TABLE reseptin_raakaaineet
 (
-    ReseptinID INTEGER REFERENCES Reseptit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-    RaakaaineenID INTEGER REFERENCES Raakaineet(ID) ON UPDATE CASCADE,
-    CONSTRAINT ReseptinRaakaineetPK PRIMARY KEY (ReseptinID, RaakaaineenID)
-);
-
-
-CREATE TABLE Kuvat
-(
-    ID SERIAL PRIMARY KEY,
-    Kuva bytea NOT NULL
-);
-
-CREATE TABLE ReseptinKuvat
-(
-    ReseptinID INTEGER REFERENCES Reseptit(ID) ON UPDATE CASCADE ON DELETE CASCADE,
-    KuvanID INTEGER REFERENCES Raakaineet(ID) ON UPDATE CASCADE,
-    CONSTRAINT ReseptinKuvatPK PRIMARY KEY (ReseptinID, KuvanID)
+    reseptin_id INTEGER REFERENCES reseptit(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    raakaaineen_id INTEGER REFERENCES raakaaineet(id) ON UPDATE CASCADE,
+    maara INTEGER NOT NULL,
+    yksikko varchar(10) NOT NULL,
+    CONSTRAINT reseptin_raakaineet_pkey PRIMARY KEY (reseptin_id, raakaaineen_id)
 );
 
 
-CREATE TABLE Menut
+CREATE TABLE kuvat
 (
-    ID SERIAL PRIMARY KEY,
-    Alkuruoka INTEGER REFERENCES Reseptit(ID),
-    Valiruoka1 INTEGER REFERENCES Reseptit(ID),
-    Paaruoka INTEGER REFERENCES Reseptit(ID),
-    Valiruoka2 INTEGER REFERENCES Reseptit(ID),
-    Jalkiruoka INTEGER REFERENCES Reseptit(ID)
+    id SERIAL PRIMARY KEY,
+    reseptin_id INTEGER REFERENCES reseptit(id) NOT NULL,
+    kuva bytea NOT NULL
+);
+
+
+CREATE TABLE menut
+(
+    id SERIAL PRIMARY KEY,
+    alkuruoka INTEGER REFERENCES reseptit(id),
+    valiruoka1 INTEGER REFERENCES reseptit(id),
+    paaruoka INTEGER REFERENCES reseptit(id),
+    valiruoka2 INTEGER REFERENCES reseptit(id),
+    jalkiruoka INTEGER REFERENCES reseptit(id)
 );
