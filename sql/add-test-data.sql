@@ -16,6 +16,12 @@ VALUES ('Suola');
 INSERT INTO kayttajat (etunimi, sukunimi, kayttajatunnus, salasana, rooli) 
 VALUES ('Foo','Bar','admin','qwertyui',1);
 
+INSERT INTO kayttajat (etunimi, sukunimi, kayttajatunnus, salasana, rooli) 
+VALUES ('Manny','Calavera','mcalaver','fandango',0);
+
+INSERT INTO kayttajat (etunimi, sukunimi, kayttajatunnus, salasana, rooli) 
+VALUES ('Nameless','One','none','torment',0);
+
 INSERT into reseptit (nimi, valmistusohje)
 VALUES('Leipä','Sekoita aineet, paista uunissa');
 
