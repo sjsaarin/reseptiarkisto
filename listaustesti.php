@@ -1,8 +1,16 @@
 <?php
     require 'libs/tietokantayhteys.php';
+    require 'libs/common.php';
     require 'libs/models/kayttaja.php';
     
-    $lista = Kayttaja::getKayttajat();
+    session_start();
+    if (onkoKirjautunut()){
+        $lista = Kayttaja::getKayttajat();
+    } else {
+        exit();
+    }
+    
+    
     
 ?><!DOCTYPE HTML>
 <html>
@@ -28,9 +36,9 @@
                     <?php foreach($lista as $asia): ?>
                     <tr>
                         <td><?php echo $asia->getId(); ?></td>
-                        <td><?php echo $asia->getName(); ?></td>
-                        <td><?php echo $asia->getUsername(); ?></td>
-                        <td><?php echo $asia->getRole(); ?>
+                        <td><?php echo $asia->getNimi(); ?></td>
+                        <td><?php echo $asia->getKayttajatunnus(); ?></td>
+                        <td><?php echo $asia->getRooli(); ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
