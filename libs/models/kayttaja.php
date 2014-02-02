@@ -12,6 +12,7 @@ class Kayttaja {
     private $salasana;
     private $rooli;
 
+    
     public function __construct($id, $etunimi, $sukunimi, $kayttajatunnus, $salasana, $rooli) {
         $this->id = $id;
         $this->etunimi = $etunimi;
@@ -21,7 +22,18 @@ class Kayttaja {
         $this->rooli = $rooli;
     }
     
-  public static function getKayttajat() {
+    public function lisaaKantaan() {
+        $sql = "INSERT INTO kayttajat(etunimi, sukunimi, kayttajatunnus, salasana, rooli) VALUES(?,?,?,?,?) RETURNING id";
+        $kysely = getTietokantayhteys()->prepare($sql);
+
+        $ok = $kysely->execute(array($this->getEtunimi(), $this->getSukunimi(), $this->getKayttajatunnus(), $this->getSalasana, $this->getRooli));
+        if ($ok) {
+            $this->id = $kysely->fetchColumn();
+        }
+        return $ok;
+    }
+    
+    public static function getKayttajat() {
         $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli from kayttajat";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
     
@@ -55,55 +67,71 @@ class Kayttaja {
         }
     }
     
-    public static function tuhoaKayttaja($id){
+    public static function poistaKannasta($id){
         
         $sql = "DELETE from kayttajat where id = ?";
         $kysely = getTietokantayhteys()->prepare($sql);
-        $kysely->execute();
+        $kysely->execute(array($id));
         
     }
     
-    
-    public function getId() {
-        return $this->id;
-    }
-    
-    public function setId($id) {
-        $this->id = $id;
-    }
-    
+    //palauttaa koko nimen
     public function getNimi() {
         return $this->etunimi . " " . $this->sukunimi;
     }
     
+    //asettaa koko nimen
     public function setNimi($etunimi, $sukunimi){
         $this->etunimi = $etunimi;
         $this->sukunimi = $sukunimi;        
     }
-    
-    public function getKayttajatunnus() {
-        return $this->kayttajatunnus;
+        
+    public function getId() {
+        return $this->id;
     }
     
-    public function setKayttajatunnus($kayttajatunnus) {
-        $this->kayttajatunnus = $kayttajatunnus;
+    public function getEtunimi() {
+        return $this->etunimi;
+    }
+
+    public function getSukunimi() {
+        return $this->sukunimi;
+    }
+
+    public function getSalasana() {
+        return $this->salasana;
+    }
+
+    public function getKayttajatunnus() {
+        return $this->kayttajatunnus;
     }
     
     public function getRooli(){
         return $this->rooli;
     }
     
+    public function setId($id) {
+        $this->id = $id;
+    }
+    
+    public function setEtunimi($etunimi) {
+        $this->etunimi = $etunimi;
+    }
+
+    public function setSukunimi($sukunimi) {
+        $this->sukunimi = $sukunimi;
+    }
+    
     public function setRooli($rooli){
         $this->rooli = $rooli;
     }
     
-    public function toString(){
-        $rooli = '';
-        if ($this->rooli === 1 ) {
-            $rooli = 'ylläpitäjä';
-        } else {
-            $rooli = 'käyttäjä';
-        }
-        return 'id: ' . $this->id . ', nimi: '. $this->etunimi . ' ' . $this->sukunimi . ", käyttäjätunnus: " . $this->kayttajatunnus . ", " . $rooli;
+    public function setKayttajatunnus($kayttajatunnus) {
+        $this->kayttajatunnus = $kayttajatunnus;
     }
+    
+    public function setSalasana($salasana) {
+        $this->salasana = $salasana;
+    }
+    
 }

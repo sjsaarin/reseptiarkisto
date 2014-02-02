@@ -17,7 +17,7 @@
                     <td><?php echo $asia->getNimi(); ?></td>
                     <td><?php echo $asia->getKayttajatunnus(); ?></td>
                     <td><?php echo $asia->getRooli(); ?></td>
-                    <?php if (!empty($data->virhe)): ?> 
+                    <?php if (!empty($data->virhe)){} ?> 
                 </tr>
             <?php endforeach; ?>
         </tbody>
