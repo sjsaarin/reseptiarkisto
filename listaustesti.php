@@ -3,14 +3,7 @@
     require 'libs/common.php';
     require 'libs/models/kayttaja.php';
     
-    session_start();
-    if (onkoKirjautunut()){
-        $lista = Kayttaja::getKayttajat();
-    } else {
-        exit();
-    }
-    
-    
+    $lista = Kayttaja::getKayttajat();
     
 ?><!DOCTYPE HTML>
 <html>

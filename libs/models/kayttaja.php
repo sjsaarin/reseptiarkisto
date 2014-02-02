@@ -53,7 +53,15 @@ class Kayttaja {
 
             return $kayttaja;
         }
-  }
+    }
+    
+    public static function tuhoaKayttaja($id){
+        
+        $sql = "DELETE from kayttajat where id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute();
+        
+    }
     
     
     public function getId() {

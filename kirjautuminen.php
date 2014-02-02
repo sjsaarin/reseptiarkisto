@@ -30,7 +30,7 @@
     if (!empty($kayttaja)){
         session_start();
         $_SESSION['kayttaja']=$kayttaja;
-        header('Location: listaustesti.php');
+        header('Location: kayttaja.php');
     } else {
         naytaNakyma("views/login.php", array(
             'title' => "Kirjautuminen",
