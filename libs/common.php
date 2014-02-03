@@ -13,6 +13,6 @@
         if (isset($_SESSION['kayttaja'])){
             return true;
         } else {
-            header('Location: login.php');
+            naytaNakyma('views/login.php');
         }
     }

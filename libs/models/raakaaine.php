@@ -31,25 +31,31 @@ class Raakaaine {
         return $ok;
     }
     
-    public static function getRaakaineet(){
-        $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli from kayttajat";
+    public static function getRaakaaineet(){
+        $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta from raakaaineet";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
     
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $kayttaja = new Kayttaja($tulos->id, $tulos->etunimi, $tulos->sukunimi, $tulos->kayttajatunnus, $tulos->salasana, $tulos->rooli); 
-                $tulokset[] = $kayttaja;
+                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta); 
+                $tulokset[] = $raakaaine;
             }
         return $tulokset;
         
     }
     
-    public static function getRaakaineRaakaineella(){
+    public static function getRaakaaineRaakaaineella(){
         
     }
     
-    public static function getRaakaineIdlla(){
+    public static function getRaakaaineIdlla(){
         
+    }
+    
+    public static function raakaaineidenLkm(){
+        $sql = "SELECT COUNT(*) from raakaaineet";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
+        return $kysely->fetchColumn(0);
     }
     
     //getters

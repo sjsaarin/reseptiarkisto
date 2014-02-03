@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 class Resepti {
     private $id;
     private $nimi;
@@ -17,6 +20,25 @@ class Resepti {
         $this->lahde = $lahde;
         $this->juomasuositus = $juomasuositus;
         $this->valmistusohje = $valmistusohje;
+    }
+    
+    public static function getReseptit(){
+        $sql = "SELECT id, nimi from reseptit";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
+    
+        $tulokset = array();
+            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+                $resepti = new Resepti($tulos->id, $tulos->nimi, null, null, null, null, null); 
+                $tulokset[] = $resepti;
+            }
+        return $tulokset;
+        
+    }
+    
+    public static function reseptienLkm(){
+        $sql = "SELECT COUNT(*) from reseptit";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
+        return $kysely->fetchColumn(0);
     }
     
     public function getId() {
@@ -75,8 +97,4 @@ class Resepti {
         $this->valmistusohje = $valmistusohje;
     }
 
-
-
 }
-
-?>

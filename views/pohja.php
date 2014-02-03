@@ -9,6 +9,11 @@
         <link href="css/main.css" rel="stylesheet">
     </head>
     <body>
+        <ul class="nav nav-tabs">
+            <li><a href="resepti.php">Reseptit</a></li>
+            <li><a href="raakaaine.php">Raaka-aineet</a></li>
+            <li><a href="kayttaja.php">Käyttäjä</a></li>
+        </ul>
         <div id="content">
             <?php if (!empty($data->virhe)): ?>
                 <div class="alert alert-danger"><?php echo $data->virhe; ?></div>

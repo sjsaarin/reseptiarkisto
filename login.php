@@ -4,5 +4,8 @@
     include "libs/naytavirheet.php";
     
     require_once "libs/common.php";
-  
-    naytaNakyma("views/login.php", array('title' => "Kirjautuminen"));
+    
+    session_start();
+    if (onkoKirjautunut()){
+        header('Location: resepti.php');
+    }
