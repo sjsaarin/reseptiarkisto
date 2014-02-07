@@ -30,6 +30,7 @@
     if (!empty($kayttaja)){
         session_start();
         $_SESSION['kayttaja']=$kayttaja;
+        $_SESSION['kayttajan_rooli']=$kayttaja->getRooli();
         header('Location: kayttaja.php');
     } else {
         naytaNakyma("views/login.php", array(

@@ -10,13 +10,13 @@
     </head>
     <body>
         <ul class="nav nav-tabs">
-            <li><a href="resepti.php">Reseptit</a></li>
-            <li><a href="raakaaine.php">Raaka-aineet</a></li>
+            <li><a href="reseptit.php">Reseptit</a></li>
+            <li><a href="raakaaineet.php">Raaka-aineet</a></li>
             <li><a href="kayttaja.php">Käyttäjä</a></li>
         </ul>
-        <div id="content">
+        <div class="container" id="content">
             <?php if (!empty($data->virhe)): ?>
-                <div class="alert alert-danger"><?php echo $data->virhe; ?></div>
+                <div class="alert alert-danger">Virhe: <?php echo $data->virhe; ?></div>
             <?php endif; ?>
             <?php require $sivu; ?>
         </div>

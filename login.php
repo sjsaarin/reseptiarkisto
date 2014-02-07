@@ -7,5 +7,5 @@
     
     session_start();
     if (onkoKirjautunut()){
-        header('Location: resepti.php');
+        header('Location: reseptit.php');
     }

@@ -16,3 +16,11 @@
             naytaNakyma('views/login.php');
         }
     }
+    
+    function onkoAdmin(){
+        if ($_SESSION['kayttajan_rooli'] === 1){
+            return true;
+        } else {
+            return false;
+        }
+    }

@@ -1,5 +1,5 @@
 <?php
-
+    
     include "libs/naytavirheet.php";
     
     require_once 'libs/common.php';
@@ -8,12 +8,17 @@
     
     session_start();
     if (onkoKirjautunut()){
+        $id = (int)$_GET['id'];
         
-        $raakaaineet = Raakaaine::getRaakaaineet();
-        $lukumaara = Raakaaine::raakaaineidenLkm();
-        naytaNakyma("views/raakaaineet_listaa.php", array(
-        'title' => "listaus",
-        'raakaaineet' => $raakaaineet,
-        'lkm' => $lukumaara
-        ));
+        $raakaaine = Raakaaine::hae($id);
+        if ($raakaaine != null) {
+            naytaNakyma("views/raakaaine_nayta.php", array(
+                'raakaaine' => $raakaaine
+            ));
+        } else {
+            naytaNakyma("views/raakaaine_nayta.php", array(
+                'raakaaine' => null,
+                'virhe' => 'Raaka-ainetta ei löytynyt'
+            ));
+        }
     }
