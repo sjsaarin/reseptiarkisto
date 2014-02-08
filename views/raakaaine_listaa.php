@@ -13,7 +13,7 @@
     <tbody>
         <?php foreach ($data->raakaaineet as $asia): ?>
             <tr>
-                <td><a href="raakaaine.php?id=<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></a></td>
+                <td><a href="raakaaineet.php?id=<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></a></td>
                 <td><?php echo $asia->getKalorit(); ?></td>
                 <td><?php echo $asia->getHiilarit(); ?></td>
                 <td><?php echo $asia->getProteiinit(); ?></td>
@@ -26,5 +26,5 @@
 <p>Raaka-aineita yhteensä: <?php echo $data->lkm ?></p>
 <br>
 <?php if (onkoAdmin()): ?>
-<p><a href="lisaaraakaaine.php">Lisää uusi raaka-aine</a></p>
+<p><a href="raakaaine.php?lisaa">Lisää uusi raaka-aine</a></p>
 <?php endif; ?>

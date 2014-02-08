@@ -24,6 +24,7 @@ class Raakaaine {
         $this->hinta = $hinta;
     }
     
+    //CREATE
     public function lisaaKantaan(){
         $sql = "INSERT INTO raakaaineet(nimi, kalorit, hiilarit, proteiinit, rasvat, hinta) VALUES(?,?,?,?,?,?) RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -35,6 +36,7 @@ class Raakaaine {
         return $ok;
     }
     
+    //READ
     public static function getRaakaaineet(){
         $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta from raakaaineet order by nimi";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
@@ -57,6 +59,27 @@ class Raakaaine {
         } else {
             return null;
         }
+    }
+    
+    //UPDATE
+    public function paivitaKantaan(){
+        $sql = "UPDATE raakaaineet SET nimi=?, kalorit=?, hiilarit=?, proteiinit=?, rasvat=?, hinta=? WHERE id=? RETURNING id";
+        $kysely = getTietokantayhteys()->prepare($sql);
+
+        $ok = $kysely->execute(array($this->getNimi(), $this->getKalorit(), $this->getHiilarit(), $this->getProteiinit(), $this->getRasvat(), $this->getHinta(), $this->getId()));
+        if ($ok) {
+            $this->id = $kysely->fetchColumn();
+        }
+        return $ok;
+    }
+    
+    //DELETE
+    public static function poistaKannasta($poistettavat){
+        $sql = "DELETE from raakaaineet where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        return $kysely->execute($poistettavat);
+        //tähän joku tarkistus että poisto(t) todella onnistuivat, nyt palauttaa aina true
+       
     }
     
     public static function raakaaineidenLkm(){
@@ -113,7 +136,7 @@ class Raakaaine {
         $this->nimi = $nimi;
         
         if (trim($this->nimi) == ''){
-            $this->virheet['nimi'] = "Nimi ei saa olla tyhjä.";
+            $this->virheet['nimi'] = "Nimi ei saa olla tyhjä";
         } else{
             unset($this->virheet['nimi']);
         }
@@ -122,7 +145,7 @@ class Raakaaine {
     public function setHiilarit($hiilarit) {
         $this->hiilarit = $hiilarit;
         if (!is_int($this->hiilarit)){
-            $this->virheet['hiilarit'] = "söytteen tulee olla kokonaisluku";
+            $this->virheet['hiilarit'] = "Syötteen tulee olla kokonaisluku";
         } else{
             unset($this->virheet['hiilarit']);
         }
@@ -131,7 +154,7 @@ class Raakaaine {
     public function setProteiinit($proteiinit) {
         $this->proteiinit = $proteiinit;
         if (!is_int($this->proteiinit)){
-            $this->virheet['proteiinit'] = "söytteen tulee olla kokonaisluku";
+            $this->virheet['proteiinit'] = "Syötteen tulee olla kokonaisluku";
         } else{
             unset($this->virheet['proteiinit']);
         }
@@ -140,7 +163,7 @@ class Raakaaine {
     public function setRasvat($rasvat) {
         $this->rasvat = $rasvat;
         if (!is_int($this->rasvat)){
-            $this->virheet['rasvat'] = "söytteen tulee olla kokonaisluku";
+            $this->virheet['rasvat'] = "Syötteen tulee olla kokonaisluku";
         } else{
             unset($this->virheet['rasvat']);
         }
@@ -149,7 +172,7 @@ class Raakaaine {
     public function setKalorit($kalorit) {
         $this->kalorit = $kalorit;
         if (!is_int($this->kalorit)){
-            $this->virheet['kalorit'] = "söytteen tulee olla kokonaisluku";
+            $this->virheet['kalorit'] = "Syötteen tulee olla kokonaisluku";
         } else{
             unset($this->virheet['kalorit']);
         }
@@ -158,7 +181,7 @@ class Raakaaine {
     public function setHinta($hinta) {
         $this->hinta = $hinta;
         if (!is_int($this->hinta)){
-            $this->virheet['hinta'] = "söytteen tulee olla kokonaisluku";
+            $this->virheet['hinta'] = "Syötteen tulee olla kokonaisluku";
         } else{
             unset($this->virheet['hinta']);
         }
