@@ -18,6 +18,12 @@
             <?php if (!empty($data->virhe)): ?>
                 <div class="alert alert-danger">Virhe: <?php echo $data->virhe; ?></div>
             <?php endif; ?>
+            <?php if(!empty($_SESSION['ilmoitus'])): ?>
+                <div class="alert alert-success">
+                    <?php echo $_SESSION['ilmoitus']; ?>
+                </div>
+                <?php unset($_SESSION['ilmoitus']); ?>
+            <?php endif; ?>
             <?php require $sivu; ?>
         </div>
     </body>

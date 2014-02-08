@@ -21,7 +21,7 @@ if ($uusiraakaaine->onkoKelvollinen()) {
 } else {
     $virheet = $uusiraakaaine->getVirheet();
     naytaNakyma("views/raakaaine_lisaa.php", array(
-        'virhe' => "VIRHE!",
+        'virhe' => "Raaka-aineen tallennus epäonnistui!",
         'raakaaine' => $uusiraakaaine,
         'virheet' => $virheet
     ));
