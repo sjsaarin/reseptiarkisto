@@ -1,7 +1,6 @@
 <?php
-
+    
     include "naytavirheet.php";
-
     
     function naytaNakyma($sivu, $data = array()) {
         $data = (object)$data;

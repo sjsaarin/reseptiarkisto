@@ -63,8 +63,9 @@ class Raakaaine {
     
     public static function haeSivu($sivu, $montako){
         $sql = "SELECT * from raakaaineet ORDER by nimi LIMIT ? OFFSET ?";
-        $kysely = getTietokantayhteys()->prepare($sql); 
-        $kysely->execute(array($montako, montako$-$sivu));
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kohta = $montako*$sivu;
+        $kysely->execute(array($montako, $kohta));
         //$kysely->execute();
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
@@ -76,7 +77,15 @@ class Raakaaine {
     }
     
     public static function haeNimella($nimi){
-        
+        $sql = "SELECT * from raakaaineet WHERE nimi ILIKE ? ORDER by nimi";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array("$nimi%"));
+        $tulokset = array();
+            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta); 
+                $tulokset[] = $raakaaine;
+            }
+        return $tulokset;
     }
     
     //UPDATE
@@ -95,8 +104,12 @@ class Raakaaine {
     public function poistaKannasta(){
         $sql = "DELETE from raakaaineet where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 
-        return $kysely->execute(array($this->getId()));
-        //tähän joku tarkistus että poisto(t) todella onnistuivat, nyt palauttaa aina true
+        try { 
+            $kysely->execute(array($this->getId()));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
     }
     
     
@@ -172,7 +185,7 @@ class Raakaaine {
             $this->hiilarit = $hiilarit;
             $this->virheet['hiilarit'] = "Syötteen tulee olla numero";
         } else{  
-            $this->hiilarit = (int)round($hiilarit);
+            $this->hiilarit = $hiilarit;
             unset($this->virheet['hiilarit']);
         }
     }
@@ -182,7 +195,7 @@ class Raakaaine {
             $this->proteiinit = $proteiinit;
             $this->virheet['proteiinit'] = "Syötteen tulee olla numero";
         } else{
-            $this->proteiinit = (int)round($proteiinit);
+            $this->proteiinit = $proteiinit;
             unset($this->virheet['proteiinit']);
         }
     }
@@ -192,7 +205,7 @@ class Raakaaine {
             $this->rasvat = $rasvat;
             $this->virheet['rasvat'] = "Syötteen tulee olla numero";
         } else{
-            $this->rasvat = (int)round($rasvat);
+            $this->rasvat = $rasvat;
             unset($this->virheet['rasvat']);
         }
     }
@@ -202,7 +215,7 @@ class Raakaaine {
             $this->kalorit = $kalorit;
             $this->virheet['kalorit'] = "Syötteen tulee olla numero";
         } else{
-            $this->kalorit = (int)round($kalorit);
+            $this->kalorit = $kalorit;
             unset($this->virheet['kalorit']);
         }
     }
@@ -212,7 +225,7 @@ class Raakaaine {
             $this->hinta = $hinta;
             $this->virheet['hinta'] = "Syötteen tulee olla numero";
         } else{
-            $this->hinta = (int)round($hinta);
+            $this->hinta = $hinta;
             unset($this->virheet['hinta']);
         }
     }

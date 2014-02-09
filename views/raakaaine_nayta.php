@@ -1,10 +1,10 @@
 <?php if (!$data->raakaaine == null): ?>
-    <h2><?php echo $data->raakaaine->getNimi(); ?></h2>
+    <h2><?php echo htmlspecialchars($data->raakaaine->getNimi()); ?></h2>
     <table>
         <tr>
             <td><b>Energiaa: </b></td>
             <td><?php echo $data->raakaaine->getKalorit(); ?></td>
-            <td>kcal / 100g</a></td>
+            <td>kcal / 100g</td>
         </tr>
         <tr>
             <td><b>Proteiineja: </b></td>

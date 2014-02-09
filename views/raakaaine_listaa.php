@@ -1,4 +1,12 @@
 <h1>Raaka-aineet</h1>
+<br>
+<form class="form-inline" role="form" action="raakaaineet.php" method="GET">
+    <div class="form-group">
+        <label class="sr-only" for="inputHakusana">Hae raaka-ainetta: </label>
+        <input type="text" class="form-control" id="inputHakusana" name="hae" placeholder="hakusana">
+    </div>
+    <button type="submit" class="btn btn-default">Hae</button>
+</form>
 <table class="table table-striped">
     <thead>
         <tr>

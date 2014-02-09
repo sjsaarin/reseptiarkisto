@@ -7,7 +7,7 @@
         <?php endif; ?> 
             <label class="col-md-2 control-label" for="inputNimi">Nimi</label>
             <div class="col-md-10">
-                <input id="inputNimi" name="nimi" type="text" placeholder="nimi" value="<?php echo $data->raakaaine->getNimi(); ?>">
+                <input id="inputNimi" name="nimi" type="text" placeholder="nimi" value="<?php echo htmlspecialchars($data->raakaaine->getNimi()); ?>">
                 <?php if (!empty($data->virheet['nimi'])): ?>
                 <span class="help-inline"><?php echo $data->virheet['nimi']; ?></span>
                 <?php endif; ?> 

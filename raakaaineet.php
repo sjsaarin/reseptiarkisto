@@ -16,7 +16,7 @@ if (onkoKirjautunut()) {
         if ($raakaaine != null) {
             $_SESSION['raakaaine'] = $raakaaine;
             naytaNakyma("views/raakaaine_nayta.php", array(
-                'title' => $raakaaine->getNimi(),
+                'title' => htmlspecialchars($raakaaine->getNimi()),
                 'raakaaine' => $raakaaine
             ));
         } else {
@@ -35,17 +35,16 @@ if (onkoKirjautunut()) {
     } elseif (isset($_GET['tallenna']) && onkoAdmin()) {        
         $uusiraakaaine = new Raakaaine(null, null, null, null, null, null, null);
         $uusiraakaaine->setNimi($_POST['nimi']);
-        //nämä tarkastukset vaativat parantelua
-        $uusiraakaaine->setKalorit(is_numeric($_POST['kalorit']) ? (int) $_POST['kalorit'] : 'e');
-        $uusiraakaaine->setHiilarit(is_numeric($_POST['hiilarit']) ? (int) $_POST['hiilarit'] : 'e');
-        $uusiraakaaine->setProteiinit(is_numeric($_POST['proteiinit']) ? (int) $_POST['proteiinit'] : 'e');
-        $uusiraakaaine->setRasvat(is_numeric($_POST['rasvat']) ? (int) $_POST['rasvat'] : 'e');
-        $uusiraakaaine->setHinta(is_numeric($_POST['hinta']) ? (int) $_POST['hinta'] : 'e');
+        $uusiraakaaine->setKalorit($_POST['kalorit']);
+        $uusiraakaaine->setHiilarit($_POST['hiilarit']);
+        $uusiraakaaine->setProteiinit($_POST['proteiinit']);
+        $uusiraakaaine->setRasvat($_POST['rasvat']);
+        $uusiraakaaine->setHinta($_POST['hinta']);
 
         if ($uusiraakaaine->onkoKelvollinen()) {
             $uusiraakaaine->lisaaKantaan();
-            header('Location: raakaaineet.php');
             $_SESSION['ilmoitus'] = "Raaka-aine lisätty onnistuneesti.";
+            header('Location: raakaaineet.php');
         } else {
             $virheet = $uusiraakaaine->getVirheet();
             naytaNakyma("views/raakaaine_lisaa.php", array(
@@ -63,7 +62,7 @@ if (onkoKirjautunut()) {
         if ($raakaaine != null) {
             $_SESSION['raakaaine'] = $raakaaine;
             naytaNakyma("views/raakaaine_muokkaa.php", array(
-                'title' => $raakaaine->getNimi(),
+                'title' => htmlspecialchars($raakaaine->getNimi()),
                 'raakaaine' => $raakaaine
             ));
         } else {
@@ -85,8 +84,8 @@ if (onkoKirjautunut()) {
         if ($uusiraakaaine->onkoKelvollinen()) {
             unset($_SESSION['raakaaine']);
             $uusiraakaaine->paivitaKantaan();
-            header('Location: raakaaineet.php');
             $_SESSION['ilmoitus'] = "Raaka-aineen tiedot päivitetty onnistuneesti.";
+            header('Location: raakaaineet.php');
         } else {
             $virheet = $uusiraakaaine->getVirheet();
             naytaNakyma("views/raakaaine_muokkaa.php", array(
@@ -102,18 +101,31 @@ if (onkoKirjautunut()) {
         unset($_SESSION['raakaaine']);
         $poistuiko = $raakaaine->poistaKannasta();
         if ($poistuiko){
-            header('Location: raakaaineet.php');
             $_SESSION['ilmoitus'] = "Raaka-aine poistettu onnistuneesti.";
+            header('Location: raakaaineet.php');
+        } else {
+            naytaNakyma("views/raakaaine_nayta.php", array(
+                'virhe' => "Raaka-ainetta ei voi poistaa, se kuuluu johonkin reseptiin!",
+                'title' => htmlspecialchars($raakaaine->getNimi()),
+                'raakaaine' => $raakaaine    ));
         }
-    } else {
-    /*    $raakaaineet = Raakaaine::getRaakaaineet();
-        $lukumaara = Raakaaine::raakaaineidenLkm();
+    } if (isset($_GET['hae'])) {
+        $nimi = $_GET['hae'];
+        $raakaaineet = Raakaaine::haeNimella($nimi);
+        //$lukumaara = Raakaaine::raakaaineidenLkm();
         naytaNakyma("views/raakaaine_listaa.php", array(
             'title' => "Raaka-aineet",
             'raakaaineet' => $raakaaineet,
-            'lkm' => $lukumaara
-        )); */
-        $raakaaineet = Raakaaine::haeSivu(2, 10);
+            'lkm' => count($raakaaineet)
+        ));
+        
+    } else {
+        if (isset($_GET['sivu'])){
+            $sivu = (int)$_GET['sivu'];
+        } else {
+            $sivu = 0;
+        }
+        $raakaaineet = Raakaaine::haeSivu($sivu, 10);
         $lukumaara = Raakaaine::raakaaineidenLkm();
         naytaNakyma("views/raakaaine_listaa.php", array(
             'title' => "Raaka-aineet",
