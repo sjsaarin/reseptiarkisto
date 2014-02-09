@@ -14,6 +14,7 @@ if (onkoKirjautunut()) {
 
         $raakaaine = Raakaaine::hae($id);
         if ($raakaaine != null) {
+            $_SESSION['raakaaine'] = $raakaaine;
             naytaNakyma("views/raakaaine_nayta.php", array(
                 'title' => $raakaaine->getNimi(),
                 'raakaaine' => $raakaaine
@@ -75,14 +76,14 @@ if (onkoKirjautunut()) {
     } elseif (isset($_GET['paivita']) && (int)$_GET['paivita']==$_SESSION['raakaaine']->getId() && onkoAdmin()){
         $uusiraakaaine = $_SESSION['raakaaine'];
         $uusiraakaaine->setNimi($_POST['nimi']);
-        //nämä tarkastukset vaativat parantelua
-        $uusiraakaaine->setKalorit(is_numeric($_POST['kalorit']) ? (int) $_POST['kalorit'] : 'e');
-        $uusiraakaaine->setHiilarit(is_numeric($_POST['hiilarit']) ? (int) $_POST['hiilarit'] : 'e');
-        $uusiraakaaine->setProteiinit(is_numeric($_POST['proteiinit']) ? (int) $_POST['proteiinit'] : 'e');
-        $uusiraakaaine->setRasvat(is_numeric($_POST['rasvat']) ? (int) $_POST['rasvat'] : 'e');
-        $uusiraakaaine->setHinta(is_numeric($_POST['hinta']) ? (int) $_POST['hinta'] : 'e');
+        $uusiraakaaine->setKalorit($_POST['kalorit']);
+        $uusiraakaaine->setHiilarit($_POST['hiilarit']);
+        $uusiraakaaine->setProteiinit($_POST['proteiinit']);
+        $uusiraakaaine->setRasvat($_POST['rasvat']);
+        $uusiraakaaine->setHinta($_POST['hinta']);
 
         if ($uusiraakaaine->onkoKelvollinen()) {
+            unset($_SESSION['raakaaine']);
             $uusiraakaaine->paivitaKantaan();
             header('Location: raakaaineet.php');
             $_SESSION['ilmoitus'] = "Raaka-aineen tiedot päivitetty onnistuneesti.";
@@ -96,23 +97,29 @@ if (onkoKirjautunut()) {
             ));
         }
         
-    } elseif (isset($_GET['poista']) && onkoAdmin()){
-        //!!!tähän tarvitaan joku varmistus poistamisesta, nyt liian helppoa.
-        //pelkästään kirjoittamalla ?poista=x, raakaaine x poistuu kannasta
-        //lisäksi epäonnistuneen poiston jälkeen pitää ohjata takaisin raaka-aineen tietoihin?
-        $id = (int)$_GET['poista'];
-        $poistuiko = Raakaaine::poistaKannasta(array($id));
+    } elseif (isset($_GET['poista']) && (int)$_GET['poista']==$_SESSION['raakaaine']->getId() && onkoAdmin()){
+        $raakaaine = $_SESSION['raakaaine'];
+        unset($_SESSION['raakaaine']);
+        $poistuiko = $raakaaine->poistaKannasta();
         if ($poistuiko){
             header('Location: raakaaineet.php');
             $_SESSION['ilmoitus'] = "Raaka-aine poistettu onnistuneesti.";
         }
     } else {
-        $raakaaineet = Raakaaine::getRaakaaineet();
+    /*    $raakaaineet = Raakaaine::getRaakaaineet();
+        $lukumaara = Raakaaine::raakaaineidenLkm();
+        naytaNakyma("views/raakaaine_listaa.php", array(
+            'title' => "Raaka-aineet",
+            'raakaaineet' => $raakaaineet,
+            'lkm' => $lukumaara
+        )); */
+        $raakaaineet = Raakaaine::haeSivu(2, 10);
         $lukumaara = Raakaaine::raakaaineidenLkm();
         naytaNakyma("views/raakaaine_listaa.php", array(
             'title' => "Raaka-aineet",
             'raakaaineet' => $raakaaineet,
             'lkm' => $lukumaara
         ));
-    }
+    } 
+    
 }

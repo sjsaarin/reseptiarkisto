@@ -26,5 +26,5 @@
 <p>Raaka-aineita yhteensä: <?php echo $data->lkm ?></p>
 <br>
 <?php if (onkoAdmin()): ?>
-<p><a href="raakaaine.php?lisaa">Lisää uusi raaka-aine</a></p>
+<p><a href="raakaaineet.php?lisaa">Lisää uusi raaka-aine</a></p>
 <?php endif; ?>

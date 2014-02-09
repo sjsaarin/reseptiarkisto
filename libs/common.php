@@ -24,3 +24,8 @@
             return false;
         }
     }
+    
+    function onkoNumero($syote) {
+        return preg_match("/^[0-9]+$/", $syote);
+    }
+    

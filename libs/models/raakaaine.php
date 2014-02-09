@@ -61,6 +61,24 @@ class Raakaaine {
         }
     }
     
+    public static function haeSivu($sivu, $montako){
+        $sql = "SELECT * from raakaaineet ORDER by nimi LIMIT ? OFFSET ?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        $kysely->execute(array($montako, montako$-$sivu));
+        //$kysely->execute();
+        $tulokset = array();
+            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta); 
+                $tulokset[] = $raakaaine;
+            }
+        return $tulokset;
+        
+    }
+    
+    public static function haeNimella($nimi){
+        
+    }
+    
     //UPDATE
     public function paivitaKantaan(){
         $sql = "UPDATE raakaaineet SET nimi=?, kalorit=?, hiilarit=?, proteiinit=?, rasvat=?, hinta=? WHERE id=? RETURNING id";
@@ -74,7 +92,15 @@ class Raakaaine {
     }
     
     //DELETE
-    public static function poistaKannasta($poistettavat){
+    public function poistaKannasta(){
+        $sql = "DELETE from raakaaineet where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        return $kysely->execute(array($this->getId()));
+        //tähän joku tarkistus että poisto(t) todella onnistuivat, nyt palauttaa aina true
+    }
+    
+    
+    public static function poistaMontaKannasta($poistettavat){
         $sql = "DELETE from raakaaineet where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 
         return $kysely->execute($poistettavat);
@@ -127,7 +153,6 @@ class Raakaaine {
     }
     
     //setters
-    
     public function setId($id){
         $this->id = $id;
     }
@@ -143,49 +168,55 @@ class Raakaaine {
     }
 
     public function setHiilarit($hiilarit) {
-        $this->hiilarit = $hiilarit;
-        if (!is_int($this->hiilarit)){
-            $this->virheet['hiilarit'] = "Syötteen tulee olla kokonaisluku";
-        } else{
+        if (!onkoNumero($hiilarit)){
+            $this->hiilarit = $hiilarit;
+            $this->virheet['hiilarit'] = "Syötteen tulee olla numero";
+        } else{  
+            $this->hiilarit = (int)round($hiilarit);
             unset($this->virheet['hiilarit']);
         }
     }
 
     public function setProteiinit($proteiinit) {
-        $this->proteiinit = $proteiinit;
-        if (!is_int($this->proteiinit)){
-            $this->virheet['proteiinit'] = "Syötteen tulee olla kokonaisluku";
+        if (!onkoNumero($proteiinit)){
+            $this->proteiinit = $proteiinit;
+            $this->virheet['proteiinit'] = "Syötteen tulee olla numero";
         } else{
+            $this->proteiinit = (int)round($proteiinit);
             unset($this->virheet['proteiinit']);
         }
     }
 
     public function setRasvat($rasvat) {
-        $this->rasvat = $rasvat;
-        if (!is_int($this->rasvat)){
-            $this->virheet['rasvat'] = "Syötteen tulee olla kokonaisluku";
+        if (!onkoNumero($rasvat)){
+            $this->rasvat = $rasvat;
+            $this->virheet['rasvat'] = "Syötteen tulee olla numero";
         } else{
+            $this->rasvat = (int)round($rasvat);
             unset($this->virheet['rasvat']);
         }
     }
     
     public function setKalorit($kalorit) {
-        $this->kalorit = $kalorit;
-        if (!is_int($this->kalorit)){
-            $this->virheet['kalorit'] = "Syötteen tulee olla kokonaisluku";
+        if (!onkoNumero($kalorit)){
+            $this->kalorit = $kalorit;
+            $this->virheet['kalorit'] = "Syötteen tulee olla numero";
         } else{
+            $this->kalorit = (int)round($kalorit);
             unset($this->virheet['kalorit']);
         }
     }
 
-    public function setHinta($hinta) {
-        $this->hinta = $hinta;
-        if (!is_int($this->hinta)){
-            $this->virheet['hinta'] = "Syötteen tulee olla kokonaisluku";
+    public function setHinta($hinta){
+        if (!onkoNumero($hinta)){
+            $this->hinta = $hinta;
+            $this->virheet['hinta'] = "Syötteen tulee olla numero";
         } else{
+            $this->hinta = (int)round($hinta);
             unset($this->virheet['hinta']);
         }
     }
+    
 
 }
 
