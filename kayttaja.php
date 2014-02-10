@@ -9,7 +9,8 @@
     session_start();
     if (onkoKirjautunut()){
         naytaNakyma("views/kayttaja.php", array(
-        'title' => "Käyttäjän tiedot"
+            'sivu' => 'kayttaja',
+            'title' => "Käyttäjän tiedot"
         ));
     }
     

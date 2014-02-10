@@ -3,17 +3,17 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>id</th>
                 <th>Nimi</th>
-                <!--th>Kategoria</th-->
+                <th>Kategoria</th>
+                <th>Pääraaka-aine</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($data->reseptit as $asia): ?>
                 <tr>
-                    <td><?php echo $asia->getId(); ?></td>
-                    <td><?php echo $asia->getNimi(); ?></td>
-                    <!--td><?#php echo $asia->getKategoria(); ?></td-->
+                    <td><a href="reseptit.php?nayta=<?php echo $asia->getId(); ?>"</a><?php echo htmlspecialchars($asia->getNimi()); ?></td>
+                    <td><?php echo htmlspecialchars($asia->getKategoria()); ?></td>
+                    <td><?php echo $asia->getPaaraakaaine(); ?></td-->
                 </tr>
             <?php endforeach; ?>
         </tbody>

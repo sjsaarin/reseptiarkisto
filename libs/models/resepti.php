@@ -68,6 +68,10 @@ class Resepti {
     public function getValmistusohje() {
         return $this->valmistusohje;
     }
+    
+    public function getPaaraakaaine() {
+        return null;
+    }
 
     public function setId($id) {
         $this->id = $id;

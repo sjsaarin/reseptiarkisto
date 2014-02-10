@@ -6,36 +6,49 @@
     require_once 'libs/tietokantayhteys.php';
     require_once 'libs/models/kayttaja.php';
     
-    if (empty($_POST["username"])){
-        naytaNakyma("views/login.php", array(
-            'title' => "Kirjautuminen",
-            'virhe' => "Kirjautuminen epäonnistui! Et antanut käyttäjätunnusta." 
-            ));
-        exit();
-    }
-    $kayttajatunnus = $_POST["username"];
+    session_start();
+    if (isset($_GET['login'])){
     
-    if (empty($_POST["password"])){
-        naytaNakyma("views/login.php", array(
-            'title' => "Kirjautuminen",
-            'kayttaja' => $kayttajatunnus,
-            'virhe' => "Kirjautuminen epäonnistui! Et antanut salasanaa."
-            ));
-        exit();
-    }
-    $salasana = $_POST["password"];
+        if (empty($_POST["username"])){
+            naytaNakyma("views/kirjautuminen.php", array(
+                'title' => "Kirjautuminen",
+                'virhe' => "Kirjautuminen epäonnistui! Et antanut käyttäjätunnusta." 
+                ));
+            exit();
+        }
+        $kayttajatunnus = $_POST["username"];
     
-    $kayttaja = Kayttaja::getKayttajaTunnuksilla($kayttajatunnus, $salasana);
+        if (empty($_POST["password"])){
+            naytaNakyma("views/kirjautuminen.php", array(
+                'title' => "Kirjautuminen",
+                'kayttaja' => $kayttajatunnus,
+                'virhe' => "Kirjautuminen epäonnistui! Et antanut salasanaa."
+                ));
+            exit();
+        }
+        $salasana = $_POST["password"];
     
-    if (!empty($kayttaja)){
-        session_start();
-        $_SESSION['kayttaja']=$kayttaja;
-        $_SESSION['kayttajan_rooli']=$kayttaja->getRooli();
-        header('Location: kayttaja.php');
-    } else {
-        naytaNakyma("views/login.php", array(
-            'title' => "Kirjautuminen",
-            'kayttaja' => $kayttajatunnus,
-            'virhe' => "Kirjautuminen epäonnistui! Antamasi tunnus tai salasana on väärä."
+        $kayttaja = Kayttaja::getKayttajaTunnuksilla($kayttajatunnus, $salasana);
+    
+        if (!empty($kayttaja)){
+            session_start();
+            $_SESSION['kayttaja']=$kayttaja;
+            $_SESSION['kayttajan_rooli']=$kayttaja->getRooli();
+            header('Location: kayttaja.php');
+        } else {
+            naytaNakyma("views/kirjautuminen.php", array(
+                'title' => "Kirjautuminen",
+                'kayttaja' => $kayttajatunnus,
+                'virhe' => "Kirjautuminen epäonnistui! Antamasi tunnus tai salasana on väärä."
         ));
+        } 
+    } elseif (isset($_GET['logout'])) {
+        unset($_SESSION['kayttaja']);
+        unset($_SESSION['kayttajan_rooli']);
+
+        header('Location: kirjautuminen.php');
+    } else {
+        naytaNakyma("views/kirjautuminen.php");
     }
+    
+    

@@ -2,7 +2,7 @@
 <table>
     <tr>
         <td><b>Nimi:</b></td>
-        <td><?php echo $_SESSION['kayttaja']->getNimi() ?></td>
+        <td><?php echo htmlspecialchars($_SESSION['kayttaja']->getNimi()) ?></td>
     </tr>
     <tr>
         <td><b>Rooli:</b></td>
@@ -10,4 +10,4 @@
     </tr>
 </table>
 <br>
-<a href="logout.php">Kirjaudu ulos</a>
+<a href="kirjautuminen.php?logout">Kirjaudu ulos</a>

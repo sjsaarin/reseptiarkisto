@@ -9,11 +9,13 @@
         <link href="css/main.css" rel="stylesheet">
     </head>
     <body>
+        <?php if (isset($_SESSION['kayttaja'])): ?>
         <ul class="nav nav-tabs">
-            <li><a href="reseptit.php">Reseptit</a></li>
-            <li><a href="raakaaineet.php">Raaka-aineet</a></li>
-            <li><a href="kayttaja.php">Käyttäjä</a></li>
+            <li <?php if ($data->sivu == "reseptit") { echo 'class="active"'; } ?>><a href="reseptit.php">Reseptit</a></li>
+            <li <?php if ($data->sivu == "raakaaineet") { echo 'class="active"'; } ?>><a href="raakaaineet.php">Raaka-aineet</a></li>
+            <li <?php if ($data->sivu == "kayttaja") { echo 'class="active"'; } ?>><a href="kayttaja.php">Käyttäjä</a></li>
         </ul>
+        <?php endif; ?>
         <div class="container" id="content">
             <?php if (!empty($data->virhe)): ?>
                 <div class="alert alert-danger">Virhe: <?php echo $data->virhe; ?></div>

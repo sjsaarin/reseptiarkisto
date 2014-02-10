@@ -1,5 +1,5 @@
 <br>
-<form class="form-inline" role="form" action="kirjautuminen.php" method="POST">
+<form class="form-inline" role="form" action="kirjautuminen.php?login" method="POST">
     <div class="form-group">
         <label class="sr-only" for="inputKayttajatunnus">Käyttäjätunnus</label>
         <input type="text" class="form-control" id="inputKayttajatunnus" name="username" placeholder="Käyttäjätunnus" value="<?php if (!empty($data->kayttaja)) echo $data->kayttaja; ?>">
