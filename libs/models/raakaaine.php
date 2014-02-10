@@ -183,7 +183,7 @@ class Raakaaine {
     public function setHiilarit($hiilarit) {
         if (!onkoOkLuku($hiilarit)){
             $this->hiilarit = $hiilarit;
-            $this->virheet['hiilarit'] = "Syötteen tulee luku väliltä 0.00 - 9999.99";
+            $this->virheet['hiilarit'] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
         } else{  
             $this->hiilarit = $hiilarit;
             unset($this->virheet['hiilarit']);
@@ -193,7 +193,7 @@ class Raakaaine {
     public function setProteiinit($proteiinit) {
         if (!onkoOkLuku($proteiinit)){
             $this->proteiinit = $proteiinit;
-            $this->virheet['proteiinit'] = "Syötteen tulee olla numero";
+            $this->virheet['proteiinit'] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
         } else{
             $this->proteiinit = $proteiinit;
             unset($this->virheet['proteiinit']);
@@ -203,7 +203,7 @@ class Raakaaine {
     public function setRasvat($rasvat) {
         if (!onkoOkLuku($rasvat)){
             $this->rasvat = $rasvat;
-            $this->virheet['rasvat'] = "Syötteen tulee olla numero";
+            $this->virheet['rasvat'] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
         } else{
             $this->rasvat = $rasvat;
             unset($this->virheet['rasvat']);
@@ -213,7 +213,7 @@ class Raakaaine {
     public function setKalorit($kalorit) {
         if (!onkoOkLuku($kalorit)){
             $this->kalorit = $kalorit;
-            $this->virheet['kalorit'] = "Syötteen tulee olla numero";
+            $this->virheet['kalorit'] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
         } else{
             $this->kalorit = $kalorit;
             unset($this->virheet['kalorit']);
@@ -223,7 +223,7 @@ class Raakaaine {
     public function setHinta($hinta){
         if (!onkoOkLuku($hinta)){
             $this->hinta = $hinta;
-            $this->virheet['hinta'] = "Syötteen tulee olla numero";
+            $this->virheet['hinta'] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
         } else{
             $this->hinta = $hinta;
             unset($this->virheet['hinta']);
