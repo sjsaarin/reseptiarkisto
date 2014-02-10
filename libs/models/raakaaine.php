@@ -181,9 +181,9 @@ class Raakaaine {
     }
 
     public function setHiilarit($hiilarit) {
-        if (!onkoNumero($hiilarit)){
+        if (!onkoOkLuku($hiilarit)){
             $this->hiilarit = $hiilarit;
-            $this->virheet['hiilarit'] = "Syötteen tulee olla numero";
+            $this->virheet['hiilarit'] = "Syötteen tulee luku väliltä 0.00 - 9999.99";
         } else{  
             $this->hiilarit = $hiilarit;
             unset($this->virheet['hiilarit']);
@@ -191,7 +191,7 @@ class Raakaaine {
     }
 
     public function setProteiinit($proteiinit) {
-        if (!onkoNumero($proteiinit)){
+        if (!onkoOkLuku($proteiinit)){
             $this->proteiinit = $proteiinit;
             $this->virheet['proteiinit'] = "Syötteen tulee olla numero";
         } else{
@@ -201,7 +201,7 @@ class Raakaaine {
     }
 
     public function setRasvat($rasvat) {
-        if (!onkoNumero($rasvat)){
+        if (!onkoOkLuku($rasvat)){
             $this->rasvat = $rasvat;
             $this->virheet['rasvat'] = "Syötteen tulee olla numero";
         } else{
@@ -211,7 +211,7 @@ class Raakaaine {
     }
     
     public function setKalorit($kalorit) {
-        if (!onkoNumero($kalorit)){
+        if (!onkoOkLuku($kalorit)){
             $this->kalorit = $kalorit;
             $this->virheet['kalorit'] = "Syötteen tulee olla numero";
         } else{
@@ -221,7 +221,7 @@ class Raakaaine {
     }
 
     public function setHinta($hinta){
-        if (!onkoNumero($hinta)){
+        if (!onkoOkLuku($hinta)){
             $this->hinta = $hinta;
             $this->virheet['hinta'] = "Syötteen tulee olla numero";
         } else{

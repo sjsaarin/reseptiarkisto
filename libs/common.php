@@ -24,7 +24,9 @@
         }
     }
     
-    function onkoNumero($syote) {
-        return preg_match("/^[0-9]+$/", $syote);
+    function onkoOkLuku($syote) {
+        $ok = is_numeric($syote) && $syote >= 0 && $syote < 10000; 
+        return $ok;
+        //return preg_match("/^[0-9]+$/", $syote);
     }
     
