@@ -13,6 +13,7 @@
         <ul class="nav nav-tabs">
             <li <?php if ($data->sivu == "reseptit") { echo 'class="active"'; } ?>><a href="reseptit.php">Reseptit</a></li>
             <li <?php if ($data->sivu == "raakaaineet") { echo 'class="active"'; } ?>><a href="raakaaineet.php">Raaka-aineet</a></li>
+            <?php if (onkoAdmin()): ?><li <?php if ($data->sivu == "kategoriat") { echo 'class="active"'; } ?>><a href="kategoriat.php">Kategoriat</a></li><?php endif; ?>
             <li <?php if ($data->sivu == "kayttaja") { echo 'class="active"'; } ?>><a href="kayttaja.php">Käyttäjä</a></li>
         </ul>
         <?php endif; ?>

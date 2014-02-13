@@ -5,7 +5,7 @@ include "libs/naytavirheet.php";
 
 require_once 'libs/common.php';
 require_once 'libs/tietokantayhteys.php';
-require_once 'libs/models/resepti.php';
+require_once 'libs/models/Resepti.php';
 require_once 'controllers/ReseptitOhjain.php';
 
 $ohjain = new ReseptitOhjain();
@@ -17,10 +17,11 @@ if (onkoKirjautunut()) {
         
     } elseif (isset($_GET['muokkaa'])){
         naytaNakyma("views/resepti_muokkaa.php", array(
-            'sivu' => $sivun_nimi
         ));
     } elseif (isset($_GET['lisaa'])){
-        naytaNakyma("views/resepti_lisaa.php", array());
+        
+        $ohjain->lisaa();
+        
     } else {
         
         $ohjain->lista();

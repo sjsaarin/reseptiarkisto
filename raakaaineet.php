@@ -4,7 +4,7 @@ include "libs/naytavirheet.php";
 
 require_once 'libs/common.php';
 require_once 'libs/tietokantayhteys.php';
-require_once 'libs/models/raakaaine.php';
+require_once 'libs/models/Raakaaine.php';
 
 session_start();
 if (onkoKirjautunut()) {

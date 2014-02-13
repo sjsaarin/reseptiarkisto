@@ -32,7 +32,7 @@ class Resepti {
      * 
      * @return taulukko
      */
-    public static function getReseptit(){
+    public static function haeKaikki(){
         $sql = "SELECT id, nimi from reseptit";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
     
@@ -63,6 +63,11 @@ class Resepti {
      */
     public static function lisaaRaakaaine($id){
         $sql = "INSERT into reseptin_raakaaineet";
+    }
+    
+    public static function haeYksikot(){
+        //yksiköt kovakoodattu tähän, ehkä syytä toteuttaa omana tauluna / jotenkin muuten?
+        return array('maustemitta','teelusikka','ruokalusikka','millilitra','senttilitra','desi','litra','gramma','kilo');
     }
     
     public function getId() {

@@ -2,7 +2,9 @@
 
 require_once 'libs/common.php';
 require_once 'libs/tietokantayhteys.php';
-require_once 'libs/models/resepti.php';
+require_once 'libs/models/Resepti.php';
+require_once 'libs/models/Raakaaine.php';
+require_once 'libs/models/Kategoria.php';
 
 /**
  * Reseptien ohjain
@@ -16,7 +18,7 @@ class ReseptitOhjain {
     private $sivun_nimi = "reseptit";
     
     public function __construct() {
-        $this->resepti = new Resepti(null, null, null, null, null, null, null, null);
+        //$this->resepti = new Resepti(null, null, null, null, null, null, null, null);
     }
     
     /**
@@ -33,7 +35,7 @@ class ReseptitOhjain {
      * Näyttää listauksen kaikista resepteistä
      */
     public function lista(){
-        $reseptit = Resepti::getReseptit();
+        $reseptit = Resepti::haeKaikki();
         $lukumaara = Resepti::reseptienLkm();
         naytaNakyma("views/resepti_listaa.php", array(
             'sivu' => $this->sivun_nimi,
@@ -50,6 +52,20 @@ class ReseptitOhjain {
         
     }
     
+    /**
+     * Näyttää reseptien lisäys näkymän
+     */
+    public function lisaa(){
+        $kategoriat = Kategoria::haeKaikki();
+        $raakaaineet = Raakaaine::haeKaikki();
+        $yksikot = Resepti::haeYksikot();
+        naytaNakyma("views/resepti_lisaa.php", array(
+            'sivu' => $this->sivun_nimi,
+            'kategoriat' => $kategoriat,
+            'raakaaineet' => $raakaaineet,
+            'yksikot' => $yksikot
+        ));
+    }
     /**
      * Tallentaa reseptin
      */

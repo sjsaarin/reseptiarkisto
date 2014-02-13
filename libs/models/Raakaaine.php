@@ -25,6 +25,11 @@ class Raakaaine {
     }
     
     //CREATE
+    /**
+     * Lisää raaka-aineen kantaan
+     * 
+     * @return type
+     */
     public function lisaaKantaan(){
         $sql = "INSERT INTO raakaaineet(nimi, kalorit, hiilarit, proteiinit, rasvat, hinta) VALUES(?,?,?,?,?,?) RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -37,7 +42,12 @@ class Raakaaine {
     }
     
     //READ
-    public static function getRaakaaineet(){
+    /**
+     * Hakee kaikki raaka-aineet kannasta, aakkosjärjestyksessä nimen mukaan
+     * 
+     * @return \Raakaaine
+     */
+    public static function haeKaikki(){
         $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta from raakaaineet order by nimi";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
     
@@ -50,6 +60,12 @@ class Raakaaine {
         
     }
     
+    /**
+     * Hakee raaka-aineen kannasta
+     * 
+     * @param type $id
+     * @return \Raakaaine|null
+     */
     public static function hae($id){
         $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta from raakaaineet where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
@@ -61,6 +77,13 @@ class Raakaaine {
         }
     }
     
+    /**
+     * Hakee yhden sivun raaka-aineita kannasta
+     * 
+     * @param type $sivu
+     * @param type $montako
+     * @return \Raakaaine
+     */
     public static function haeSivu($sivu, $montako){
         $sql = "SELECT * from raakaaineet ORDER by nimi LIMIT ? OFFSET ?";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -76,6 +99,12 @@ class Raakaaine {
         
     }
     
+    /**
+     * Hakee parametrinä annettua nimeä vastaavan raaka-aineen kannasta
+     * 
+     * @param type $nimi
+     * @return \Raakaaine
+     */
     public static function haeNimella($nimi){
         $sql = "SELECT * from raakaaineet WHERE nimi ILIKE ? ORDER by nimi";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -89,6 +118,11 @@ class Raakaaine {
     }
     
     //UPDATE
+    /**
+     * Päivittää raaka-aineen kantaan
+     * 
+     * @return type
+     */
     public function paivitaKantaan(){
         $sql = "UPDATE raakaaineet SET nimi=?, kalorit=?, hiilarit=?, proteiinit=?, rasvat=?, hinta=? WHERE id=? RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -101,6 +135,11 @@ class Raakaaine {
     }
     
     //DELETE
+    /**
+     * Poistaa raaka-aineen kannasta
+     * 
+     * @return boolean
+     */
     public function poistaKannasta(){
         $sql = "DELETE from raakaaineet where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 
@@ -112,21 +151,31 @@ class Raakaaine {
         return true;
     }
     
-    
+    /* ei toteutettu vielä
     public static function poistaMontaKannasta($poistettavat){
         $sql = "DELETE from raakaaineet where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 
         return $kysely->execute($poistettavat);
-        //tähän joku tarkistus että poisto(t) todella onnistuivat, nyt palauttaa aina true
-       
+        //tähän joku tarkistus että poisto(t) todella onnistuivat, nyt palauttaa aina true 
     }
+    */
     
+    /**
+     * Palauttaa raaka-aineden lukumääärän kannassa
+     * 
+     * @return int
+     */
     public static function raakaaineidenLkm(){
         $sql = "SELECT COUNT(*) from raakaaineet";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
         return $kysely->fetchColumn(0);
     }
     
+    /**
+     * Tarkistaa onko Raakaaine kelvollinen
+     * 
+     * @return boolean
+     */
     public function onkoKelvollinen(){
         return empty($this->virheet);
     }
@@ -205,12 +254,16 @@ class Raakaaine {
         $this->tarkistaAtribuutti('hinta', $hinta);
     }
     
+    //apufunktoita
+    
+    //tarkistaa onko luku kelvollinen (eli väliltä 0.0-10000.0)
     private function onkoOkLuku($syote) {
         $ok = is_numeric($syote) && $syote >= 0 && $syote < 10000; 
         return $ok;
         //return preg_match("/^[0-9]+$/", $syote);
     }
     
+    //tarkistaa onko attribuutti kelvollinen, jos ei ole talletta virheilmoituksen attribuuttia vastaavaan kenttään virheet taulukkoon
     private function tarkistaAtribuutti($nimi, $arvo){
         if (!$this->onkoOkLuku($arvo)){
             $this->virheet[$nimi] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
