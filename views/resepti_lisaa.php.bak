@@ -25,50 +25,34 @@
     </div>
     <label for="lisaaRaakaaine"><h3>Raaka-aineet:</h3></label>
     <div id="lisaaRaakaaine">
-    <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nimi:</th>
-            <th>Määrä:</th>
-            <th>Yksikkö:</th>
-            <th>Pääraaka-aine:</th>
-        </tr>
-    </thead>
-    <tbody>
     <?php for ($i=0; $i < 10; $i++): ?>
-    <tr>
-        <td>
-        <div class="form-group">
-            <select class="form-control">
+    <div class="row">
+        <div class="form-group col-md-4">
+            <?php if ($i==0): ?><label for="selectRaakaine">Nimi:</label><?php endif; ?>
+            <select class="form-control" id="selectRaakaine">
                 <?php foreach ($data->raakaaineet as $asia): ?>
                     <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
-        </td>
-        <td>
-        <div class="form-group">
+        <div class="form-group col-md-1">
+            <?php if ($i==0): ?><label for="inputMaara">Määrä:</label><?php endif; ?>
             <input type="number" class="form-control" id="inputMaara" placeholder="0.0">
         </div>
-        </td>
-        <td>
-        <div class="form-group">
+        <div class="form-group col-md-2">
+            <?php if ($i==0): ?><label for="selectYksikkö">Yksikkö:</label><?php endif; ?>
             <select class="form-control" id="selectYksikko">
                 <?php foreach ($data->yksikot as $yksikko): ?>
                     <option value="<?php echo $yksikko; ?>"><?php echo $yksikko; ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
-        </td>
-        <td>
-        <div class="checkbox">
-            <input type="checkbox">
+        <div class="checkbox col-md-2">
+            <?php if ($i==0): ?><label for="paaraaka">Pääraaka-aine</label><?php endif; ?>
+            <input id="paaraaka" type="checkbox">
         </div>
-        </td>
-    </tr>
+    </div>
     <?php endfor; ?>
-    </tbody>
-    </table>
     </div>
     <div class="row">
         <div class="form-group col-md-8">

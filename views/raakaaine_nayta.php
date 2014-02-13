@@ -33,5 +33,5 @@
     <?php endif; ?>
 <?php else: ?>
     <a href="raakaaineet.php">Takaisin listaukseen</a>
-<?php endif; ?>
+<?php endif; 
 
