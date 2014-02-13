@@ -3,6 +3,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+/**
+ * Reseptin malli
+ */
 class Resepti {
     private $id;
     private $nimi;
@@ -11,8 +14,9 @@ class Resepti {
     private $lahde;
     private $juomasuositus;
     private $valmistusohje;
+    private $annoksia;
     
-    function __construct($id, $nimi, $kategoria, $omistaja, $lahde, $juomasuositus, $valmistusohje) {
+    function __construct($id, $nimi, $kategoria, $omistaja, $lahde, $juomasuositus, $valmistusohje, $annoksia) {
         $this->id = $id;
         $this->nimi = $nimi;
         $this->kategoria = $kategoria;
@@ -20,25 +24,45 @@ class Resepti {
         $this->lahde = $lahde;
         $this->juomasuositus = $juomasuositus;
         $this->valmistusohje = $valmistusohje;
+        $this->annoksia = $annoksia;
     }
     
+    /**
+     * Palauttaa taulukun jossa on kaikki tietokannassa olevat reseptit, Resepti olioina.
+     * 
+     * @return taulukko
+     */
     public static function getReseptit(){
         $sql = "SELECT id, nimi from reseptit";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
     
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $resepti = new Resepti($tulos->id, $tulos->nimi, null, null, null, null, null); 
+                $resepti = new Resepti($tulos->id, $tulos->nimi, null, null, null, null, null, null); 
                 $tulokset[] = $resepti;
             }
         return $tulokset;
         
     }
     
+    /**
+     * Palauttaa tietokantaan tallennettujen reseptien lukumäärn
+     * 
+     * @return int
+     */
     public static function reseptienLkm(){
         $sql = "SELECT COUNT(*) from reseptit";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
         return $kysely->fetchColumn(0);
+    }
+    
+    /**
+     * Lisää raakaineen reseptiin
+     * 
+     * @param type $id
+     */
+    public static function lisaaRaakaaine($id){
+        $sql = "INSERT into reseptin_raakaaineet";
     }
     
     public function getId() {
