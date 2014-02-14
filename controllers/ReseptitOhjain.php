@@ -69,8 +69,17 @@ class ReseptitOhjain {
     /**
      * Tallentaa reseptin
      */
-    public function tallenna(){
-        
+    public function tallenna($nimi, $kategoria, $raakaaine, $maara, $yksikko, $ohje, $juomasuositus, $lahde){
+        naytaNakyma("views/resepti_testi.php", array(
+            'nimi' => $nimi, 
+            'kategoria' => $kategoria, 
+            'raakaaine' => $raakaaine, 
+            'maara' => $maara, 
+            'yksikko' => $yksikko, 
+            'ohje' => $ohje, 
+            'juomasuositus' => $juomasuositus, 
+            'lahde' => $lahde
+        ));
     }
     
     /**
