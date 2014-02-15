@@ -20,10 +20,9 @@ if (onkoKirjautunut()) {
 
     // raakaaineet.php?lisaa, jos kirjautunut käyttäjä ei ole admin ei näytetä
     } elseif (isset($_GET['lisaa']) && onkoAdmin()) {
-        naytaNakyma("views/raakaaine_lisaa.php", array(
-            'sivu' => $sivun_nimi,
-            'title' => "Raaka-aineen lisäys",
-        ));
+        
+        $ohjain->lisaa();
+        
     // raakaaineet.php?tallenna, jos kirjautunut käyttäjä ei ole admin ei näytetä
     } elseif (isset($_GET['tallenna']) && onkoAdmin()) {        
         $uusiraakaaine = new Raakaaine(null, null, null, null, null, null, null);

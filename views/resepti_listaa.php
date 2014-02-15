@@ -18,9 +18,9 @@
     <tbody>
         <?php foreach ($data->reseptit as $asia): ?>
             <tr>
-                <td><a href="reseptit.php?nayta=<?php echo $asia->getId(); ?>"</a><?php echo htmlspecialchars($asia->getNimi()); ?></td>
-                <td><?php echo htmlspecialchars($asia->getKategoria()); ?></td>
-                <td><?php echo $asia->getPaaraakaaine(); ?></td-->
+                <td><a href="reseptit.php?nayta=<?php echo $asia[0]; ?>"</a><?php echo $asia[1]; ?></td>
+                <td><?php echo $asia[2]; ?></td>
+                <td><?php echo $asia[3]; ?></td-->
             </tr>
         <?php endforeach; ?>
     </tbody>

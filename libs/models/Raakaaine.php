@@ -77,6 +77,16 @@ class Raakaaine {
         }
     }
     
+    public static function haeNimi($id){
+        $sql = "SELECT nimi from raakaaineet where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
+        $tulos = $kysely->fetchObject();
+        if (!$tulos == null){
+            return $tulos->nimi;
+        } else {
+            return null;
+        }
+    }
     /**
      * Hakee yhden sivun raaka-aineita kannasta
      * 
@@ -151,7 +161,7 @@ class Raakaaine {
         return true;
     }
     
-    /* ei toteutettu vielä
+    /* 
     public static function poistaMontaKannasta($poistettavat){
         $sql = "DELETE from raakaaineet where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 

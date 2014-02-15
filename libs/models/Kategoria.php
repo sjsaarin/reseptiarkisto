@@ -36,11 +36,22 @@ class Kategoria{
      * @return \Kategoria|null
      */
     public static function hae($id){
-        $sql = "SELECT id, nimi, from kategoriat where id=?";
+        $sql = "SELECT id, nimi from kategoriat where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
         $tulos = $kysely->fetchObject();
         if (!$tulos == null){
             return new Kategoria($tulos->id, $tulos->nimi);
+        } else {
+            return null;
+        }
+    }
+    
+    public static function haeNimi($id){
+        $sql = "SELECT id, nimi from kategoriat where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
+        $tulos = $kysely->fetchObject();
+        if (!$tulos == null){
+            return $tulos->nimi;
         } else {
             return null;
         }

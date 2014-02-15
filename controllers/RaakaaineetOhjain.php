@@ -41,5 +41,12 @@ class RaakaaineetOhjain {
             'lkm' => $lukumaara
         ));
     }
+    
+    public function lisaa(){
+        naytaNakyma("views/raakaaine_lisaa.php", array(
+            'sivu' => $sivun_nimi,
+            'title' => "Raaka-aineen lisäys",
+        ));
+    }
 
 }

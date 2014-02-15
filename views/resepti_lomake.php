@@ -1,9 +1,17 @@
 <h1>Lisää resepti</h1>
+<?php echo implode($data->virheet); ?>
 <form role="form" action="reseptit.php?tallenna" method="POST">
     <div class="row">
-        <div class="form-group col-md-6">
+        <?php if (!empty($data->virheet['nimi'])): ?>
+            <div class="form-group col-md-6 has-error">        
+        <?php else: ?>
+            <div class="form-group col-md-6">
+        <?php endif; ?>
             <label for="inputNimi">Reseptin nimi</label>
-            <input type="text" class="form-control" id="inputNimi" placeholder="Reseptin nimi" name="nimi">
+            <input type="text" class="form-control" id="inputNimi" placeholder="Reseptin nimi" name="nimi" value="<?php if(isset($data->resepti)) echo htmlspecialchars($data->resepti->getNimi()); ?>">
+            <?php if (!empty($data->virheet['nimi'])): ?>
+                <span class="help-inline alert-danger"><?php echo $data->virheet['nimi']; ?></span>
+            <?php endif; ?>
         </div>
     </div>
     <div class="row">
@@ -18,7 +26,7 @@
             <label for="selectKategoria">Kategoria</label>
             <select class="form-control" id="selectKategoria" name="kategoria">
                 <?php foreach ($data->kategoriat as $asia): ?>
-                    <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
+                    <option value="<?php echo $asia->getId(); ?>" <?php if(isset($data->resepti) && $data->resepti->getKategoria() ==  $asia->getId()) echo 'selected'  ?>><?php echo htmlspecialchars($asia->getNimi()); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -40,7 +48,7 @@
         <td>
         <div class="form-group">
             <select class="form-control" name="raakaaine[<?php echo $i; ?>]">
-                <option value=""> </option>
+                <option> </option>
                 <?php foreach ($data->raakaaineet as $asia): ?>
                     <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
                 <?php endforeach; ?>
@@ -64,7 +72,7 @@
         </td>
         <td>
         <div class="checkbox">
-            <input type="radio" name="paaraakaaine" value="<?php echo $i; ?>">
+            <input type="radio" name="paaraakaaine" value="<?php echo $i; ?>" <?php if(isset($data->resepti) && $data->resepti->getPaaraakaaine() == $i) echo 'checked'; elseif ($i==0) echo 'checked'; ?>>
         </div>
         </td>
     </tr>
@@ -75,25 +83,25 @@
     <div class="row">
         <div class="form-group col-md-1">
             <label for="inputAnnoksia">Annoksia</label>
-            <input type="number" class="form-control" id="inputAnnoksia" placeholder=1 name="annoksia">
+            <input type="number" class="form-control" id="inputAnnoksia" placeholder=1 name="annoksia" value="<?php if (isset($data->resepti)) echo $data->resepti->getAnnoksia(); else echo 4 ?>">
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-8">
             <label for="inputOhje">Valmistusohje</label>
-            <textarea class="form-control" id="inputOhje" name="ohje" rows="10"></textarea>
+            <textarea class="form-control" id="inputOhje" name="ohje" rows="10" value="<?php if (isset($data->$resepti)) echo htmlspecialchars($data->resepti->getValmistusohje); ?>"></textarea>
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-6">
             <label for="inputJuomasuositus">Juomasuositus</label>
-            <input type="text" class="form-control" id="inputJuomasuositus" name="juomasuositus" placeholder="Juomasuositus">
+            <input type="text" class="form-control" id="inputJuomasuositus" name="juomasuositus" placeholder="Juomasuositus" value="<?php if (isset($data->resepti)) echo htmlspecialchars($data->resepti->getJuomasuositus()); ?>">
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-6">
             <label for="inputLahde">Tekijä / Lähde</label>
-            <input type="text" class="form-control" id="inputLahde" name="lahde" placeholder="Lähde">
+            <input type="text" class="form-control" id="inputLahde" name="lahde" placeholder="Lähde" value="<?php if (isset($data->resepti)) echo htmlspecialchars($data->resepti->getLahde()); ?>">
         </div>
     </div>
     <div class="row">
