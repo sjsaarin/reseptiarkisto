@@ -271,9 +271,6 @@ class Raakaaine {
             unset($this->virheet[$nimi]);
         }
     }
-    
-    
-    
 
 }
 

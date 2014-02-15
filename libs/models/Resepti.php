@@ -7,6 +7,7 @@ ini_set('display_errors', '1');
  * Reseptin malli
  */
 class Resepti {
+    
     private $id;
     private $nimi;
     private $kategoria;
@@ -15,8 +16,18 @@ class Resepti {
     private $juomasuositus;
     private $valmistusohje;
     private $annoksia;
+    private $paaraakaaine;
     
-    function __construct($id, $nimi, $kategoria, $omistaja, $lahde, $juomasuositus, $valmistusohje, $annoksia) {
+    private $raakaaineet;
+    private $raakaaineiden_maarat;
+    private $raakaaineiden_yksikot;
+    
+    private $raakaaineden_lkm = 10;
+    
+    private $virheet = array();
+    
+    
+    function __construct($id, $nimi, $kategoria, $omistaja, $lahde, $juomasuositus, $valmistusohje, $annoksia, $paaraakaaine) {
         $this->id = $id;
         $this->nimi = $nimi;
         $this->kategoria = $kategoria;
@@ -25,6 +36,7 @@ class Resepti {
         $this->juomasuositus = $juomasuositus;
         $this->valmistusohje = $valmistusohje;
         $this->annoksia = $annoksia;
+        $this->paaraakaaine = $paaraakaaine;
     }
     
     /**
@@ -37,12 +49,26 @@ class Resepti {
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
     
         $tulokset = array();
-            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $resepti = new Resepti($tulos->id, $tulos->nimi, null, null, null, null, null, null); 
-                $tulokset[] = $resepti;
-            }
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $resepti = new Resepti($tulos->id, $tulos->nimi, null, null, null, null, null, null, null);
+            $tulokset[] = $resepti;
+        }
         return $tulokset;
-        
+    }
+    
+    /**
+     * Hakee kannasta reseptiin kuuluvat raaka-aineet
+     */
+    public function haeRaakaaineet(){
+        $sql = "SELECT nimi, maara, yksikko
+                FROM raakaaineet, reseptin_raakaaineet
+                WHERE reseptin_raakaaineet.reseptin_id=? AND reseptin_raakaaineet.raakaaineen_id = raakaaineet.id";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($this->getId()));
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tulokset[] = array($tulos->nimi, $tulos->maara, $tulos->yksikko);
+        }
+        return $tulokset;
     }
     
     /**
@@ -65,9 +91,49 @@ class Resepti {
         $sql = "INSERT into reseptin_raakaaineet";
     }
     
+    
+    /**
+     * Tallentaa reseptin kantaan
+     * 
+     */
+    public function lisaaKantaan(){
+        $sql = "INSERT INTO reseptit(nimi, kategoria, omistaja, lahde, juomasuositus, valmistusohje, annoksia, paaraakaaine) VALUES(?,?,?,?,?,?,?,?) RETURNING id";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $ok = $kysely->execute(array($this->getNimi(), $this->getKategoria(), $this->getOmistaja(), $this->getLahde(), $this->getJuomasuositus(), $this->getValmistusohje(), $this->getAnnoksia(), $this->getPaaraakaaine()));
+        if ($ok) {
+            $this->id = $kysely->fetchColumn();
+        }
+        $this->lisaaRaakaaineetKantaan();
+        return $ok;
+    }
+    
+    private function lisaaRaakaaineetKantaan(){
+        $sql = "INSERT INTO reseptin_raakaaineet(reseptin_id, raakaaineen_id, maara, yksikko) VALUES(?,?,?,?)";
+        for ($i=0; $i<$this->raakaaineden_lkm; $i++){
+            if(!empty($this->raakaaineet[$i])){
+                $kysely = getTietokantayhteys()->prepare($sql);
+                $ok = $kysely->execute(array($this->getId(), $this->raakaaineet[$i], $this->raakaaineiden_maarat[$i], $this->raakaaineiden_yksikot[$i]));
+                if (!$ok) {
+                    return false;
+                }
+            }
+        }
+        return true; 
+    }
+    
+    
     public static function haeYksikot(){
         //yksiköt kovakoodattu tähän, ehkä syytä toteuttaa omana tauluna / jotenkin muuten?
-        return array('maustemitta','teelusikka','ruokalusikka','millilitra','senttilitra','desi','litra','gramma','kilo');
+        return array('mm','tl','rkl','ml','cl','dl','l','g','kg','kpl');
+    }
+    
+    /**
+     * Tarkistaa onko Raakaaine kelvollinen
+     * 
+     * @return boolean
+     */
+    public function onkoKelvollinen(){
+        return empty($this->virheet);
     }
     
     public function getId() {
@@ -98,8 +164,30 @@ class Resepti {
         return $this->valmistusohje;
     }
     
+    public function getAnnoksia(){
+        return $this->annoksia;
+    }
+    
     public function getPaaraakaaine() {
-        return null;
+        return $this->paaraakaaine;
+    }
+    
+    /**
+     * Palauttaa reseptin raaka-aineen id:n / määrän / yksikön
+     * 
+     * @param type 0: id, 1: maara, 2: yksikko
+     * @param type $kentta
+     */
+    public function getRaakaaine($attribuutti, $kentta){
+        if ($attribuutti == 0){
+            return $this->raakaaineet[$kentta];
+        } elseif ($attribuutti == 1){
+            return $this->raakaaineiden_maarat[$kentta];
+        } elseif ($attribuutti¨== 3){
+            return $this->raakaaineiden_yksikot[$kentta];
+        } else {
+            return null;
+        }
     }
 
     public function setId($id) {
@@ -108,6 +196,12 @@ class Resepti {
 
     public function setNimi($nimi) {
         $this->nimi = $nimi;
+        
+        if (trim($this->nimi) == ''){
+            $this->virheet['nimi'] = "Nimi ei saa olla tyhjä";
+        } else{
+            unset($this->virheet['nimi']);
+        }
     }
 
     public function setKategoria($kategoria) {
@@ -119,6 +213,7 @@ class Resepti {
     }
 
     public function setLahde($lahde) {
+
         $this->lahde = $lahde;
     }
 
@@ -128,6 +223,38 @@ class Resepti {
 
     public function setValmistusohje($valmistusohje) {
         $this->valmistusohje = $valmistusohje;
+    }
+    
+    public function setAnnoksia($annoksia){
+        $this->annoksia = $annoksia;
+        if(!$this->onkoOkLuku($annoksia, 0, 100)){
+            $this->virheet['annoksia'] = "Syötteen tulee olla luku väliltä 0 - 99";
+        } else {
+            unset($this->virheet['annoksia']);
+        }
+    }
+    
+    public function setRaakaaineet($raakaaineet, $maarat, $yksikot){
+        $this->raakaaineet = $raakaaineet;
+        $this->raakaaineiden_maarat = $maarat;
+        $this->raakaaineiden_yksikot = $yksikot;
+        
+        for ($i=0; $i<raakaainden; $i++) {
+            if (!$this->onkoOkLuku($maarat[$i], 0, 10000)){
+                $this->virheet['raakaaineiden_maarat'][$i] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
+            } else {
+                unset($this->virheet['raakaaineiden_maarat'][$i]);
+            }
+        }
+    }
+    
+    //apufunktoita
+    
+    //tarkistaa onko luku kelvollinen (eli päteekö: pienin =< syote < suurin)
+    private function onkoOkLuku($syote, $pienin, $suurin) {
+        $ok = is_numeric($syote) && $syote >= $pienin && $syote < $suurin; 
+        return $ok;
+        //return preg_match("/^[0-9]+$/", $syote);
     }
 
 }

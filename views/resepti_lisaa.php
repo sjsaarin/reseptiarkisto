@@ -64,13 +64,19 @@
         </td>
         <td>
         <div class="checkbox">
-            <input type="checkbox">
+            <input type="radio" name="paaraakaaine" value="<?php echo $i; ?>">
         </div>
         </td>
     </tr>
     <?php endfor; ?>
     </tbody>
     </table>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-1">
+            <label for="inputAnnoksia">Annoksia</label>
+            <input type="number" class="form-control" id="inputAnnoksia" placeholder=1 name="annoksia">
+        </div>
     </div>
     <div class="row">
         <div class="form-group col-md-8">
@@ -90,16 +96,11 @@
             <input type="text" class="form-control" id="inputLahde" name="lahde" placeholder="Lähde">
         </div>
     </div>
-    <!--
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> Check me out
-      </label>
-    </div>
-    -->
     <div class="row">
         <div class="col-md-2">
             <button type="submit" class="btn btn-default">Tallenna</button>
         </div>
     </div>
 </form>
+<br>
+<br>

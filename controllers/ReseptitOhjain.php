@@ -69,17 +69,28 @@ class ReseptitOhjain {
     /**
      * Tallentaa reseptin
      */
-    public function tallenna($nimi, $kategoria, $raakaaine, $maara, $yksikko, $ohje, $juomasuositus, $lahde){
-        naytaNakyma("views/resepti_testi.php", array(
+    public function tallenna($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $paaraakaaine, $annoksia, $ohje, $juomasuositus, $lahde){
+        $paaraakaaine = $raakaaineet[$paaraakaaine];
+        $omistaja = $_SESSION['kayttajan_id'];
+        $uusiresepti = new Resepti(null, null, $kategoria, $omistaja, $lahde, $juomasuositus, $ohje, null, $paaraakaaine);
+        $uusiresepti->setNimi($nimi);
+        $uusiresepti->setAnnoksia($annoksia);
+        $uusiresepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
+        $uusiresepti->lisaaKantaan();
+        header('Location: reseptit.php');
+        //new Resepti($id, $nimi, $kategoria, $omistaja, $lahde, $juomasuositus, $valmistusohje, $annoksia, $paaraakaaine)
+        /*naytaNakyma("views/resepti_testi.php", array(
             'nimi' => $nimi, 
             'kategoria' => $kategoria, 
             'raakaaine' => $raakaaine, 
             'maara' => $maara, 
-            'yksikko' => $yksikko, 
+            'yksikko' => $yksikko,
+            'paaraakaaine' => $paaraakaaine,
+            'annoksia' => $annoksia,
             'ohje' => $ohje, 
             'juomasuositus' => $juomasuositus, 
             'lahde' => $lahde
-        ));
+        ));*/
     }
     
     /**

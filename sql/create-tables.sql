@@ -13,11 +13,11 @@ CREATE TABLE raakaaineet
 (
     id SERIAL PRIMARY KEY,
     nimi varchar(30) NOT NULL,
-    kalorit INTEGER,
-    hiilarit INTEGER,
-    proteiinit INTEGER,
-    rasvat INTEGER,
-    hinta INTEGER
+    kalorit numeric(6,2),
+    hiilarit numeric(6,2),
+    proteiinit numeric(6,2),
+    rasvat numeric(6,2),
+    hinta numeric(6,2)
 );
 
 CREATE TABLE kategoriat
@@ -32,6 +32,8 @@ CREATE TABLE reseptit
     nimi varchar(30) NOT NULL,
     kategoria INTEGER REFERENCES kategoriat(id),
     omistaja INTEGER REFERENCES kayttajat(id),
+    paaraakaaine INTEGER REFERENCES raakaaineet(id),
+    annoksia INTEGER,
     lahde varchar(100),
     juomasuositus varchar(50),
     valmistusohje varchar(3000)

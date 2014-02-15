@@ -34,6 +34,7 @@
             session_start();
             $_SESSION['kayttaja']=$kayttaja;
             $_SESSION['kayttajan_rooli']=$kayttaja->getRooli();
+            $_SESSION['kayttajan_id']=$kayttaja->getId();
             header('Location: kayttaja.php');
         } else {
             naytaNakyma("views/kirjautuminen.php", array(

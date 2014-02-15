@@ -24,9 +24,9 @@ if (onkoKirjautunut()) {
         
     } elseif (isset($_GET['tallenna'])) {
         
-        $ohjain->tallenna($_POST['nimi'], $_POST['kategoria'], 
-                $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'],
-                $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
+        $ohjain->tallenna($_POST['nimi'], (int)$_POST['kategoria'], 
+                $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], (int)$_POST['paaraakaaine'],
+                (int)$_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
     } else {
         
