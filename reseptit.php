@@ -28,6 +28,10 @@ if (onkoKirjautunut()) {
                 $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['paaraakaaine'],
                 (int)$_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
+    } elseif (isset($_POST['id']) && onkoAdmin() ){
+        
+        $ohjain->poista($_POST['id']);
+        
     } else {
         
         $ohjain->lista();

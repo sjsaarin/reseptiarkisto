@@ -22,7 +22,10 @@ class Resepti {
     private $raakaaineiden_maarat;
     private $raakaaineiden_yksikot;
     
+    //reseptin raaka-aineiden lukumäärän maksimi
     private $raakaaineiden_lkm = 10;
+    //yksiköt kovakoodattu tähän
+    private static $yksikot = array('mm','tl','rkl','ml','cl','dl','l','g','kg','kpl');
     
     private $virheet = array();
     
@@ -101,11 +104,11 @@ class Resepti {
      * Lisää raakaineen reseptiin
      * 
      * @param type $id
-     */
+
     public static function lisaaRaakaaine($id){
         $sql = "INSERT into reseptin_raakaaineet";
     }
-    
+    */
     
     /**
      * Tallentaa reseptin kantaan
@@ -136,9 +139,19 @@ class Resepti {
         return true; 
     }
     
+    public static function poistaKannasta($id){
+        $sql = "DELETE from reseptit where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($id));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
+    }
+    
     public static function haeYksikot(){
-        //yksiköt kovakoodattu tähän, ehkä syytä toteuttaa omana tauluna / jotenkin muuten?
-        return array('mm','tl','rkl','ml','cl','dl','l','g','kg','kpl');
+        return self::$yksikot;
     }
     
     /**
@@ -198,7 +211,7 @@ class Resepti {
         return $this->raakaaineiden_maarat[$i];
     }
     
-    public function getRaakaaineenYksikko(){
+    public function getRaakaaineenYksikko($i){
         return $this->raakaaineiden_yksikot[$i];
     }
 

@@ -126,7 +126,18 @@ class ReseptitOhjain {
     /**
      * Poistaa reseptin
      */
-    public function poista(){
+    public function poista($id){
+        $id = (int)$id;
+        $poistuiko = Resepti::poistaKannasta($id);
+        if ($poistuiko){
+            $_SESSION['ilmoitus'] = "Resepti poistettu onnistuneesti.";
+            header('Location: reseptit.php');
+        } else {
+            naytaNakyma("views/reseptit.php?nayta=$id", array(
+                'sivu' => $sivun_nimi,
+                'virhe' => "Reseptin poisto epäonnistui!",
+            ));
+        }
         
     }
 }
