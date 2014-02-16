@@ -109,6 +109,19 @@ class Resepti {
         $sql = "INSERT into reseptin_raakaaineet";
     }
     */
+    public function paivitaKantaan(){
+        $sql = "UPDATE reseptit SET nimi=?, kategoria=?, lahde=?, juomasuositus=?, valmistusohje=?, annoksia=?, paaraakaaine=? WHERE id=? RETURNING id";
+        $kysely = getTietokantayhteys()->prepare($sql);
+
+        $ok = $kysely->execute(array($this->getNimi(), $this->getKategoria(), $this->getLahde(), $this->getJuomasuositus(), $this->getValmistusohje(), $this->getAnnoksia(), $this->getPaaraakaaine(), $this->getId()));
+        //poistetaan vanhat raaka-aineet kannasta ja lisätään uudet
+        $this->poistaRaakaaineetKannasta();
+        $this->lisaaRaakaaineetKantaan();
+        if ($ok) {
+            $this->id = $kysely->fetchColumn();
+        }
+        return $ok;
+    }
     
     /**
      * Tallentaa reseptin kantaan
@@ -125,10 +138,17 @@ class Resepti {
         return $ok;
     }
     
+    /**
+     * Lisää reseptin raaka-aineet kantaan
+     * 
+     * @return boolean
+     * 
+     */
     private function lisaaRaakaaineetKantaan(){
         $sql = "INSERT INTO reseptin_raakaaineet(reseptin_id, raakaaineen_id, maara, yksikko) VALUES(?,?,?,?)";
         for ($i=0; $i<$this->raakaaineiden_lkm; $i++){
-            if(!empty($this->raakaaineet[$i])){
+            //tallennetaan raaka-aine reseptin_raakaaineisiiin jos raaka-aine asetettu
+            if(!($this->raakaaineet[$i] == -1)){
                 $kysely = getTietokantayhteys()->prepare($sql);
                 $ok = $kysely->execute(array($this->getId(), $this->raakaaineet[$i], $this->raakaaineiden_maarat[$i], $this->raakaaineiden_yksikot[$i]));
                 if (!$ok) {
@@ -150,12 +170,23 @@ class Resepti {
         return true;
     }
     
+    public function poistaRaakaaineetKannasta(){
+        $sql = "DELETE from reseptin_raakaaineet where reseptin id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($this->getId()));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
+    }
+    
     public static function haeYksikot(){
         return self::$yksikot;
     }
     
     /**
-     * Tarkistaa onko Raakaaine kelvollinen
+     * Tarkistaa onko Raaka-aine kelvollinen
      * 
      * @return boolean
      */
@@ -214,6 +245,18 @@ class Resepti {
     public function getRaakaaineenYksikko($i){
         return $this->raakaaineiden_yksikot[$i];
     }
+    
+    public function getRaakaaineet(){
+        return $this->raakaaineet;
+    }
+    
+    public function getRaakaaineidenMaarat(){
+        return $this->raakaaineiden_maarat;
+    }
+    
+    public function getRaakaaineidenYksikot(){
+        return $this->raakaaineiden_yksikot;
+    }
 
     public function setId($id) {
         $this->id = $id;
@@ -250,15 +293,17 @@ class Resepti {
         $this->valmistusohje = $valmistusohje;
     }
     
+    public function setPaaraakaaine($paaraakaaine) {
+        $this->paaraakaaine = $paaraakaaine;
+    }
+    
     public function setAnnoksia($annoksia){
         $this->annoksia = $annoksia;
-        /*
         if(!$this->onkoOkLuku($annoksia, 0, 100)){
-            $this->virheet['annoksia'] = "Syötteen tulee olla luku väliltä 0 - 99";
+            $this->virheet['annoksia'] = "annosmäärän tulee olla luku väliltä 0 - 99";
         } else {
             unset($this->virheet['annoksia']);
         }
-         */
     }
     
     public function setRaakaaineet($raakaaineet, $maarat, $yksikot){
@@ -266,16 +311,19 @@ class Resepti {
         $this->raakaaineiden_maarat = $maarat;
         $this->raakaaineiden_yksikot = $yksikot;
         
-        /*
-        for ($i=0; $i<$this->raakaaineden_lkm; $i++) {
-            if (!$this->onkoOkLuku($maarat[$i], 0, 10000)){
-                $this->virheet['raakaaineiden_maarat'][$i] = "Syötteen tulee olla luku väliltä 0.00 - 9999.99";
-            } else {
-                unset($this->virheet['raakaaineiden_maarat'][$i]);
+        if ($this->raakaaineet[0] == -1){
+            $this->virheet['raakaaineet'][0] = "reseptissä taytyy olla pääraaka-aine";
+        } else {
+            for ($i=0; $i<$this->raakaaineiden_lkm; $i++){
+                //jos raaka-aine on valittu ja raakaianeen maara virheellinen ilmoitetaan virheestä
+                if ((!($this->raakaaineet[$i] == -1)) && (!($this->onkoOkLuku($this->raakaaineiden_maarat[$i], 0, 10000)))){
+                    $this->virheet['raakaaineet'][$i] = "raaka-aineen määrä voi olla väliltä 0.00-9999.99 ";
+                } else {
+                    unset($this->virheet['raakaaineet'][$i]);
+                }
             }
         }
-         */
-    }
+    }    
     
     //apufunktoita
     

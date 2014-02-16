@@ -74,9 +74,67 @@ class ReseptitOhjain {
     /**
      * Näyttää reseptien muokkausnäkymän
      */
-    public function muokkaa(){
-        
+    public function muokkaa($id){
+            
+            $resepti = Resepti::hae($id);
+            $_SESSION['resepti'];
+            $kategoriat_lista = Kategoria::haeKaikki();
+            $raakaaineet_lista = Raakaaine::haeKaikki();
+            $yksikot_lista = Resepti::haeYksikot();
+            naytaNakyma("views/resepti_lomake.php", array(
+                'virhe' => "!!! RESEPTIN MUOKKAUS EI TOIMI !!!",
+                'tila' => 'muokkaus',
+                'sivu' => $this->sivun_nimi,
+                'resepti' => $resepti,
+                'kategoriat' => $kategoriat_lista,
+                'raakaaineet' => $raakaaineet_lista,
+                'yksikot' => $yksikot_lista
+                /*
+                'asetetut_maarat' => $resepti->getRaakaaineidenMaarat(),
+                'asetetut_raakaaineet' => $resepti->getRaakaaineet(),
+                'asetetut_yksikot' => $resepti->getRaakaaineidenYksikot()
+                 */
+            ));
     }
+    
+    public function paivita($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde){
+        
+        $resepti = $_SESSION['resepti'];
+        $resepti->setNimi($nimi);
+        $resepti->setKategoria((int)$kategoria);
+        $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
+        $resepti->setAnnoksia((int)$annoksia);
+        $resepti->setValmistusohje($ohje);
+        $resepti->setJuomasuositus($juomasuositus);
+        $resepti->setLahde($lahde);
+        $resepti->setPaaraakaaine($raakaaineet[0]);
+        if ($resepti->onkoKelvollinen()) {
+            $resepti->paivitaKantaan();
+            $_SESSION['ilmoitus'] = "Resepti talennettu onnistuneesti.";
+            unset($_SESSION['resepti']);
+            header('Location: reseptit.php');
+        } else {
+            $kategoriat_lista = Kategoria::haeKaikki();
+            $raakaaineet_lista = Raakaaine::haeKaikki();
+            $yksikot_lista = Resepti::haeYksikot();
+            naytaNakyma("views/resepti_lomake.php", array(
+                'tila' => 'muokkaus',
+                'virhe' => "!!! RESEPTIN MUOKKAUS EI TOIMI !!!",
+                //'virhe' => 'Reseptin tallennus epäonnistui',
+                'sivu' => $this->sivun_nimi,
+                'virheet' => $resepti->getVirheet(),
+                'resepti' => $resepti,
+                'kategoriat' => $kategoriat_lista,
+                'raakaaineet' => $raakaaineet_lista,
+                'yksikot' => $yksikot_lista,
+                'asetetut_maarat' => $resepti->getRaakaaineidenMaarat(),
+                'asetetut_raakaaineet' => $resepti->getRaakaaineet(),
+                'asetetut_yksikot' => $resepti->getRaakaaineidenYksikot()
+            ));
+        }
+    }
+    
+    
     
     /**
      * Näyttää reseptien lisäys näkymän
@@ -87,6 +145,7 @@ class ReseptitOhjain {
         $yksikot = Resepti::haeYksikot();
         naytaNakyma("views/resepti_lomake.php", array(
             'sivu' => $this->sivun_nimi,
+            'tila' => 'lisays',
             'kategoriat' => $kategoriat,
             'raakaaineet' => $raakaaineet,
             'yksikot' => $yksikot
@@ -95,29 +154,33 @@ class ReseptitOhjain {
     /**
      * Tallentaa reseptin
      */
-    public function tallenna($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $paaraakaaine, $annoksia, $ohje, $juomasuositus, $lahde){
-        $paaraakaaine = $raakaaineet[$paaraakaaine];
+    public function tallenna($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde){
         $omistaja = (int)$_SESSION['kayttajan_id'];
-        $uusiresepti = new Resepti(null, null, $kategoria, $omistaja, $lahde, $juomasuositus, $ohje, null, $paaraakaaine);
+        $paaraakaaine = $raakaaineet[0];
+        $uusiresepti = new Resepti(null, null, (int)$kategoria, $omistaja, $lahde, $juomasuositus, $ohje, null, $paaraakaaine);
         $uusiresepti->setNimi($nimi);
-        $uusiresepti->setAnnoksia($annoksia);
+        $uusiresepti->setAnnoksia((int)$annoksia);
         $uusiresepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
         if ($uusiresepti->onkoKelvollinen()) {
             $uusiresepti->lisaaKantaan();
-            $_SESSION['ilmoitus'] = "Resepti lisätty onnistuneesti.";
+            $_SESSION['ilmoitus'] = "Resepti talennettu onnistuneesti.";
             header('Location: reseptit.php');
         } else {
-            $kategoriat = Kategoria::haeKaikki();
-            $raakaaineet = Raakaaine::haeKaikki();
-            $yksikot = Resepti::haeYksikot();
+            $kategoriat_lista = Kategoria::haeKaikki();
+            $raakaaineet_lista = Raakaaine::haeKaikki();
+            $yksikot_lista = Resepti::haeYksikot();
             naytaNakyma("views/resepti_lomake.php", array(
+                'tila' => 'lisays',
                 'virhe' => 'Reseptin lisääminen epäonnistui',
                 'sivu' => $this->sivun_nimi,
                 'virheet' => $uusiresepti->getVirheet(),
                 'resepti' => $uusiresepti,
-                'kategoriat' => $kategoriat,
-                'raakaaineet' => $raakaaineet,
-                'yksikot' => $yksikot
+                'kategoriat' => $kategoriat_lista,
+                'raakaaineet' => $raakaaineet_lista,
+                'yksikot' => $yksikot_lista,
+                'asetetut_maarat' => $uusiresepti->getRaakaaineidenMaarat(),
+                'asetetut_raakaaineet' => $uusiresepti->getRaakaaineet(),
+                'asetetut_yksikot' => $uusiresepti->getRaakaaineidenYksikot()
             ));
         }
     }

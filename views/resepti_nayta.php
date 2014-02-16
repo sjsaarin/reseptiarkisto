@@ -17,7 +17,20 @@
 <p>Lähde: <?php echo $data->resepti->getLahde(); ?></p>
 <br>
 <br>
+<?php if(onkoAdmin()): ?>
+<table>
+    <tr>
+        <td>
 <form action='reseptit.php' method="post" onsubmit="return confirm('Oletko varma?')">
     <input type="hidden" name="id" value="<?php echo $data->resepti->getId(); ?>">
     <input type="submit" class="btn btn-danger btn-xs" value="Poista resepti">
 </form>
+        </td>
+        <td>
+            <form action='reseptit.php' method="get">
+    <input type="hidden" name="muokkaa" value="<?php echo $data->resepti->getId(); ?>">
+    <input type="submit" class="btn btn-primary btn-xs" value="Muokkaa reseptiä">
+</form>
+        </td>
+    </tr>
+<?php endif; ?>

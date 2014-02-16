@@ -1,6 +1,5 @@
 <h1>Lisää resepti</h1>
-<?php echo implode($data->virheet); ?>
-<form role="form" action="reseptit.php?tallenna" method="POST">
+<form role="form" action="reseptit.php?<?php if ($data->tila == 'lisays') echo 'tallenna' ?><?php if ($data->tila == 'muokkaus') echo 'paivita' ?>" method="POST">
     <div class="row">
         <?php if (!empty($data->virheet['nimi'])): ?>
             <div class="form-group col-md-6 has-error">        
@@ -14,13 +13,15 @@
             <?php endif; ?>
         </div>
     </div>
+    <!--
     <div class="row">
         <div class="form-group col-md-4">
             <label for="inputKuva">Lisää kuva</label>
             <input type="file" id="inputKuva">
-            <!--<p class="help-block">Example block-level help text here.</p>-->
+            <!--<p class="help-block">Example block-level help text here.</p>--><!--
         </div>
     </div>
+    -->
     <div class="row">
         <div class="form-group col-md-3">
             <label for="selectKategoria">Kategoria</label>
@@ -39,7 +40,7 @@
             <th class="col-md-6">Nimi:</th>
             <th class="col-md-1">Määrä:</th>
             <th class="col-md-3">Yksikkö:</th>
-            <th class="col-md-2">Pääraaka-aine:</th>
+            <th class="col-md-2"></th>
         </tr>
     </thead>
     <tbody>
@@ -48,32 +49,47 @@
         <td>
         <div class="form-group">
             <select class="form-control" name="raakaaine[<?php echo $i; ?>]">
-                <option> </option>
-                <?php foreach ($data->raakaaineet as $asia): ?>
-                    <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
-                <?php endforeach; ?>
+                <option value="-1"> </option>
+                    <?php foreach ($data->raakaaineet as $asia): ?>
+                        <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
+                    <?php endforeach; ?>
             </select>
+            <?php if (isset($data->asetetut_raakaaineet[$i])): ?>
+                <?php if (!($data->asetetut_raakaaineet[$i] == -1)): ?>
+                <span class="help-inline"><?php echo Raakaaine::haeNimi($data->asetetut_raakaaineet[$i]); ?></span>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
         </td>
         <td>
         <div class="form-group">
-            <input type="number" class="form-control" id="inputMaara" name="maara[<?php echo $i; ?>]" placeholder="0.0">
+            <input type="number" class="form-control" id="inputMaara" name="maara[<?php echo $i; ?>]" placeholder="0.0" value="0">
+            <?php if (isset($data->asetetut_raakaaineet[$i]) && isset($data->asetetut_maarat[$i])): ?>
+                <?php if (!($data->asetetut_raakaaineet[$i] == -1)): ?>
+                <span class="help-inline"><?php echo $data->asetetut_maarat[$i]; ?></span>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
         </td>
         <td>
         <div class="form-group">
             <select class="form-control" id="selectYksikko" name="yksikko[<?php echo $i; ?>]">
-                <option value=""> </option>
                 <?php foreach ($data->yksikot as $yksikko): ?>
                     <option value="<?php echo $yksikko; ?>"><?php echo $yksikko; ?></option>
                 <?php endforeach; ?>
             </select>
+            <?php if (isset($data->asetetut_raakaaineet[$i]) && isset($data->asetetut_yksikot[$i])): ?>
+                <?php if (!($data->asetetut_raakaaineet[$i] == -1)): ?>
+                <span class="help-inline"><?php echo $data->asetetut_yksikot[$i]; ?></span>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
         </td>
         <td>
-        <div class="checkbox">
-            <input type="radio" name="paaraakaaine" value="<?php echo $i; ?>" <?php if(isset($data->resepti) && $data->resepti->getPaaraakaaine() == $i) echo 'checked'; elseif ($i==0) echo 'checked'; ?>>
-        </div>
+            <?php if($i==0 && empty($data->virheet['raakaaineet'][$i])) echo "<p>Pääraaka-aine</p>"; ?>
+            <?php if (!empty($data->virheet['raakaaineet'][$i])): ?>
+                <p class="alert-danger"><?php echo $data->virheet['raakaaineet'][$i] ?></p>
+            <?php endif; ?>
         </td>
     </tr>
     <?php endfor; ?>
@@ -84,6 +100,9 @@
         <div class="form-group col-md-1">
             <label for="inputAnnoksia">Annoksia</label>
             <input type="number" class="form-control" id="inputAnnoksia" placeholder=1 name="annoksia" value="<?php if (isset($data->resepti)) echo $data->resepti->getAnnoksia(); else echo 4 ?>">
+            <?php if (!empty($data->virheet['annoksia'])): ?>
+                <span class="help-inline alert-danger"><?php echo $data->virheet['annoksia']; ?></span>
+            <?php endif; ?>
         </div>
     </div>
     <div class="row">

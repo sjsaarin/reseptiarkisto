@@ -16,17 +16,22 @@ if (onkoKirjautunut()) {
         $ohjain->nayta($_GET['nayta']);
         
     } elseif (isset($_GET['muokkaa'])){
-        naytaNakyma("views/resepti_muokkaa.php", array(
-        ));
+
+        $ohjain->muokkaa($_GET['muokkaa']);
+        
+    } elseif (isset($_GET['paivita'])){
+
+        $ohjain->paivita($_POST['nimi'], $_POST['kategoria'], 
+                $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
+        
     } elseif (isset($_GET['lisaa'])){
         
         $ohjain->lisaa();
         
     } elseif (isset($_GET['tallenna'])) {
         
-        $ohjain->tallenna($_POST['nimi'], (int)$_POST['kategoria'], 
-                $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['paaraakaaine'],
-                (int)$_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
+        $ohjain->tallenna($_POST['nimi'], $_POST['kategoria'], 
+                $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
     } elseif (isset($_POST['id']) && onkoAdmin() ){
         
