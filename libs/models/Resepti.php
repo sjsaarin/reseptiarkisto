@@ -89,6 +89,18 @@ class Resepti {
         return $tulokset;
     }
     
+    public function haeRaakaaineetReseptiin(){
+        $sql = "SELECT raaka, maara, yksikko
+                FROM raakaaineet, reseptin_raakaaineet
+                WHERE reseptin_raakaaineet.reseptin_id=? AND reseptin_raakaaineet.raakaaineen_id = raakaaineet.id";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($this->getId()));
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tulokset[] = array($tulos->nimi, $tulos->maara, $tulos->yksikko);
+        }
+        return $tulokset;
+    }
+    
     /**
      * Palauttaa tietokantaan tallennettujen reseptien lukumäärn
      * 
@@ -114,9 +126,10 @@ class Resepti {
         $kysely = getTietokantayhteys()->prepare($sql);
 
         $ok = $kysely->execute(array($this->getNimi(), $this->getKategoria(), $this->getLahde(), $this->getJuomasuositus(), $this->getValmistusohje(), $this->getAnnoksia(), $this->getPaaraakaaine(), $this->getId()));
-        //poistetaan vanhat raaka-aineet kannasta ja lisätään uudet
-        $this->poistaRaakaaineetKannasta();
-        $this->lisaaRaakaaineetKantaan();
+        //poistetaan vanhat raaka-aineet kannasta ja lisätään uudet, uusien lisäys tehdään vasta sen jälkeen kun vanhat poistuneet muuten operaatiot saattavat olla päällekkäiset
+        if ($this->poistaRaakaaineetKannasta()){
+            $this->lisaaRaakaaineetKantaan();
+        }
         if ($ok) {
             $this->id = $kysely->fetchColumn();
         }
@@ -171,7 +184,7 @@ class Resepti {
     }
     
     public function poistaRaakaaineetKannasta(){
-        $sql = "DELETE from reseptin_raakaaineet where reseptin id=?";
+        $sql = "DELETE from reseptin_raakaaineet where reseptin_id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 
         try { 
             $kysely->execute(array($this->getId()));
@@ -311,18 +324,7 @@ class Resepti {
         $this->raakaaineiden_maarat = $maarat;
         $this->raakaaineiden_yksikot = $yksikot;
         
-        if ($this->raakaaineet[0] == -1){
-            $this->virheet['raakaaineet'][0] = "reseptissä taytyy olla pääraaka-aine";
-        } else {
-            for ($i=0; $i<$this->raakaaineiden_lkm; $i++){
-                //jos raaka-aine on valittu ja raakaianeen maara virheellinen ilmoitetaan virheestä
-                if ((!($this->raakaaineet[$i] == -1)) && (!($this->onkoOkLuku($this->raakaaineiden_maarat[$i], 0, 10000)))){
-                    $this->virheet['raakaaineet'][$i] = "raaka-aineen määrä voi olla väliltä 0.00-9999.99 ";
-                } else {
-                    unset($this->virheet['raakaaineet'][$i]);
-                }
-            }
-        }
+        $this->tarkastaRaakaaineidenVirheet();
     }    
     
     //apufunktoita
@@ -333,5 +335,65 @@ class Resepti {
         return $ok;
         //return preg_match("/^[0-9]+$/", $syote);
     }
+    
+    //tarkastaa onko parametrina annetun indeksin mukainen raakaaineet taulukon rivi kelvollinen, ja asettaa virheilmoituksen jos ei ole
+    /*private function tarkastaRaakaaineidenVirheet($i) {
+        if ($this->onkoRaakaaineDuplikaatti($this->raakaaineet[$i], $i)) {
+            $this->virheet['raakaaineet'][$i] .= "raaka-aine voi olla reseptissä vain kertaalleen.";
+            if ((!($this->raakaaineet[$i] == -1)) && (!($this->onkoOkLuku($this->raakaaineiden_maarat[$i], 0, 10000)))) {
+                $this->virheet['raakaaineet'][$i] .= "raaka-aineen määrä voi olla väliltä 0.00-9999.99 ";
+            }
+        } else {
+            unset($this->virheet['raakaaineet'][$i]);
+        }
+    }*/
 
+    private function tarkastaRaakaaineidenVirheet(){
+        for ($i=0; $i<$this->raakaaineiden_lkm; $i++){
+            if($this->onkoPaaraakaaineAsetettu($i) && (!$this->onkoRaakaaineDuplikaatti($this->raakaaineet[$i], $i)) && $this->onkoRaakaineenMaaraOk($i)){
+                unset($this->virheet['raakaaineet'][$i]);
+            }
+        }
+    }
+    
+    private function asetaRaakaineenVirheViesti($viesti, $i){
+        if (isset($this->virheet['raakaaineet'][$i])){
+            $this->virheet['raakaaineet'][$i] .= $viesti;
+        } else {
+            $this->virheet['raakaaineet'][$i] = $viesti;
+        }
+        
+    }
+    
+    private function onkoPaaraakaaineAsetettu($i){
+        if (($i == 0) && ($this->raakaaineet[0] == -1)){
+            $this->asetaRaakaineenVirheViesti("reseptissä taytyy olla pääraaka-aine", 0);
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+    
+    //tarkastaa onko raaka-aine jo kertaalleen raaka-aineet taulokossa
+    private function onkoRaakaaineDuplikaatti($raakaaine, $i) {
+        $esiintymat = count(array_keys($this->raakaaineet, $raakaaine));
+        if (($esiintymat > 1) && !($raakaaine == -1)){
+            $viesti = "raaka-aine voi olla reseptissä vain kertaalleen.";
+            $this->asetaRaakaineenVirheViesti($viesti, $i);
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+    
+    private function onkoRaakaineenMaaraOk($i){
+        if ((!($this->raakaaineet[$i] == -1)) && (!($this->onkoOkLuku($this->raakaaineiden_maarat[$i], 0, 10000)))) {
+            $viesti = "raaka-aineen määrä voi olla väliltä 0.00-9999.99";
+            $this->asetaRaakaineenVirheViesti($viesti, $i);
+            return FALSE;
+        } else {
+            RETURN TRUE;
+        }
+    }
+            
 }

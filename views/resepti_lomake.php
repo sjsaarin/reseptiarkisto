@@ -1,4 +1,6 @@
-<h1>Lisää resepti</h1>
+<?php if (isset($data->virheet)) echo implode($data->virheet) ?>
+
+<h1><?php if ($data->tila == 'lisays') echo 'Lisää resepti' ?><?php if ($data->tila == 'muokkaus') echo 'Muokkaa reseptiä: ' . $data->resepti->getNimi(); ?></h1>
 <form role="form" action="reseptit.php?<?php if ($data->tila == 'lisays') echo 'tallenna' ?><?php if ($data->tila == 'muokkaus') echo 'paivita' ?>" method="POST">
     <div class="row">
         <?php if (!empty($data->virheet['nimi'])): ?>
@@ -108,7 +110,7 @@
     <div class="row">
         <div class="form-group col-md-8">
             <label for="inputOhje">Valmistusohje</label>
-            <textarea class="form-control" id="inputOhje" name="ohje" rows="10" value="<?php if (isset($data->$resepti)) echo htmlspecialchars($data->resepti->getValmistusohje); ?>"></textarea>
+            <textarea class="form-control" id="inputOhje" name="ohje" rows="10"><?php if (isset($data->resepti)) echo htmlspecialchars($data->resepti->getValmistusohje()); ?></textarea>
         </div>
     </div>
     <div class="row">
