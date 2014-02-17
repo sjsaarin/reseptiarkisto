@@ -109,9 +109,9 @@ class ReseptitOhjain {
         $resepti->setPaaraakaaine($raakaaineet[0]);
         if ($resepti->onkoKelvollinen()) {
             $resepti->paivitaKantaan();
-            $_SESSION['ilmoitus'] = "Resepti talennettu onnistuneesti.";
+            $_SESSION['ilmoitus'] = "Resepti tallennettu onnistuneesti.";
             unset($_SESSION['resepti']);
-            header('Location: reseptit.php');
+            header('Location: reseptit.php?nayta=' . $resepti->getId());
         } else {
             $kategoriat_lista = Kategoria::haeKaikki();
             $raakaaineet_lista = Raakaaine::haeKaikki();
@@ -162,7 +162,7 @@ class ReseptitOhjain {
         if ($uusiresepti->onkoKelvollinen()) {
             $uusiresepti->lisaaKantaan();
             $_SESSION['ilmoitus'] = "Resepti talennettu onnistuneesti.";
-            header('Location: reseptit.php');
+            header('Location: reseptit.php?nayta' . $uusiresepti->getId());
         } else {
             $kategoriat_lista = Kategoria::haeKaikki();
             $raakaaineet_lista = Raakaaine::haeKaikki();
@@ -199,7 +199,25 @@ class ReseptitOhjain {
                 'virhe' => "Reseptin poisto epäonnistui!",
             ));
         }
+    }
+    
+    public function hae($nimi){
         
+        $reseptit = Resepti::haeNimella($nimi);
+        $reseptit_nimilla = array();
+        //haetaan taulukoon reseptien id:t, nimet sekä reseptien kategorioiden ja raaka-aineiden nimet.
+        foreach($reseptit as $asia){
+            $kategorian_nimi = Kategoria::haeNimi($asia->getKategoria());
+            $raakaaineen_nimi = Raakaaine::haeNimi($asia->getPaaraakaaine());
+            $tulos = array($asia->getId(), htmlspecialchars($asia->getNimi()), htmlspecialchars($kategorian_nimi), htmlspecialchars($raakaaineen_nimi));
+            array_push($reseptit_nimilla, $tulos);
+        }
+        naytaNakyma("views/resepti_listaa.php", array(
+            'sivu' => $this->sivun_nimi,
+            'title' => "Reseptit",
+            'reseptit' => $reseptit_nimilla,
+            'lkm' => count($reseptit)
+        ));      
     }
 }
 

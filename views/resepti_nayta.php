@@ -12,8 +12,9 @@
 </table>
 <br>
 <p>Annoksia: <?php echo $data->resepti->getAnnoksia(); ?></p>
-<p>Juomasuositus: <?php echo $data->resepti->getJuomasuositus(); ?></p>
+<h3>Valmistusohje:</h3>
 <pre><?php echo htmlspecialchars($data->resepti->getValmistusohje()); ?></pre>
+<p>Juomasuositus: <?php echo $data->resepti->getJuomasuositus(); ?></p>
 <p>Lähde: <?php echo $data->resepti->getLahde(); ?></p>
 <br>
 <br>

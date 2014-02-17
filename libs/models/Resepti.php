@@ -74,6 +74,24 @@ class Resepti {
         return $tulokset;
     }
     
+     /**
+     * Hakee parametrinä annettua nimeä vastaavat reseptit kannasta
+     * 
+     * @param type $nimi
+     * @return \Rresepti
+     */
+    public static function haeNimella($nimi){
+        $sql = "SELECT * from reseptit WHERE nimi ILIKE ? ORDER by nimi";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kysely->execute(array("$nimi%"));
+        $tulokset = array();
+            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+                $resepti = new Resepti($tulos->id, $tulos->nimi, $tulos->kategoria, $tulos->omistaja, $tulos->lahde, $tulos->juomasuositus, $tulos->valmistusohje, $tulos->annoksia, $tulos->paaraakaaine); 
+                $tulokset[] = $resepti;
+            }
+        return $tulokset;
+    }
+    
     /**
      * Hakee kannasta reseptiin kuuluvat raaka-aineet
      */
@@ -325,6 +343,13 @@ class Resepti {
         }
     }
     
+    /**
+     * Asettaa raaka-aineet reseptiin ja tarkastaa samalla että annetut raaka-aineet ovat kevollisia
+     * 
+     * @param type $raakaaineet
+     * @param type $maarat
+     * @param type $yksikot
+     */
     public function setRaakaaineet($raakaaineet, $maarat, $yksikot){
         $this->raakaaineet = $raakaaineet;
         $this->raakaaineiden_maarat = $maarat;
@@ -333,6 +358,9 @@ class Resepti {
         $this->tarkastaRaakaaineidenVirheet();
     }
     
+    /**
+     * Nollaa reseptin virheilmoitukset
+     */
     public function nollaaVirheet(){
         unset($this->virheet);
     }
@@ -345,18 +373,6 @@ class Resepti {
         return $ok;
         //return preg_match("/^[0-9]+$/", $syote);
     }
-    
-    //tarkastaa onko parametrina annetun indeksin mukainen raakaaineet taulukon rivi kelvollinen, ja asettaa virheilmoituksen jos ei ole
-    /*private function tarkastaRaakaaineidenVirheet($i) {
-        if ($this->onkoRaakaaineDuplikaatti($this->raakaaineet[$i], $i)) {
-            $this->virheet['raakaaineet'][$i] .= "raaka-aine voi olla reseptissä vain kertaalleen.";
-            if ((!($this->raakaaineet[$i] == -1)) && (!($this->onkoOkLuku($this->raakaaineiden_maarat[$i], 0, 10000)))) {
-                $this->virheet['raakaaineet'][$i] .= "raaka-aineen määrä voi olla väliltä 0.00-9999.99 ";
-            }
-        } else {
-            unset($this->virheet['raakaaineet'][$i]);
-        }
-    }*/
 
     private function tarkastaRaakaaineidenVirheet(){
         for ($i=0; $i<$this->raakaaineiden_lkm; $i++){
@@ -375,6 +391,7 @@ class Resepti {
         
     }
     
+    //tarkastaa onko paaraaka-aine asetettu
     private function onkoPaaraakaaineAsetettu($i){
         if (($i == 0) && ($this->raakaaineet[0] == -1)){
             $this->asetaRaakaineenVirheViesti("reseptissä taytyy olla pääraaka-aine", 0);
@@ -396,6 +413,7 @@ class Resepti {
         }
     }
     
+    //tarkastaa onko raaka-aineelle annettu määrä kelvollinen
     private function onkoRaakaineenMaaraOk($i){
         if ((!($this->raakaaineet[$i] == -1)) && (!($this->onkoOkLuku($this->raakaaineiden_maarat[$i], 0, 10000)))) {
             $viesti = "raaka-aineen määrä voi olla väliltä 0.00-9999.99";

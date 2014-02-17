@@ -17,11 +17,7 @@
     }
     
     function onkoAdmin(){
-        if ($_SESSION['kayttajan_rooli'] === 1){
-            return true;
-        } else {
-            return false;
-        }
+        return $_SESSION['kayttajan_rooli'] === 1;
     }
     
 

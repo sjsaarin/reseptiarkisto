@@ -1,7 +1,5 @@
 <?php
 
-    include 'naytavirheet.php';
-
     function getTietokantayhteys() {
         
         static $yhteys = null; //Muuttuja, jonka sisältö säilyy getTietokantayhteys-kutsujen välillä.

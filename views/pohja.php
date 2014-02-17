@@ -21,6 +21,10 @@
             <?php if (!empty($data->virhe)): ?>
                 <div class="alert alert-danger">Virhe: <?php echo $data->virhe; ?></div>
             <?php endif; ?>
+            <?php if (!empty($_SESSION['virhe'])): ?>
+                <div class="alert alert-danger">Virhe: <?php echo $_SESSION['virhe']; ?></div>
+                <?php unset($_SESSION['virhe']); ?>
+            <?php endif; ?>
             <?php if(!empty($_SESSION['ilmoitus'])): ?>
                 <div class="alert alert-success">
                     <?php echo $_SESSION['ilmoitus']; ?>

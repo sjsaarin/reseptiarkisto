@@ -110,7 +110,7 @@ class Raakaaine {
     }
     
     /**
-     * Hakee parametrinä annettua nimeä vastaavan raaka-aineen kannasta
+     * Hakee parametrinä annettua nimeä vastaavat raaka-aineet kannasta
      * 
      * @param type $nimi
      * @return \Raakaaine

@@ -49,10 +49,8 @@ class KategoriatOhjain {
             $_SESSION['ilmoitus'] = "Kategoria poistettu onnistuneesti.";
             header('Location: kategoriat.php');
         } else {
-            naytaNakyma("views/kategoriat.php", array(
-                'sivu' => $sivun_nimi,
-                'virhe' => "Kategoriaa ei voi poistaa, se kuuluu johonkin reseptiin!",
-            ));
+                $_SESSION['virhe'] = "Kategoriaa ei voi poistaa, se kuuluu johonkin reseptiin!";
+                header('Location: kategoriat.php');
         }
         
     }
