@@ -90,15 +90,18 @@ class Resepti {
     }
     
     public function haeRaakaaineetReseptiin(){
-        $sql = "SELECT raaka, maara, yksikko
+        $sql = "SELECT raakaaineen_id, maara, yksikko
                 FROM raakaaineet, reseptin_raakaaineet
                 WHERE reseptin_raakaaineet.reseptin_id=? AND reseptin_raakaaineet.raakaaineen_id = raakaaineet.id";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($this->getId()));
-        $tulokset = array();
+        $this->raakaaineet = array();
+        $this->raakaaineiden_maarat = array();
+        $this->raakaaineiden_yksikot = array();
         foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-            $tulokset[] = array($tulos->nimi, $tulos->maara, $tulos->yksikko);
+            $this->raakaaineet[] = $tulos->raakaaineen_id;
+            $this->raakaaineiden_maarat[] = $tulos->maara;
+            $this->raakaaineiden_yksikot[] = $tulos->yksikko; 
         }
-        return $tulokset;
     }
     
     /**
@@ -260,6 +263,9 @@ class Resepti {
     }
     
     public function getRaakaaineet(){
+        if (!isset($this->raakaaineet)){
+            $this->haeRaakaaineetReseptiin();
+        }
         return $this->raakaaineet;
     }
     
@@ -325,7 +331,11 @@ class Resepti {
         $this->raakaaineiden_yksikot = $yksikot;
         
         $this->tarkastaRaakaaineidenVirheet();
-    }    
+    }
+    
+    public function nollaaVirheet(){
+        unset($this->virheet);
+    }
     
     //apufunktoita
     

@@ -53,38 +53,27 @@
             <select class="form-control" name="raakaaine[<?php echo $i; ?>]">
                 <option value="-1"> </option>
                     <?php foreach ($data->raakaaineet as $asia): ?>
-                        <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
+                        <option value="<?php echo $asia->getId(); ?>" <?php if (isset($data->asetetut_raakaaineet[$i]) && ($data->asetetut_raakaaineet[$i] == $asia->getId())) echo 'selected' ; ?>><?php echo htmlspecialchars($asia->getNimi()); ?></option>
                     <?php endforeach; ?>
             </select>
-            <?php if (isset($data->asetetut_raakaaineet[$i])): ?>
-                <?php if (!($data->asetetut_raakaaineet[$i] == -1)): ?>
-                <span class="help-inline"><?php echo Raakaaine::haeNimi($data->asetetut_raakaaineet[$i]); ?></span>
-                <?php endif; ?>
-            <?php endif; ?>
         </div>
         </td>
         <td>
         <div class="form-group">
-            <input type="number" class="form-control" id="inputMaara" name="maara[<?php echo $i; ?>]" placeholder="0.0" value="0">
-            <?php if (isset($data->asetetut_raakaaineet[$i]) && isset($data->asetetut_maarat[$i])): ?>
-                <?php if (!($data->asetetut_raakaaineet[$i] == -1)): ?>
-                <span class="help-inline"><?php echo $data->asetetut_maarat[$i]; ?></span>
-                <?php endif; ?>
-            <?php endif; ?>
+            <input type="text" class="form-control" id="inputMaara" name="maara[<?php echo $i; ?>]" placeholder="0" value="<?php if (isset($data->asetetut_maarat[$i])): ?><?php echo $data->asetetut_maarat[$i]; ?><?php else: ?><?php echo 0; ?><?php endif; ?>" >
         </div>
         </td>
         <td>
         <div class="form-group">
-            <select class="form-control" id="selectYksikko" name="yksikko[<?php echo $i; ?>]">
+            <select class="form-control" id="selectYksikko" name="yksikko[<?php echo $i; ?>]" selected="kg">
                 <?php foreach ($data->yksikot as $yksikko): ?>
-                    <option value="<?php echo $yksikko; ?>"><?php echo $yksikko; ?></option>
+                    <option value="<?php echo $yksikko; ?>" 
+                    <?php if (isset($data->asetetut_raakaaineet[$i]) && isset($data->asetetut_yksikot[$i])): ?>
+                        <?php if ($data->asetetut_yksikot[$i] == $yksikko) echo 'selected'; ?> 
+                    <?php endif; ?>
+                    ><?php echo $yksikko; ?></option>
                 <?php endforeach; ?>
             </select>
-            <?php if (isset($data->asetetut_raakaaineet[$i]) && isset($data->asetetut_yksikot[$i])): ?>
-                <?php if (!($data->asetetut_raakaaineet[$i] == -1)): ?>
-                <span class="help-inline"><?php echo $data->asetetut_yksikot[$i]; ?></span>
-                <?php endif; ?>
-            <?php endif; ?>
         </div>
         </td>
         <td>

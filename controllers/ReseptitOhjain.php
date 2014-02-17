@@ -77,29 +77,28 @@ class ReseptitOhjain {
     public function muokkaa($id){
             
             $resepti = Resepti::hae($id);
-            $_SESSION['resepti'];
+            $_SESSION['resepti'] = $resepti;
             $kategoriat_lista = Kategoria::haeKaikki();
             $raakaaineet_lista = Raakaaine::haeKaikki();
             $yksikot_lista = Resepti::haeYksikot();
             naytaNakyma("views/resepti_lomake.php", array(
-                'virhe' => "!!! RESEPTIN MUOKKAUS EI TOIMI !!!",
                 'tila' => 'muokkaus',
                 'sivu' => $this->sivun_nimi,
                 'resepti' => $resepti,
                 'kategoriat' => $kategoriat_lista,
                 'raakaaineet' => $raakaaineet_lista,
-                'yksikot' => $yksikot_lista
-                /*
-                'asetetut_maarat' => $resepti->getRaakaaineidenMaarat(),
+                'yksikot' => $yksikot_lista,
                 'asetetut_raakaaineet' => $resepti->getRaakaaineet(),
+                'asetetut_maarat' => $resepti->getRaakaaineidenMaarat(),
                 'asetetut_yksikot' => $resepti->getRaakaaineidenYksikot()
-                 */
+
             ));
     }
     
     public function paivita($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde){
         
         $resepti = $_SESSION['resepti'];
+        $resepti->nollaaVirheet();
         $resepti->setNimi($nimi);
         $resepti->setKategoria((int)$kategoria);
         $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
@@ -119,8 +118,7 @@ class ReseptitOhjain {
             $yksikot_lista = Resepti::haeYksikot();
             naytaNakyma("views/resepti_lomake.php", array(
                 'tila' => 'muokkaus',
-                'virhe' => "!!! RESEPTIN MUOKKAUS EI TOIMI !!!",
-                //'virhe' => 'Reseptin tallennus epäonnistui',
+                'virhe' => 'Reseptin tallennus epäonnistui',
                 'sivu' => $this->sivun_nimi,
                 'virheet' => $resepti->getVirheet(),
                 'resepti' => $resepti,
