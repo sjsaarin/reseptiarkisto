@@ -71,6 +71,7 @@ class ReseptitOhjain {
     /**
      * Tallentaa reseptin
      */
+    /*
     public function tallenna($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde) {
         $omistaja = (int) $_SESSION['kayttajan_id'];
         $paaraakaaine = $raakaaineet[0];
@@ -87,7 +88,7 @@ class ReseptitOhjain {
               header('Location: reseptit.php?nayta' . $uusiresepti->getId());
              * 
              */
-        } else {
+     /*   } else {
             $this->naytaEiOk('lisays', $resepti);
             /*
               $kategoriat_lista = Kategoria::haeKaikki();
@@ -105,10 +106,41 @@ class ReseptitOhjain {
               'asetetut_maarat' => $uusiresepti->getRaakaaineidenMaarat(),
               'asetetut_raakaaineet' => $uusiresepti->getRaakaaineet(),
               'asetetut_yksikot' => $uusiresepti->getRaakaaineidenYksikot()
-              )); */
+              )); 
         }
-    }
+    }*/
+    
+    public function tallenna($tila, $nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde){
+        if ($tila == 'lisays'){
+            $resepti = new Resepti(null, null, null, null, null, null, null, null, null);
+            $resepti->setOmistaja((int) $_SESSION['kayttajan_id']);
+        }
+        if ($tila == 'muokkaus'){
+            $resepti = $_SESSION['resepti'];
+            $resepti->nollaaVirheet();
+        }
+        $resepti->setNimi($nimi);
+        $resepti->setKategoria((int) $kategoria);
+        $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
+        $resepti->setAnnoksia((int) $annoksia);
+        $resepti->setValmistusohje($ohje);
+        $resepti->setJuomasuositus($juomasuositus);
+        $resepti->setLahde($lahde);
+        $resepti->setPaaraakaaine($raakaaineet[0]);
+        if ($resepti->onkoKelvollinen()) {
+            if ($tila == 'lisays'){
+                $resepti->lisaaKantaan();
+            }
+            if ($tila == 'muokkaus'){
+                $resepti->paivitaKantaan();
+            }
+            $this->naytaOk($resepti);
+        } else {
+            $this->naytaEiOk($tila, $resepti);
+        }
 
+    }
+    /*
     public function paivita($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde) {
 
         $resepti = $_SESSION['resepti'];
@@ -128,7 +160,7 @@ class ReseptitOhjain {
               $resepti->paivitaKantaan();
               $_SESSION['ilmoitus'] = "Resepti tallennettu onnistuneesti.";
               unset($_SESSION['resepti']);
-              header('Location: reseptit.php?nayta=' . $resepti->getId()); */
+              header('Location: reseptit.php?nayta=' . $resepti->getId()); */ /*
         } else {
             $this->naytaEiOk('muokkaus', $resepti);
             /*
@@ -148,9 +180,9 @@ class ReseptitOhjain {
               'asetetut_raakaaineet' => $resepti->getRaakaaineet(),
               'asetetut_yksikot' => $resepti->getRaakaaineidenYksikot()
               ));
-             */
+             
         }
-    }
+    } */
 
     private function naytaOk($resepti) {
         $_SESSION['ilmoitus'] = "Resepti tallennettu onnistuneesti.";

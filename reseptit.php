@@ -21,7 +21,7 @@ if (onkoKirjautunut()) {
         
     } elseif (isset($_GET['paivita'])){
 
-        $ohjain->paivita($_POST['nimi'], $_POST['kategoria'], 
+        $ohjain->tallenna('muokkaus', $_POST['nimi'], $_POST['kategoria'], 
                 $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
     } elseif (isset($_GET['lisaa'])){
@@ -30,7 +30,7 @@ if (onkoKirjautunut()) {
         
     } elseif (isset($_GET['tallenna'])) {
         
-        $ohjain->tallenna($_POST['nimi'], $_POST['kategoria'], 
+        $ohjain->tallenna('lisays', $_POST['nimi'], $_POST['kategoria'], 
                 $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
     } elseif (isset($_POST['id']) && onkoAdmin() ){
