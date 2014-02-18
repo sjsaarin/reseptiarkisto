@@ -107,6 +107,18 @@ class Resepti {
         return $tulokset;
     }
     
+    public static function haeRaakaaineetHinnalla($id){
+        $sql = "SELECT nimi, maara, yksikko, hinta
+                FROM raakaaineet, reseptin_raakaaineet
+                WHERE reseptin_raakaaineet.reseptin_id=? AND reseptin_raakaaineet.raakaaineen_id = raakaaineet.id";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tulokset[] = array($tulos->nimi, $tulos->maara, $tulos->yksikko, $tulos->hinta);
+        }
+        return $tulokset;
+    }
+    
     public function haeRaakaaineetReseptiin(){
         $sql = "SELECT raakaaineen_id, maara, yksikko
                 FROM raakaaineet, reseptin_raakaaineet

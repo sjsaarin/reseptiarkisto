@@ -10,6 +10,10 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+<form action='ostoslista.php' method="post">
+    <input type="hidden" name="resepti" value="<?php echo $data->resepti->getId(); ?>">
+    <input type="submit" class="btn btn-xs" value="Lisää raaka-aineet ostolistalle">
+</form>
 <br>
 <p>Annoksia: <?php echo $data->resepti->getAnnoksia(); ?></p>
 <h3>Valmistusohje:</h3>
