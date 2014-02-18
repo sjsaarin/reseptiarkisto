@@ -57,6 +57,7 @@ class ReseptitOhjain {
         naytaNakyma("views/resepti_lomake.php", array(
             'tila' => 'muokkaus',
             'sivu' => $this->sivun_nimi,
+            'title' => htmlspecialchars($resepti->getNimi()),
             'resepti' => $resepti,
             'kategoriat' => $kategoriat_lista,
             'raakaaineet' => $raakaaineet_lista,
@@ -121,6 +122,7 @@ class ReseptitOhjain {
         $resepti->setLahde($lahde);
         $resepti->setPaaraakaaine($raakaaineet[0]);
         if ($resepti->onkoKelvollinen()) {
+            $resepti->paivitaKantaan();
             $this->naytaOk($resepti);
             /*
               $resepti->paivitaKantaan();
@@ -128,7 +130,6 @@ class ReseptitOhjain {
               unset($_SESSION['resepti']);
               header('Location: reseptit.php?nayta=' . $resepti->getId()); */
         } else {
-            $resepti->paivitaKantaan();
             $this->naytaEiOk('muokkaus', $resepti);
             /*
               $kategoriat_lista = Kategoria::haeKaikki();
@@ -165,7 +166,7 @@ class ReseptitOhjain {
             'tila' => $tila,
             'virhe' => 'Reseptin tallennus epäonnistui',
             'sivu' => $this->sivun_nimi,
-            'title' => $resepti->getNimi(),
+            'title' => htmlspecialchars($resepti->getNimi()),
             'kategoriat' => $kategoriat_lista,
             'raakaaineet' => $raakaaineet_lista,
             'yksikot' => $yksikot_lista,
@@ -186,6 +187,7 @@ class ReseptitOhjain {
         $yksikot = Resepti::haeYksikot();
         naytaNakyma("views/resepti_lomake.php", array(
             'sivu' => $this->sivun_nimi,
+            'title' => 'Reseptin lisäys',
             'tila' => 'lisays',
             'kategoriat' => $kategoriat,
             'raakaaineet' => $raakaaineet,
@@ -204,7 +206,8 @@ class ReseptitOhjain {
             header('Location: reseptit.php');
         } else {
             naytaNakyma("views/reseptit.php?nayta=$id", array(
-                'sivu' => $sivun_nimi,
+                'title' => 'Virhe',
+                'sivu' => $this->sivun_nimi,
                 'virhe' => "Reseptin poisto epäonnistui!",
             ));
         }
