@@ -139,9 +139,6 @@ class Resepti {
                 FROM reseptit, kategoriat, raakaaineet
                 WHERE reseptit.nimi ILIKE ? AND ";
         $parametrit = array("$nimi%");
-        /*if (empty($nimi)){
-            $nimi = '%';
-        }*/
         if (!($kategoria == -1)){
             $sql .= "reseptit.kategoria = ? AND ";
             array_push($parametrit, $kategoria);

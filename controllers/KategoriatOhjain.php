@@ -19,7 +19,7 @@ class KategoriatOhjain {
         $this->haeKaikki();
         naytaNakyma("views/kategoriat.php", array(
             'sivu' => $this->sivun_nimi,
-            'title' => $title,
+            'title' => $this->title,
             'kategoriat' => $this->kategoriat
         ));
     }

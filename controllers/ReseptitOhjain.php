@@ -67,58 +67,19 @@ class ReseptitOhjain {
             'asetetut_yksikot' => $resepti->getRaakaaineidenYksikot()
         ));
     }
-
-    /**
-     * Tallentaa reseptin
-     */
-    /*
-    public function tallenna($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde) {
-        $omistaja = (int) $_SESSION['kayttajan_id'];
-        $paaraakaaine = $raakaaineet[0];
-        $resepti = new Resepti(null, null, (int) $kategoria, $omistaja, $lahde, $juomasuositus, $ohje, null, $paaraakaaine);
-        $resepti->setNimi($nimi);
-        $resepti->setAnnoksia((int) $annoksia);
-        $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
-        if ($resepti->onkoKelvollinen()) {
-            $resepti->lisaaKantaan();
-            $this->naytaOk($resepti);
-            /*
-              $uusi
-              $_SESSION['ilmoitus'] = "Resepti talennettu onnistuneesti.";
-              header('Location: reseptit.php?nayta' . $uusiresepti->getId());
-             * 
-             */
-     /*   } else {
-            $this->naytaEiOk('lisays', $resepti);
-            /*
-              $kategoriat_lista = Kategoria::haeKaikki();
-              $raakaaineet_lista = Raakaaine::haeKaikki();
-              $yksikot_lista = Resepti::haeYksikot();
-              naytaNakyma("views/resepti_lomake.php", array(
-              'tila' => 'lisays',
-              'virhe' => 'Reseptin lisääminen epäonnistui',
-              'sivu' => $this->sivun_nimi,
-              'virheet' => $uusiresepti->getVirheet(),
-              'resepti' => $uusiresepti,
-              'kategoriat' => $kategoriat_lista,
-              'raakaaineet' => $raakaaineet_lista,
-              'yksikot' => $yksikot_lista,
-              'asetetut_maarat' => $uusiresepti->getRaakaaineidenMaarat(),
-              'asetetut_raakaaineet' => $uusiresepti->getRaakaaineet(),
-              'asetetut_yksikot' => $uusiresepti->getRaakaaineidenYksikot()
-              )); 
-        }
-    }*/
     
     public function tallenna($tila, $nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde){
+        
         if ($tila == 'lisays'){
             $resepti = new Resepti(null, null, null, null, null, null, null, null, null);
             $resepti->setOmistaja((int) $_SESSION['kayttajan_id']);
         }
+        
         if ($tila == 'muokkaus'){
             $resepti = $_SESSION['resepti'];
             $resepti->nollaaVirheet();
         }
+        
         $resepti->setNimi($nimi);
         $resepti->setKategoria((int) $kategoria);
         $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
@@ -140,49 +101,6 @@ class ReseptitOhjain {
         }
 
     }
-    /*
-    public function paivita($nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde) {
-
-        $resepti = $_SESSION['resepti'];
-        $resepti->nollaaVirheet();
-        $resepti->setNimi($nimi);
-        $resepti->setKategoria((int) $kategoria);
-        $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
-        $resepti->setAnnoksia((int) $annoksia);
-        $resepti->setValmistusohje($ohje);
-        $resepti->setJuomasuositus($juomasuositus);
-        $resepti->setLahde($lahde);
-        $resepti->setPaaraakaaine($raakaaineet[0]);
-        if ($resepti->onkoKelvollinen()) {
-            $resepti->paivitaKantaan();
-            $this->naytaOk($resepti);
-            /*
-              $resepti->paivitaKantaan();
-              $_SESSION['ilmoitus'] = "Resepti tallennettu onnistuneesti.";
-              unset($_SESSION['resepti']);
-              header('Location: reseptit.php?nayta=' . $resepti->getId()); */ /*
-        } else {
-            $this->naytaEiOk('muokkaus', $resepti);
-            /*
-              $kategoriat_lista = Kategoria::haeKaikki();
-              $raakaaineet_lista = Raakaaine::haeKaikki();
-              $yksikot_lista = Resepti::haeYksikot();
-              naytaNakyma("views/resepti_lomake.php", array(
-              'tila' => 'muokkaus',
-              'virhe' => 'Reseptin tallennus epäonnistui',
-              'sivu' => $this->sivun_nimi,
-              'virheet' => $resepti->getVirheet(),
-              'resepti' => $resepti,
-              'kategoriat' => $kategoriat_lista,
-              'raakaaineet' => $raakaaineet_lista,
-              'yksikot' => $yksikot_lista,
-              'asetetut_maarat' => $resepti->getRaakaaineidenMaarat(),
-              'asetetut_raakaaineet' => $resepti->getRaakaaineet(),
-              'asetetut_yksikot' => $resepti->getRaakaaineidenYksikot()
-              ));
-             
-        }
-    } */
 
     private function naytaOk($resepti) {
         $_SESSION['ilmoitus'] = "Resepti tallennettu onnistuneesti.";
