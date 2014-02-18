@@ -1,5 +1,10 @@
+<?php if ($data->tila == 'lisaa'): ?>
+<h1>Lisää raaka-aine</h1>
+<?php endif; ?>
+<?php if ($data->tila == 'muokkaa'): ?>
 <h1>Muokkaa raaka-ainetta</h1>
-<form class="form-horizontal" role="form" action="raakaaineet.php?paivita=<?php echo $_SESSION['raakaaine']->getId(); ?>" method="POST">
+<?php endif; ?>
+<form class="form-horizontal" role="form" action="raakaaineet.php?<?php if ($data->tila === 'lisaa') { echo 'tallenna'; } ?><?php if ($data->tila === 'muokkaa') { echo 'paivita=' . $_SESSION['raakaaine']->getId(); } ?>" method="POST">
         <?php if (!empty($data->virheet['nimi'])): ?>
         <div class="form-group has-error">        
         <?php else: ?>
@@ -7,7 +12,7 @@
         <?php endif; ?> 
             <label class="col-md-2 control-label" for="inputNimi">Nimi</label>
             <div class="col-md-10">
-                <input id="inputNimi" name="nimi" type="text" placeholder="nimi" value="<?php echo htmlspecialchars($data->raakaaine->getNimi()); ?>">
+                <input id="inputNimi" name="nimi" type="text" placeholder="nimi" value="<?php if (isset($data->raakaaine)){ echo htmlspecialchars($data->raakaaine->getNimi()); } ?>">
                 <?php if (!empty($data->virheet['nimi'])): ?>
                 <span class="help-inline"><?php echo $data->virheet['nimi']; ?></span>
                 <?php endif; ?> 
@@ -21,7 +26,7 @@
         <?php endif; ?>
             <label class="col-md-2 control-label" for="inputKalorit">kcal / 100g</label>
             <div class="col-md-10">
-                <input id="inputKalorit" name="kalorit" type="text" placeholder="0" value="<?php echo $data->raakaaine->getKalorit(); ?>">
+                <input id="inputKalorit" name="kalorit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)) { echo $data->raakaaine->getKalorit(); } ?>">
                 <?php if (!empty($data->virheet['kalorit'])): ?>
                 <span class="help-inline"><?php echo $data->virheet['kalorit']; ?></span>
                 <?php endif; ?> 
@@ -35,7 +40,7 @@
         <?php endif; ?>
             <label class="col-md-2 control-label" for="inputProteiinit">Proteiinit / 100g</label>
             <div class="col-md-10">
-                <input id="inputProteiinit" name="proteiinit" type="text" placeholder="0" value="<?php echo $data->raakaaine->getProteiinit(); ?>">
+                <input id="inputProteiinit" name="proteiinit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getProteiinit(); } ?>">
                 <?php if (!empty($data->virheet['proteiinit'])): ?>
                 <span class="help-inline"><?php echo $data->virheet['proteiinit']; ?></span>
                 <?php endif; ?> 
@@ -49,7 +54,7 @@
         <?php endif; ?>
             <label class="col-md-2 control-label" for="inputHiilarit">Hiilarit / 100g</label>
             <div class="col-md-10">
-                <input id="inputHiilarit" name="hiilarit" type="text" placeholder="0" value="<?php echo $data->raakaaine->getHiilarit(); ?>">
+                <input id="inputHiilarit" name="hiilarit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getHiilarit(); } ?>">
                 <?php if (!empty($data->virheet['hiilarit'])): ?>
                 <span class="help-inline"><?php echo $data->virheet['hiilarit']; ?></span>
                 <?php endif; ?> 
@@ -63,7 +68,7 @@
         <?php endif; ?>
             <label class="col-md-2 control-label" for="inputRasvat">Rasvat / 100g</label>
             <div class="col-md-10">
-                <input id="inputRasvat" name="rasvat" type="text" placeholder="0" value="<?php echo $data->raakaaine->getRasvat(); ?>">
+                <input id="inputRasvat" name="rasvat" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getRasvat(); } ?>">
                 <?php if (!empty($data->virheet['rasvat'])): ?>
                 <span class="help-inline"><?php echo $data->virheet['rasvat']; ?></span>
                 <?php endif; ?> 
@@ -77,7 +82,7 @@
         <?php endif; ?>
             <label class="col-md-2 control-label" for="inputHinta">Hinta €/kg</label>
             <div class="col-md-10">
-                <input id="inputHinta" name="hinta" type="text" placeholder="0" value="<?php echo $data->raakaaine->getHinta(); ?>">
+                <input id="inputHinta" name="hinta" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getHinta(); } ?>">
                 <?php if (!empty($data->virheet['hinta'])): ?>
                 <span class="help-inline"><?php echo $data->virheet['hinta']; ?></span>
                 <?php endif; ?> 

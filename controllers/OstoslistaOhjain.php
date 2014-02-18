@@ -27,15 +27,10 @@ class OstoslistaOhjain {
     }
 
     public function nayta() {
-        if (isset($_SESSION['ostoslista'])) {
-            naytaNakyma('views/ostoslista.php', array(
-                'title' => 'Ostoslista',
-                'sivu' => 'ostoslista'
-            ));
-        } else {
-            $_SESSION['ilmoitus'] = "Ostolista on tyhjä";
-            header('Location: reseptit.php');
-        }
+        naytaNakyma('views/ostoslista.php', array(
+            'title' => 'Ostoslista',
+            'sivu' => 'ostoslista'
+        ));
     }
 
 }

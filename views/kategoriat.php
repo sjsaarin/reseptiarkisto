@@ -22,6 +22,7 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+<div class="col-md-6">
 <h3>Lisää kategoria:</h3>
 <form role="form" action="kategoriat.php?lisaa" method="POST">
   <?php if (!empty($data->virheet['nimi'])): ?>
@@ -37,3 +38,4 @@
   </div>
   <button type="submit" class="btn btn-default">Lisää</button>
 </form>
+</div>

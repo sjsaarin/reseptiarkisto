@@ -78,9 +78,10 @@ class ReseptitOhjain {
         $resepti->setAnnoksia((int) $annoksia);
         $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
         if ($resepti->onkoKelvollinen()) {
+            $resepti->lisaaKantaan();
             $this->naytaOk($resepti);
             /*
-              $uusiresepti->lisaaKantaan();
+              $uusi
               $_SESSION['ilmoitus'] = "Resepti talennettu onnistuneesti.";
               header('Location: reseptit.php?nayta' . $uusiresepti->getId());
              * 
@@ -127,6 +128,7 @@ class ReseptitOhjain {
               unset($_SESSION['resepti']);
               header('Location: reseptit.php?nayta=' . $resepti->getId()); */
         } else {
+            $resepti->paivitaKantaan();
             $this->naytaEiOk('muokkaus', $resepti);
             /*
               $kategoriat_lista = Kategoria::haeKaikki();
@@ -150,7 +152,6 @@ class ReseptitOhjain {
     }
 
     private function naytaOk($resepti) {
-        $resepti->paivitaKantaan();
         $_SESSION['ilmoitus'] = "Resepti tallennettu onnistuneesti.";
         unset($_SESSION['resepti']);
         header('Location: reseptit.php?nayta=' . $resepti->getId());

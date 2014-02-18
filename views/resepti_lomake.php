@@ -1,5 +1,3 @@
-<?php if (isset($data->virheet)) echo implode($data->virheet) ?>
-
 <h1><?php if ($data->tila == 'lisays') echo 'Lisää resepti' ?><?php if ($data->tila == 'muokkaus') echo 'Muokkaa reseptiä: ' . $data->resepti->getNimi(); ?></h1>
 <form role="form" action="reseptit.php?<?php if ($data->tila == 'lisays') echo 'tallenna' ?><?php if ($data->tila == 'muokkaus') echo 'paivita' ?>" method="POST">
     <div class="row">
@@ -36,13 +34,13 @@
     </div>
     <label for="lisaaRaakaaine"><h3>Raaka-aineet:</h3></label>
     <div id="lisaaRaakaaine">
-    <table class="table table-striped table-condensed">
+    <table class="table-condensed">
     <thead>
         <tr>
             <th class="col-md-6">Nimi:</th>
             <th class="col-md-1">Määrä:</th>
-            <th class="col-md-3">Yksikkö:</th>
-            <th class="col-md-2"></th>
+            <th class="col-md-2">Yksikkö:</th>
+            <th class="col-md-3"></th>
         </tr>
     </thead>
     <tbody>

@@ -43,8 +43,9 @@ class RaakaaineetOhjain {
     }
     
     public function lisaa(){
-        naytaNakyma("views/raakaaine_lisaa.php", array(
+        naytaNakyma("views/raakaaine_lomake.php", array(
             'sivu' => $this->sivun_nimi,
+            'tila' => 'lisaa',
             'title' => "Raaka-aineen lisäys",
         ));
     }
@@ -64,8 +65,9 @@ class RaakaaineetOhjain {
             header('Location: raakaaineet.php');
         } else {
             $virheet = $uusiraakaaine->getVirheet();
-            naytaNakyma("views/raakaaine_lisaa.php", array(
+            naytaNakyma("views/raakaaine_lomake.php", array(
                 'sivu' => $this->sivun_nimi,
+                'tila' => 'lisaa',
                 'title' => "Raaka-aineen lisäys",
                 'virhe' => "Raaka-aineen tallennus epäonnistui!",
                 'raakaaine' => $uusiraakaaine,
@@ -81,8 +83,9 @@ class RaakaaineetOhjain {
         $raakaaine = Raakaaine::hae($id);
         if ($raakaaine != null) {
             $_SESSION['raakaaine'] = $raakaaine;
-            naytaNakyma("views/raakaaine_muokkaa.php", array(
+            naytaNakyma("views/raakaaine_lomake.php", array(
                 'sivu' => $this->sivun_nimi,
+                'tila' => 'muokkaa',
                 'title' => htmlspecialchars($raakaaine->getNimi()),
                 'raakaaine' => $raakaaine
             ));
@@ -113,9 +116,10 @@ class RaakaaineetOhjain {
             header('Location: raakaaineet.php');
         } else {
             $virheet = $uusiraakaaine->getVirheet();
-            naytaNakyma("views/raakaaine_muokkaa.php", array(
+            naytaNakyma("views/raakaaine_lomake.php", array(
                 'sivu' => $this->sivun_nimi,
-                'title' => "Raaka-aineen lisäys",
+                'tila' => 'muokkaa',
+                'title' => "Raaka-aineen muokkaus",
                 'virhe' => "Raaka-aineen tallennus epäonnistui!",
                 'raakaaine' => $uusiraakaaine,
                 'virheet' => $virheet
