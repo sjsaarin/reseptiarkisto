@@ -37,13 +37,13 @@ if (onkoKirjautunut()) {
         
         $ohjain->poista($_POST['id']);
         
-    } elseif (isset($_GET['hae'])) {
+    } elseif (isset($_GET['nimi'])) {
     
-        $ohjain->hae($_GET['hae']);
+        $ohjain->lista($_GET['nimi'],$_GET['kategoria'],$_GET['paaraakaaine']);
     }
         else {
         
-        $ohjain->lista();
+        $ohjain->lista("", -1, -1);
         
     }
 }

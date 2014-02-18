@@ -1,12 +1,32 @@
 
 <h1>Reseptit</h1>
-<form class="form-inline" role="form" action="reseptit.php" method="GET">
+<br>
+<form class="form-inline" role="form" action="reseptit.php" method="GET"> 
     <div class="form-group">
         <label class="sr-only" for="inputHakusana">Hae reseptiä: </label>
-        <input type="text" class="form-control" id="inputHakusana" name="hae" placeholder="hakusana">
+        <input type="text" class="form-control" id="inputHakusana" name="nimi" placeholder="hakusana">
+    </div>
+    <label for="kategoriaLista">Kategoria:</label>
+    <div class="form-group" id="kategoriaLista" >
+        <select class="form-control" name="kategoria">
+            <option value="-1"> </option>
+            <?php foreach ($data->kategoriat as $asia): ?>
+                <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <label for="paaraakaaineLista">Pääraaka-aine:</label>
+    <div class="form-group" id="paaraakaaineLista">
+        <select class="form-control" name="paaraakaaine">
+            <option value="-1"> </option>
+            <?php foreach ($data->paaraakaaineet as $asia): ?>
+                <option value="<?php echo $asia[0] ?>"><?php echo htmlspecialchars($asia[1]); ?></option>
+            <?php endforeach; ?>
+        </select>
     </div>
     <button type="submit" class="btn btn-default">Hae</button>
 </form>
+<br>
 <table class="table table-striped">
     <thead>
         <tr>

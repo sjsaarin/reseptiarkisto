@@ -122,6 +122,48 @@ class Resepti {
         }
     }
     
+    public static function haeReseptitListaan($nimi, $kategoria, $paaraakaaine){
+        $sql = "SELECT reseptit.id, reseptit.nimi AS renimi, kategoriat.nimi AS kanimi, raakaaineet.nimi AS ranimi
+                FROM reseptit, kategoriat, raakaaineet
+                WHERE reseptit.nimi ILIKE ? AND ";
+        $parametrit = array("$nimi%");
+        /*if (empty($nimi)){
+            $nimi = '%';
+        }*/
+        if (!($kategoria == -1)){
+            $sql .= "reseptit.kategoria = ? AND ";
+            array_push($parametrit, $kategoria);
+        }
+        if (!($paaraakaaine == -1)){
+            $sql .= "reseptit.paaraakaaine = ? AND ";
+            array_push($parametrit, $paaraakaaine);
+        }
+        $sql .= "reseptit.kategoria = kategoriat.id AND reseptit.paaraakaaine = raakaaineet.id";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute($parametrit);
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tulokset[] = array($tulos->id, $tulos->renimi, $tulos->kanimi, $tulos->ranimi);
+        }
+        return $tulokset;
+    
+    }
+    
+    /**
+     * Hakee kaikki reseptien paaraaka-aineet
+     */
+    public static function haePaaRaakaaineet(){
+        $sql = "SELECT DISTINCT paaraakaaine, raakaaineet.nimi
+                FROM reseptit, raakaaineet
+                WHERE paaraakaaine = raakaaineet.id
+                ORDER by raakaaineet.nimi";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
+        $tulokset = array();
+        foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+            $tulokset[] = array($tulos->paaraakaaine, $tulos->nimi);
+        }
+        return $tulokset;
+    }
+    
     /**
      * Palauttaa tietokantaan tallennettujen reseptien lukumäärn
      * 

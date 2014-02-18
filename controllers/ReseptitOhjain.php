@@ -48,29 +48,6 @@ class ReseptitOhjain {
         }
     }
     
-    
-    /**
-     * Näyttää listauksen kaikista resepteistä
-     */
-    public function lista(){
-        $reseptit = Resepti::haeKaikki();
-        $lukumaara = Resepti::reseptienLkm();
-        $reseptit_nimilla = array();
-        //haetaan taulukoon reseptien id:t, nimet sekä reseptien kategorioiden ja raaka-aineiden nimet.
-        foreach($reseptit as $asia){
-            $kategorian_nimi = Kategoria::haeNimi($asia->getKategoria());
-            $raakaaineen_nimi = Raakaaine::haeNimi($asia->getPaaraakaaine());
-            $tulos = array($asia->getId(), htmlspecialchars($asia->getNimi()), htmlspecialchars($kategorian_nimi), htmlspecialchars($raakaaineen_nimi));
-            array_push($reseptit_nimilla, $tulos);
-        }
-        naytaNakyma("views/resepti_listaa.php", array(
-            'sivu' => $this->sivun_nimi,
-            'title' => "Reseptit",
-            'reseptit' => $reseptit_nimilla,
-            'lkm' => $lukumaara
-        ));
-    }
-    
     /**
      * Näyttää reseptien muokkausnäkymän
      */
@@ -201,21 +178,17 @@ class ReseptitOhjain {
         }
     }
     
-    public function hae($nimi){
+    public function lista($nimi, $kategoria, $paaraakaaine){
         
-        $reseptit = Resepti::haeNimella($nimi);
-        $reseptit_nimilla = array();
-        //haetaan taulukoon reseptien id:t, nimet sekä reseptien kategorioiden ja raaka-aineiden nimet.
-        foreach($reseptit as $asia){
-            $kategorian_nimi = Kategoria::haeNimi($asia->getKategoria());
-            $raakaaineen_nimi = Raakaaine::haeNimi($asia->getPaaraakaaine());
-            $tulos = array($asia->getId(), htmlspecialchars($asia->getNimi()), htmlspecialchars($kategorian_nimi), htmlspecialchars($raakaaineen_nimi));
-            array_push($reseptit_nimilla, $tulos);
-        }
+        $reseptit = Resepti::haeReseptitListaan($nimi, (int)$kategoria, (int)$paaraakaaine);
+        $kategoriat = Kategoria::haeKaikki();
+        $paaraakaineet = Resepti::haePaaRaakaaineet();
         naytaNakyma("views/resepti_listaa.php", array(
             'sivu' => $this->sivun_nimi,
             'title' => "Reseptit",
-            'reseptit' => $reseptit_nimilla,
+            'reseptit' => $reseptit,
+            'kategoriat' => $kategoriat,
+            'paaraakaaineet' => $paaraakaineet,
             'lkm' => count($reseptit)
         ));      
     }
