@@ -26,7 +26,7 @@ if (onkoKirjautunut()) {
     // raakaaineet.php?tallenna, jos kirjautunut käyttäjä ei ole admin ei näytetä
     } elseif (isset($_GET['tallenna']) && onkoAdmin()) {
         
-        $ohjain->tallenna($_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta']);
+        $ohjain->tallenna('lisaa', $_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta']);
 
     // raakaaineet.php?muokkaa
     } elseif (isset($_GET['muokkaa']) && onkoAdmin()){
@@ -35,7 +35,7 @@ if (onkoKirjautunut()) {
 
     } elseif (isset($_GET['paivita']) && (int)$_GET['paivita']==$_SESSION['raakaaine']->getId() && onkoAdmin()){
         
-        $ohjain->paivita($_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta']);
+        $ohjain->tallenna('muokkaa', $_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta']);
         
     } elseif (isset($_GET['poista']) && (int)$_GET['poista']==$_SESSION['raakaaine']->getId() && onkoAdmin()){
         

@@ -50,8 +50,13 @@ class RaakaaineetOhjain {
         ));
     }
     
-    public function tallenna($nimi, $kalorit, $hiilarit, $proteiinit, $rasvat, $hinta){
-        $uusiraakaaine = new Raakaaine(null, null, null, null, null, null, null);
+    public function tallenna($tila, $nimi, $kalorit, $hiilarit, $proteiinit, $rasvat, $hinta){
+        if ($tila == 'lisaa'){
+            $uusiraakaaine = new Raakaaine(null, null, null, null, null, null, null);
+        }
+        if ($tila == 'muokkaa'){
+            $uusiraakaaine = $_SESSION['raakaaine'];
+        }
         $uusiraakaaine->setNimi($nimi);
         $uusiraakaaine->setKalorit($kalorit);
         $uusiraakaaine->setHiilarit($hiilarit);
@@ -60,14 +65,21 @@ class RaakaaineetOhjain {
         $uusiraakaaine->setHinta($hinta);
 
         if ($uusiraakaaine->onkoKelvollinen()) {
-            $uusiraakaaine->lisaaKantaan();
-            $_SESSION['ilmoitus'] = "Raaka-aine lisätty onnistuneesti.";
+            if ($tila == 'lisaa'){
+                $uusiraakaaine->lisaaKantaan();  
+                $_SESSION['ilmoitus'] = "Raaka-aine lisätty onnistuneesti.";
+            }
+            if ($tila == 'muokkaa'){
+                unset($_SESSION['raakaaine']);
+                $uusiraakaaine->paivitaKantaan();
+                $_SESSION['ilmoitus'] = "Raaka-aineen tiedot päivitetty onnistuneesti.";
+            }
             header('Location: raakaaineet.php');
         } else {
             $virheet = $uusiraakaaine->getVirheet();
             naytaNakyma("views/raakaaine_lomake.php", array(
                 'sivu' => $this->sivun_nimi,
-                'tila' => 'lisaa',
+                'tila' => $tila,
                 'title' => "Raaka-aineen lisäys",
                 'virhe' => "Raaka-aineen tallennus epäonnistui!",
                 'raakaaine' => $uusiraakaaine,
@@ -76,29 +88,7 @@ class RaakaaineetOhjain {
         }
     }
     
-    public function muokkaa($id){
-        
-         $id = (int)$id;
-
-        $raakaaine = Raakaaine::hae($id);
-        if ($raakaaine != null) {
-            $_SESSION['raakaaine'] = $raakaaine;
-            naytaNakyma("views/raakaaine_lomake.php", array(
-                'sivu' => $this->sivun_nimi,
-                'tila' => 'muokkaa',
-                'title' => htmlspecialchars($raakaaine->getNimi()),
-                'raakaaine' => $raakaaine
-            ));
-        } else {
-            naytaNakyma("views/raakaaine_nayta.php", array(
-                'sivu' => $this->sivun_nimi,
-                'title' => "Virhe!",
-                'raakaaine' => null,
-                'virhe' => 'Raaka-ainetta ei löytynyt'
-            ));
-        }
-    }
-    
+    /*
     public function paivita($nimi, $kalorit, $hiilarit, $proteiinit, $rasvat, $hinta){
         
         $uusiraakaaine = $_SESSION['raakaaine'];
@@ -123,6 +113,30 @@ class RaakaaineetOhjain {
                 'virhe' => "Raaka-aineen tallennus epäonnistui!",
                 'raakaaine' => $uusiraakaaine,
                 'virheet' => $virheet
+            ));
+        }
+    }
+    */
+    
+    public function muokkaa($id){
+        
+         $id = (int)$id;
+
+        $raakaaine = Raakaaine::hae($id);
+        if ($raakaaine != null) {
+            $_SESSION['raakaaine'] = $raakaaine;
+            naytaNakyma("views/raakaaine_lomake.php", array(
+                'sivu' => $this->sivun_nimi,
+                'tila' => 'muokkaa',
+                'title' => htmlspecialchars($raakaaine->getNimi()),
+                'raakaaine' => $raakaaine
+            ));
+        } else {
+            naytaNakyma("views/raakaaine_nayta.php", array(
+                'sivu' => $this->sivun_nimi,
+                'title' => "Virhe!",
+                'raakaaine' => null,
+                'virhe' => 'Raaka-ainetta ei löytynyt'
             ));
         }
     }
