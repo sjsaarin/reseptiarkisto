@@ -4,7 +4,7 @@ CREATE TABLE kayttajat
     id SERIAL PRIMARY KEY,
     etunimi varchar(30),
     sukunimi varchar(30),
-    kayttajatunnus varchar(8) NOT NULL,
+    kayttajatunnus varchar(8) NOT NULL UNIQUE,
     salasana varchar(128) NOT NULL,
     rooli INTEGER NOT NULL
 );
