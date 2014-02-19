@@ -17,8 +17,15 @@
     }
     
     function onkoAdmin(){
+        return $_SESSION['kayttajan_rooli'] === 0;
+    }
+    
+     function onkoMuokkaaja(){
         return $_SESSION['kayttajan_rooli'] === 1;
     }
     
+    function onkoKirjautunutKayttaja($id){
+        return $_SESSION['kayttajan_id'] === $id;
+    }
 
     

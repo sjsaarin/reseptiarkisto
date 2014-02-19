@@ -147,7 +147,7 @@ class Resepti {
             $sql .= "reseptit.paaraakaaine = ? AND ";
             array_push($parametrit, $paaraakaaine);
         }
-        $sql .= "reseptit.kategoria = kategoriat.id AND reseptit.paaraakaaine = raakaaineet.id";
+        $sql .= "reseptit.kategoria = kategoriat.id AND reseptit.paaraakaaine = raakaaineet.id order by renimi";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute($parametrit);
         $tulokset = array();
         foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {

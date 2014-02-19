@@ -19,14 +19,14 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($data->raakaaineet as $asia): ?>
+        <?php foreach ($data->raakaaineet as $raakaaine): ?>
             <tr>
-                <td><a href="raakaaineet.php?id=<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></a></td>
-                <td><?php echo $asia->getKalorit(); ?></td>
-                <td><?php echo $asia->getHiilarit(); ?></td>
-                <td><?php echo $asia->getProteiinit(); ?></td>
-                <td><?php echo $asia->getRasvat(); ?></td>
-                <td><?php echo $asia->getHinta(); ?></td>
+                <td><a href="raakaaineet.php?id=<?php echo $raakaaine->getId(); ?>"><?php echo htmlspecialchars($raakaaine->getNimi()); ?></a></td>
+                <td><?php echo $raakaaine->getKalorit(); ?></td>
+                <td><?php echo $raakaaine->getHiilarit(); ?></td>
+                <td><?php echo $raakaaine->getProteiinit(); ?></td>
+                <td><?php echo $raakaaine->getRasvat(); ?></td>
+                <td><?php echo $raakaaine->getHinta(); ?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

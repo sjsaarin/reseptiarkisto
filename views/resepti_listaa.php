@@ -10,8 +10,8 @@
     <div class="form-group" id="kategoriaLista" >
         <select class="form-control" name="kategoria">
             <option value="-1"> </option>
-            <?php foreach ($data->kategoriat as $asia): ?>
-                <option value="<?php echo $asia->getId(); ?>"><?php echo htmlspecialchars($asia->getNimi()); ?></option>
+            <?php foreach ($data->kategoriat as $kategoria): ?>
+                <option value="<?php echo $kategoria->getId(); ?>"><?php echo htmlspecialchars($kategoria->getNimi()); ?></option>
             <?php endforeach; ?>
         </select>
     </div>
@@ -19,8 +19,8 @@
     <div class="form-group" id="paaraakaaineLista">
         <select class="form-control" name="paaraakaaine">
             <option value="-1"> </option>
-            <?php foreach ($data->paaraakaaineet as $asia): ?>
-                <option value="<?php echo $asia[0] ?>"><?php echo htmlspecialchars($asia[1]); ?></option>
+            <?php foreach ($data->paaraakaaineet as $raakaaine): ?>
+                <option value="<?php echo $raakaaine[0] ?>"><?php echo htmlspecialchars($raakaaine[1]); ?></option>
             <?php endforeach; ?>
         </select>
     </div>
@@ -36,11 +36,11 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($data->reseptit as $asia): ?>
+        <?php foreach ($data->reseptit as $rivi): ?>
             <tr>
-                <td><a href="reseptit.php?nayta=<?php echo $asia[0]; ?>"</a><?php echo htmlspecialchars($asia[1]); ?></td>
-                <td><?php echo htmlspecialchars($asia[2]); ?></td>
-                <td><?php echo htmlspecialchars($asia[3]); ?></td-->
+                <td><a href="reseptit.php?nayta=<?php echo $rivi[0]; ?>"</a><?php echo htmlspecialchars($rivi[1]); ?></td>
+                <td><?php echo htmlspecialchars($rivi[2]); ?></td>
+                <td><?php echo htmlspecialchars($rivi[3]); ?></td-->
             </tr>
         <?php endforeach; ?>
     </tbody>

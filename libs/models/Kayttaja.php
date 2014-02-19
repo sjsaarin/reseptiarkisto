@@ -34,9 +34,25 @@ class Kayttaja {
         return $ok;
     }
     
-    public static function getKayttajat() {
-        $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli from kayttajat";
-        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
+    public static function hae($id){
+        $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli 
+                FROM kayttajat
+                WHERE id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
+        $tulos = $kysely->fetchObject();
+        if (!$tulos == null){
+            return new Kayttaja($tulos->id, $tulos->etunimi, $tulos->sukunimi, $tulos->kayttajatunnus, $tulos->salasana, $tulos->rooli); 
+        } else {
+            return null;
+        }
+        
+    }
+    
+    public static function haeKayttajat($hakusana) {
+        $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli 
+                FROM kayttajat
+                WHERE etunimi ILIKE ? OR sukunimi ILIKE ?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$hakusana%", "$hakusana%"));
     
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
@@ -46,7 +62,7 @@ class Kayttaja {
         return $tulokset;
     }
     
-    public static function getKayttajaTunnuksilla($kayttajatunnus, $salasana) {
+    public static function haeKayttajaTunnuksilla($kayttajatunnus, $salasana) {
         
         $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli from kayttajat where kayttajatunnus = ? AND salasana = ? LIMIT 1";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -74,6 +90,11 @@ class Kayttaja {
         $kysely = getTietokantayhteys()->prepare($sql);
         $kysely->execute(array($id));
         
+    }
+    
+    public function vaihdaSalasana($uusisalasana){
+        $hash = $this->luoSalasanaHash($salasana);
+        $sql = "UPDATE ";
     }
     
     //palauttaa koko nimen
@@ -131,8 +152,13 @@ class Kayttaja {
         $this->kayttajatunnus = $kayttajatunnus;
     }
     
-    public function setSalasana($salasana) {
+    public function setSalasana($salasana, $vahvistus) {
         $this->salasana = $salasana;
+    }
+    
+    private function luoSalasanaHash($salasana){
+        $suola = '$2a$11$' . substr(md5(uniqid(rand(), true)), 0, 22);
+        return crypt($salasana, $suola);
     }
     
 }

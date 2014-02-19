@@ -15,27 +15,27 @@ if (onkoKirjautunut()) {
         
         $ohjain->nayta($_GET['nayta']);
         
-    } elseif (isset($_GET['muokkaa'])){
+    } elseif (isset($_GET['muokkaa']) && (onkoAdmin() || onkoMuokkaaja())){
 
         $ohjain->muokkaa($_GET['muokkaa']);
         
-    } elseif (isset($_GET['paivita'])){
+    } elseif (isset($_GET['paivita']) && (onkoAdmin() || onkoMuokkaaja())){
 
         $ohjain->tallenna('muokkaus', $_POST['nimi'], $_POST['kategoria'], 
                 $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
-    } elseif (isset($_GET['lisaa'])){
+    } elseif (isset($_GET['lisaa']) && (onkoAdmin() || onkoMuokkaaja())){
         
         $ohjain->lisaa();
         
-    } elseif (isset($_GET['tallenna'])) {
+    } elseif (isset($_GET['tallenna']) && (onkoAdmin() || onkoMuokkaaja())) {
         
         $ohjain->tallenna('lisays', $_POST['nimi'], $_POST['kategoria'], 
                 $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
-    } elseif (isset($_POST['id']) && onkoAdmin() ){
+    } elseif (isset($_POST['id']) && (onkoAdmin() || onkoMuokkaaja()) ){
         
-        $ohjain->poista($_POST['id']);
+        $ohjain->poista($_POST['id'] && (onkoAdmin() || onkoMuokkaaja()));
         
     } elseif (isset($_GET['nimi'])) {
     
