@@ -94,7 +94,7 @@ class Kayttaja {
     
     public function vaihdaSalasana($uusisalasana){
         $hash = $this->luoSalasanaHash($salasana);
-        $sql = "UPDATE "
+        $sql = "UPDATE ";
     }
     
     //palauttaa koko nimen
