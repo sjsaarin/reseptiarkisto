@@ -2,19 +2,17 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>id</th>
             <th>Nimi</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($data->kategoriat as $asia): ?>
+        <?php foreach ($data->kategoriat as $kategoria): ?>
             <tr>
-                <td><?php echo htmlspecialchars($asia->getId()); ?></a></td>
-                <td><?php echo htmlspecialchars($asia->getNimi()); ?></a></td>
+                <td><?php echo htmlspecialchars($kategoria->getNimi()); ?></a></td>
                 <td>
                     <form action='kategoriat.php' method="post" onsubmit="return confirm('Oletko varma?')">
-                        <input type="hidden" name="id" value="<?php echo $asia->getId(); ?>">
+                        <input type="hidden" name="id" value="<?php echo $kategoria->getId(); ?>">
                         <input type="submit" class="btn btn-danger btn-xs" value="Poista">
                     </form>
                 </td>

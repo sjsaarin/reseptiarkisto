@@ -21,11 +21,12 @@
     }
     
      function onkoMuokkaaja(){
-        return $_SESSION['kayttajan_rooli'] === 1;
+        return $_SESSION['kayttajan_rooli'] <= 1;
     }
     
     function onkoKirjautunutKayttaja($id){
         return $_SESSION['kayttajan_id'] === $id;
     }
+    
 
     

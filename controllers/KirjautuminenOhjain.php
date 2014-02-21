@@ -17,25 +17,26 @@ class KirjautuminenOhjain {
                 ));
             exit();
         }
-        $annettu_kayttajatunnus = $kayttajatunnus;
     
         if (empty($salasana)){
             naytaNakyma("views/kirjautuminen.php", array(
                 'title' => $this->title,
-                'kayttaja' => $annettu_kayttajatunnus,
+                'kayttaja' => $kayttajatunnus,
                 'virhe' => "Kirjautuminen epäonnistui! Et antanut salasanaa."
                 ));
             exit();
         }
-        $annettu_salasana = $salasana;
-    
-        $kayttaja = Kayttaja::haeKayttajaTunnuksilla($annettu_kayttajatunnus, $annettu_salasana);
-    
+        //$salasana_hash = Kayttaja::haeSalasanaKayttajatunnuksella($kayttajatunnus);
+        
+        $kayttaja = Kayttaja::haeKayttajaTunnuksilla($kayttajatunnus, $salasana);
+
+            
         if (!empty($kayttaja)){
             session_start();
             $_SESSION['kayttaja']=$kayttaja;
             $_SESSION['kayttajan_rooli']=$kayttaja->getRooli();
             $_SESSION['kayttajan_id']=$kayttaja->getId();
+            $_SESSION['ilmoitus']="Tervetuloa ". $kayttaja->getEtunimi();
             header('Location: index.php');
         } else {
             naytaNakyma("views/kirjautuminen.php", array(
@@ -48,9 +49,12 @@ class KirjautuminenOhjain {
     }
     
     public function kirjauduUlos(){
+        /*
         unset($_SESSION['kayttaja']);
         unset($_SESSION['kayttajan_rooli']);
-        unset($_SESSION['kayttajan_id']);
+        unset($_SESSION['kayttajan_id']); */
+        $_SESSION = array();
+        session_destroy();
         header('Location: kirjautuminen.php');
         
     }
