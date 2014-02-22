@@ -10,13 +10,13 @@
         <?php else: ?>
         <div class="form-group">
         <?php endif; ?> 
-            <label class="col-md-2 control-label" for="inputNimi">Nimi</label>
-            <div class="col-md-10">
-                <input id="inputNimi" name="nimi" type="text" placeholder="nimi" value="<?php if (isset($data->raakaaine)){ echo htmlspecialchars($data->raakaaine->getNimi()); } ?>">
-                <?php if (!empty($data->virheet['nimi'])): ?>
-                <span class="help-inline"><?php echo $data->virheet['nimi']; ?></span>
-                <?php endif; ?> 
-            </div>    
+            <label class="col-sm-2 control-label" for="inputNimi">Nimi</label>
+            <div class="col-sm-3">
+                <input id="inputNimi" class="form-control" name="nimi" type="text" placeholder="nimi" value="<?php if (isset($data->raakaaine)){ echo htmlspecialchars($data->raakaaine->getNimi()); } ?>"> 
+            </div>
+            <?php if (!empty($data->virheet['nimi'])): ?>
+                <p class="help-block"><?php echo $data->virheet['nimi']; ?></p>
+            <?php endif; ?>
         </div>
             
         <?php if (!empty($data->virheet['kalorit'])): ?>
@@ -24,13 +24,13 @@
         <?php else: ?>
         <div class="form-group">
         <?php endif; ?>
-            <label class="col-md-2 control-label" for="inputKalorit">kcal / 100g</label>
-            <div class="col-md-10">
-                <input id="inputKalorit" name="kalorit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)) { echo $data->raakaaine->getKalorit(); } ?>">
-                <?php if (!empty($data->virheet['kalorit'])): ?>
-                <span class="help-inline"><?php echo $data->virheet['kalorit']; ?></span>
-                <?php endif; ?> 
+            <label class="col-sm-2 control-label" for="inputKalorit">kcal / 100g</label>
+            <div class="col-sm-2">
+                <input id="inputKalorit" class="form-control" name="kalorit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)) { echo $data->raakaaine->getKalorit(); } ?>"> 
             </div>
+            <?php if (!empty($data->virheet['kalorit'])): ?>
+                <p class="help-block"><?php echo $data->virheet['kalorit']; ?></p>
+            <?php endif; ?>
         </div>
 
         <?php if (!empty($data->virheet['proteiinit'])): ?>
@@ -38,13 +38,13 @@
         <?php else: ?>
         <div class="form-group">
         <?php endif; ?>
-            <label class="col-md-2 control-label" for="inputProteiinit">Proteiinit / 100g</label>
-            <div class="col-md-10">
-                <input id="inputProteiinit" name="proteiinit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getProteiinit(); } ?>">
-                <?php if (!empty($data->virheet['proteiinit'])): ?>
-                <span class="help-inline"><?php echo $data->virheet['proteiinit']; ?></span>
-                <?php endif; ?> 
+            <label class="col-sm-2 control-label" for="inputProteiinit">Proteiinit / 100g</label>
+            <div class="col-sm-2">
+                <input id="inputProteiinit" class="form-control" name="proteiinit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getProteiinit(); } ?>">
             </div>
+            <?php if (!empty($data->virheet['proteiinit'])): ?>
+                <p class="help-block"><?php echo $data->virheet['proteiinit']; ?></p>
+            <?php endif; ?>
         </div>
 
         <?php if (!empty($data->virheet['hiilarit'])): ?>
@@ -52,13 +52,13 @@
         <?php else: ?>
         <div class="form-group">
         <?php endif; ?>
-            <label class="col-md-2 control-label" for="inputHiilarit">Hiilarit / 100g</label>
-            <div class="col-md-10">
-                <input id="inputHiilarit" name="hiilarit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getHiilarit(); } ?>">
-                <?php if (!empty($data->virheet['hiilarit'])): ?>
-                <span class="help-inline"><?php echo $data->virheet['hiilarit']; ?></span>
-                <?php endif; ?> 
+            <label class="col-sm-2 control-label" for="inputHiilarit">Hiilarit / 100g</label>
+            <div class="col-sm-2">
+                <input id="inputHiilarit" class="form-control" name="hiilarit" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getHiilarit(); } ?>"> 
             </div>
+            <?php if (!empty($data->virheet['hiilarit'])): ?>
+                <p class="help-block"><?php echo $data->virheet['hiilarit']; ?></p>
+            <?php endif; ?>
         </div>
 
         <?php if (!empty($data->virheet['rasvat'])): ?>
@@ -66,13 +66,13 @@
         <?php else: ?>
         <div class="form-group">
         <?php endif; ?>
-            <label class="col-md-2 control-label" for="inputRasvat">Rasvat / 100g</label>
-            <div class="col-md-10">
-                <input id="inputRasvat" name="rasvat" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getRasvat(); } ?>">
-                <?php if (!empty($data->virheet['rasvat'])): ?>
-                <span class="help-inline"><?php echo $data->virheet['rasvat']; ?></span>
-                <?php endif; ?> 
+            <label class="col-sm-2 control-label" for="inputRasvat">Rasvat / 100g</label>
+            <div class="col-sm-2">
+                <input id="inputRasvat" class="form-control" name="rasvat" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getRasvat(); } ?>">    
             </div>
+            <?php if (!empty($data->virheet['rasvat'])): ?>
+                <p class="help-block"><?php echo $data->virheet['rasvat']; ?></p>
+            <?php endif; ?>
         </div>
 
         <?php if (!empty($data->virheet['hinta'])): ?>
@@ -80,17 +80,45 @@
         <?php else: ?>
         <div class="form-group">
         <?php endif; ?>
-            <label class="col-md-2 control-label" for="inputHinta">Hinta €/kg</label>
-            <div class="col-md-10">
-                <input id="inputHinta" name="hinta" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getHinta(); } ?>">
-                <?php if (!empty($data->virheet['hinta'])): ?>
-                <span class="help-inline"><?php echo $data->virheet['hinta']; ?></span>
-                <?php endif; ?> 
+            <label class="col-sm-2 control-label" for="inputHinta">Hinta €/kg</label>
+            <div class="col-sm-2">
+                <input id="inputHinta" class="form-control" name="hinta" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getHinta(); } ?>"> 
             </div>
+            <?php if (!empty($data->virheet['hinta'])): ?>
+                <p class="help-block"><?php echo $data->virheet['hinta']; ?></p>
+            <?php endif; ?>
+        </div>
+            
+        <?php if (!empty($data->virheet['tiheys'])): ?>
+        <div class="form-group has-error">        
+        <?php else: ?>
+        <div class="form-group">
+        <?php endif; ?>
+            <label class="col-sm-2 control-label" for="inputHinta">Tiheys g/dl</label>
+            <div class="col-sm-2">
+                <input id="inputTiheys" class="form-control" name="tiheys" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getTiheys(); } ?>"> 
+            </div>
+            <?php if (!empty($data->virheet['tiheys'])): ?>
+                <p class="help-block"><?php echo $data->virheet['tiheys']; ?></p>
+            <?php endif; ?>
+        </div>
+        
+        <?php if (!empty($data->virheet['kpl_paino'])): ?>
+        <div class="form-group has-error">        
+        <?php else: ?>
+        <div class="form-group">
+        <?php endif; ?>
+            <label class="col-sm-2 control-label" for="inputKplPaino">Paino (g)/kpl</label>
+            <div class="col-sm-2">
+                <input id="inputKplPaino" class="form-control" name="kpl_paino" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getKplPaino(); } else { echo 0; } ?>"> 
+            </div>
+            <?php if (!empty($data->virheet['tiheys'])): ?>
+                <p class="help-block"><?php echo $data->virheet['kpl_paino']; ?></p>
+            <?php endif; ?>
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+            <div class="col-sm-offset-2 col-sm-2">
                 <button type="submit" class="btn btn-default">Tallenna</button>
             </div>
         </div>

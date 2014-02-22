@@ -25,7 +25,7 @@ class Resepti {
     //reseptin raaka-aineiden lukumäärän maksimi
     private $raakaaineiden_lkm = 10;
     //yksiköt kovakoodattu tähän
-    private static $yksikot = array('mm','tl','rkl','ml','cl','dl','l','g','kg','kpl');
+    private static $yksikot = array('mm' => 0.01,'tl' => 0.05, 'rkl' => 0.15 , 'ml' => 0.01, 'cl' => 0.1 ,'dl' => 1 , 'l' => 10, 'g' => 1, 'kg' => 1000, 'kpl' => 1);
     
     private $virheet = array();
     
@@ -49,10 +49,10 @@ class Resepti {
         $sql = "SELECT id, nimi, kategoria, omistaja, lahde, juomasuositus, valmistusohje, annoksia, paaraakaaine from reseptit where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
         $tulos = $kysely->fetchObject();
-        if (!$tulos == null){
+        if (!($tulos === NULL)){
             return new Resepti($tulos->id, $tulos->nimi, $tulos->kategoria, $tulos->omistaja, $tulos->lahde, $tulos->juomasuositus, $tulos->valmistusohje, $tulos->annoksia, $tulos->paaraakaaine);
         } else {
-            return null;
+            return NULL;
         }
         
     }
@@ -90,6 +90,22 @@ class Resepti {
                 $tulokset[] = $resepti;
             }
         return $tulokset;
+    }
+    
+    /**
+     * Hakee id:tä vastaavan reseptin nimen. Jos reseptiä ei ole palauttaa NULL
+     * 
+     * @param type $id
+     */
+    public static function haeNimi($id){
+        $sql = "SELECT nimi from reseptit WHERE id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
+        $tulos = $kysely->fetchObject();
+        if (!empty($tulos)){
+            return $tulos->nimi;
+        } else {
+            return NULL;
+        }
     }
     
     /**
@@ -255,6 +271,7 @@ class Resepti {
         return true;
     }
     
+    //poistaa kaikki reseptiin liittyvät raaka-aineet kannasta
     public function poistaRaakaaineetKannasta(){
         $sql = "DELETE from reseptin_raakaaineet where reseptin_id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 
@@ -264,6 +281,17 @@ class Resepti {
             return false; 
         } 
         return true;
+    }
+    
+    /**
+     * vaihtaa reseptin omistajan 
+     * 
+     * @param type $omistaja
+     * @param type $uusi_omistaja
+     */
+    public static function vaihdaOmistaja($omistaja, $uusi_omistaja){
+        $sql = "UPDATE reseptit SET omistaja=? WHERE omistaja=?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($uusi_omistaja, $omistaja));
     }
     
     public static function haeYksikot(){

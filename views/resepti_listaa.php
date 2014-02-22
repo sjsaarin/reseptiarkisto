@@ -46,4 +46,4 @@
     </tbody>
 </table>
 <p>Reseptejä yhteensä: <?php echo $data->lkm ?></p>
-<?php if (onkoAdmin()): ?><p><a href="reseptit.php?lisaa">Lisää uusi resepti</a></p><?php endif; ?>
+<?php if (onkoMuokkaaja()): ?><p><a href="reseptit.php?lisaa">Lisää uusi resepti</a></p><?php endif; ?>

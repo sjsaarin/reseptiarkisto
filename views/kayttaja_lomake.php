@@ -12,13 +12,13 @@
     <div class="form-group">
         <label for="inputEtunimi" class="col-sm-2 control-label">Etunimi</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="inputEtunimi" name="etunimi" placeholder="Etunimi" <?php if (isset($data->kayttaja)) : ?>value="<?php echo $data->kayttaja->getEtunimi() ?>" <?php endif; ?>>
+            <input type="text" class="form-control" id="inputEtunimi" name="etunimi" placeholder="Etunimi" <?php if (isset($data->kayttaja)) : ?>value="<?php echo htmlspecialchars($data->kayttaja->getEtunimi()); ?>" <?php endif; ?>>
         </div>
     </div>
     <div class="form-group">
         <label for="inputSukunimi" class="col-sm-2 control-label">Sukunimi</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="inputSukunimi" name="sukunimi" placeholder="Sukunimi" <?php if (isset($data->kayttaja)) : ?>value="<?php echo $data->kayttaja->getSukunimi() ?>" <?php endif; ?>>
+            <input type="text" class="form-control" id="inputSukunimi" name="sukunimi" placeholder="Sukunimi" <?php if (isset($data->kayttaja)) : ?>value="<?php echo htmlspecialchars($data->kayttaja->getSukunimi()); ?>" <?php endif; ?>>
         </div>
     </div>
     <br>

@@ -19,27 +19,27 @@ if (onkoKirjautunut()) {
         $ohjain->nayta($_GET['id']);
 
     // raakaaineet.php?lisaa, jos kirjautunut käyttäjä ei ole admin ei näytetä
-    } elseif (isset($_GET['lisaa']) && onkoAdmin()) {
+    } elseif (isset($_GET['lisaa']) && onkoMuokkaaja()) {
         
         $ohjain->lisaa();
         
     // raakaaineet.php?tallenna, jos kirjautunut käyttäjä ei ole admin ei näytetä
-    } elseif (isset($_GET['tallenna']) && onkoAdmin()) {
+    } elseif (isset($_GET['tallenna']) && onkoMuokkaaja()) {
         
-        $ohjain->tallenna('lisaa', $_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta']);
+        $ohjain->tallenna('lisaa', $_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta'], $_POST['tiheys'], $_POST['kpl_paino']);
 
     // raakaaineet.php?muokkaa
-    } elseif (isset($_GET['muokkaa']) && onkoAdmin()){
+    } elseif (isset($_GET['muokkaa']) && onkoMuokkaaja()){
         
         $ohjain->muokkaa($_GET['muokkaa']);
 
-    } elseif (isset($_GET['paivita']) && (int)$_GET['paivita']==$_SESSION['raakaaine']->getId() && onkoAdmin()){
+    } elseif (isset($_GET['paivita']) && (int)$_GET['paivita']==$_SESSION['raakaaine']->getId() && onkoMuokkaaja()){
         
-        $ohjain->tallenna('muokkaa', $_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta']);
+        $ohjain->tallenna('muokkaa', $_POST['nimi'], $_POST['kalorit'], $_POST['hiilarit'], $_POST['proteiinit'], $_POST['rasvat'], $_POST['hinta'], $_POST['tiheys'], $_POST['kpl_paino']);
         
-    } elseif (isset($_GET['poista']) && (int)$_GET['poista']==$_SESSION['raakaaine']->getId() && onkoAdmin()){
+    } elseif (isset($_GET['poista']) && isset($_POST['id']) && onkoMuokkaaja()){
         
-        $ohjain->poista();
+        $ohjain->poista($_POST['id']);
     
     } elseif (isset($_GET['hae'])) {
 

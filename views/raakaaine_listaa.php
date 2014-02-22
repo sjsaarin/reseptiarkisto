@@ -7,6 +7,7 @@
     </div>
     <button type="submit" class="btn btn-default">Hae</button>
 </form>
+<br>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -33,6 +34,6 @@
 </table>
 <p>Raaka-aineita yhteensä: <?php echo $data->lkm ?></p>
 <br>
-<?php if (onkoAdmin()): ?>
+<?php if (onkoMuokkaaja()): ?>
 <p><a href="raakaaineet.php?lisaa">Lisää uusi raaka-aine</a></p>
 <?php endif; ?>

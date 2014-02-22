@@ -12,9 +12,11 @@ class Raakaaine {
     private $proteiinit;
     private $rasvat;
     private $hinta;
+    private $tiheys;
+    private $kpl_paino;
     private $virheet = array();
     
-    public function __construct($id, $nimi, $kalorit, $hiilarit, $proteiinit, $rasvat, $hinta){
+    public function __construct($id, $nimi, $kalorit, $hiilarit, $proteiinit, $rasvat, $hinta, $tiheys, $kpl_paino){
         $this->id = $id;
         $this->nimi = $nimi;
         $this->kalorit = $kalorit;
@@ -22,6 +24,8 @@ class Raakaaine {
         $this->proteiinit = $proteiinit;
         $this->rasvat = $rasvat;
         $this->hinta = $hinta;
+        $this->tiheys = $tiheys;
+        $this->kpl_paino = $kpl_paino;
     }
     
     //CREATE
@@ -31,10 +35,10 @@ class Raakaaine {
      * @return type
      */
     public function lisaaKantaan(){
-        $sql = "INSERT INTO raakaaineet(nimi, kalorit, hiilarit, proteiinit, rasvat, hinta) VALUES(?,?,?,?,?,?) RETURNING id";
+        $sql = "INSERT INTO raakaaineet(nimi, kalorit, hiilarit, proteiinit, rasvat, hinta, tiheys, kpl_paino) VALUES(?,?,?,?,?,?,?,?) RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);
 
-        $ok = $kysely->execute(array($this->getNimi(), $this->getKalorit(), $this->getHiilarit(), $this->getProteiinit(), $this->getRasvat(), $this->getHinta()));
+        $ok = $kysely->execute(array($this->getNimi(), $this->getKalorit(), $this->getHiilarit(), $this->getProteiinit(), $this->getRasvat(), $this->getHinta(), $this->getTiheys(), $this->getKplPaino()));
         if ($ok) {
             $this->id = $kysely->fetchColumn();
         }
@@ -48,12 +52,12 @@ class Raakaaine {
      * @return \Raakaaine
      */
     public static function haeKaikki(){
-        $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta from raakaaineet order by nimi";
+        $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta, tiheys, kpl_paino from raakaaineet order by nimi";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
     
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta); 
+                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino); 
                 $tulokset[] = $raakaaine;
             }
         return $tulokset;
@@ -67,11 +71,11 @@ class Raakaaine {
      * @return \Raakaaine|null
      */
     public static function hae($id){
-        $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta from raakaaineet where id=?";
+        $sql = "SELECT id, nimi, kalorit, hiilarit, proteiinit, rasvat, hinta, tiheys, kpl_paino from raakaaineet where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
         $tulos = $kysely->fetchObject();
         if (!$tulos == null){
-            return new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta);
+            return new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino);
         } else {
             return null;
         }
@@ -102,7 +106,7 @@ class Raakaaine {
         //$kysely->execute();
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta); 
+                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino); 
                 $tulokset[] = $raakaaine;
             }
         return $tulokset;
@@ -121,7 +125,7 @@ class Raakaaine {
         $kysely->execute(array("$nimi%"));
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta); 
+                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino); 
                 $tulokset[] = $raakaaine;
             }
         return $tulokset;
@@ -134,10 +138,10 @@ class Raakaaine {
      * @return type
      */
     public function paivitaKantaan(){
-        $sql = "UPDATE raakaaineet SET nimi=?, kalorit=?, hiilarit=?, proteiinit=?, rasvat=?, hinta=? WHERE id=? RETURNING id";
+        $sql = "UPDATE raakaaineet SET nimi=?, kalorit=?, hiilarit=?, proteiinit=?, rasvat=?, hinta=?, tiheys=?, kpl_paino=? WHERE id=? RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);
 
-        $ok = $kysely->execute(array($this->getNimi(), $this->getKalorit(), $this->getHiilarit(), $this->getProteiinit(), $this->getRasvat(), $this->getHinta(), $this->getId()));
+        $ok = $kysely->execute(array($this->getNimi(), $this->getKalorit(), $this->getHiilarit(), $this->getProteiinit(), $this->getRasvat(), $this->getHinta(), $this->getTiheys(), $this->getKplPaino(), $this->getId()));
         if ($ok) {
             $this->id = $kysely->fetchColumn();
         }
@@ -155,6 +159,17 @@ class Raakaaine {
         $kysely = getTietokantayhteys()->prepare($sql); 
         try { 
             $kysely->execute(array($this->getId()));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
+    }
+    
+    public static function poistaRaakaaineKannasta($id){
+        $sql = "DELETE from raakaaineet where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($id));
         } catch (PDOException $e) { 
             return false; 
         } 
@@ -220,6 +235,14 @@ class Raakaaine {
         return $this->hinta;
     }
     
+    public function getTiheys() {
+        return $this->tiheys;
+    }
+    
+    public function getKplPaino() {
+        return $this->kpl_paino;
+    }
+    
     public function getVirheet(){
         return $this->virheet;
     }
@@ -259,6 +282,16 @@ class Raakaaine {
         $this->tarkistaAtribuutti('kalorit', $kalorit);
     }
 
+    public function setTiheys($tiheys){
+        $this->tiheys = $tiheys;
+        $this->tarkistaAtribuutti('tiheys', $tiheys);
+    }
+    
+    public function setKplPaino($kpl_paino){
+        $this->kpl_paino = $kpl_paino;
+        $this->tarkistaAtribuutti('kpl_paino', $kpl_paino);
+    }
+    
     public function setHinta($hinta){
         $this->hinta = $hinta;
         $this->tarkistaAtribuutti('hinta', $hinta);

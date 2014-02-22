@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-
+require_once 'libs/models/Resepti.php';
 
 class Kayttaja {
   
@@ -41,10 +41,10 @@ class Kayttaja {
                 WHERE id = ?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
         $tulos = $kysely->fetchObject();
-        if (!$tulos == null){
+        if (!empty($tulos)){
             return new Kayttaja($tulos->id, $tulos->etunimi, $tulos->sukunimi, $tulos->kayttajatunnus, $tulos->salasana, $tulos->rooli); 
         } else {
-            return null;
+            return NULL;
         }
         
     }
@@ -52,7 +52,8 @@ class Kayttaja {
     public static function haeKayttajat($hakusana) {
         $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli 
                 FROM kayttajat
-                WHERE etunimi ILIKE ? OR sukunimi ILIKE ?";
+                WHERE etunimi ILIKE ? OR sukunimi ILIKE ? 
+                ORDER BY etunimi";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$hakusana%", "$hakusana%"));
     
         $tulokset = array();
@@ -124,12 +125,19 @@ class Kayttaja {
             return $tulos->salasana;
         }*/
     
-    
-    public static function poistaKannasta($id){
+    /**
+     * Poistaa kayttajan kannasta, samalla asettaa reseptien jotka poistettava omisti omistajaksi poistajan
+     * 
+     * @param type $poistettava
+     * @param type $poistaja
+     */
+    public static function poistaKannasta($poistettava, $poistaja){
+        
+        Resepti::vaihdaOmistaja($poistettava, $poistaja);
         
         $sql = "DELETE from kayttajat where id = ?";
         $kysely = getTietokantayhteys()->prepare($sql);
-        $kysely->execute(array($id));
+        $kysely->execute(array($poistettava));
         
     }
     

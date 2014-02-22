@@ -24,19 +24,15 @@ class KayttajatOhjain {
     
     public function nayta($id){
         $kayttaja = Kayttaja::hae($id);
-        if (isset($kayttaja)){
+        if (!empty($kayttaja)){
             naytaNakyma("views/kayttaja_nayta.php", array(
                 'title' => $kayttaja->getNimi(),
                 'sivun' => $this->sivun_nimi,
                 'kayttaja' => $kayttaja 
             ));
         } else {
-            naytaNakyma("views/kayttaja_nayta.php", array(
-                'title' => "Virhe",
-                'virhe' => 'Käyttäjää ei löydy',
-                'sivu' => $this->sivun_nimi,
-                'kayttaja' => $kayttaja 
-            ));
+            $_SESSION['virhe'] = 'Käyttäjää ei löydy';
+            header('Location: index.php');
         }
     }
     
@@ -140,7 +136,7 @@ class KayttajatOhjain {
     }
     
     public function poista($id){
-        Kayttaja::poistaKannasta((int)$id);
+        Kayttaja::poistaKannasta((int)$id, $_SESSION['kayttajan_id']);
         $_SESSION['ilmoitus'] = "Käyttäjä (id: " . $id .") poistettu.";
         header('Location: kayttajat.php');
     }

@@ -26,7 +26,8 @@
                 <div class="navbar-collapse collapse" id="paavalikko">     
                     <ul class="nav navbar-nav">
                         <li <?php if ($data->sivu == "reseptit") { echo 'class="active"'; } ?>><a href="reseptit.php">Reseptit</a></li>
-                        <li <?php if ($data->sivu == "raaka-aineet") { echo 'class="active"'; } ?>><a href="raakaaineet.php">Raaka-aineet</a></li>
+                        <li <?php if ($data->sivu == "raakaaineet") { echo 'class="active"'; } ?>><a href="raakaaineet.php">Raaka-aineet</a></li>
+                        <li <?php if ($data->sivu == "menut") { echo 'class="active"'; } ?>><a href="menut.php">Menut</a></li>
                         <?php if (onkoMuokkaaja()): ?><li <?php if ($data->sivu == "kategoriat") { echo 'class="active"'; } ?>><a href="kategoriat.php">Kategoriat</a></li><?php endif; ?>
                         <?php if (onkoAdmin()): ?><li <?php if ($data->sivu == "kayttajat") { echo 'class="active"'; } ?>><a href="kayttajat.php">Kayttajat</a></li><?php endif; ?>
                         <li <?php if ($data->sivu == "ostoslista") { echo 'class="active"'; } ?>><a href="ostoslista.php">Ostoslista</a></li>

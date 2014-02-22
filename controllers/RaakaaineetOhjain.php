@@ -7,7 +7,7 @@
  */
 class RaakaaineetOhjain {
 
-    private $sivun_nimi = 'raaka-aineet';
+    private $sivun_nimi = 'raakaaineet';
 
     public function nayta($id) {
 
@@ -50,9 +50,9 @@ class RaakaaineetOhjain {
         ));
     }
 
-    public function tallenna($tila, $nimi, $kalorit, $hiilarit, $proteiinit, $rasvat, $hinta) {
+    public function tallenna($tila, $nimi, $kalorit, $hiilarit, $proteiinit, $rasvat, $hinta, $tiheys, $kpl_paino) {
         if ($tila == 'lisaa') {
-            $uusiraakaaine = new Raakaaine(null, null, null, null, null, null, null);
+            $uusiraakaaine = new Raakaaine(null, null, null, null, null, null, null, null);
         }
         if ($tila == 'muokkaa') {
             $uusiraakaaine = $_SESSION['raakaaine'];
@@ -63,6 +63,8 @@ class RaakaaineetOhjain {
         $uusiraakaaine->setProteiinit($proteiinit);
         $uusiraakaaine->setRasvat($rasvat);
         $uusiraakaaine->setHinta($hinta);
+        $uusiraakaaine->setTiheys($tiheys);
+        $uusiraakaaine->setKplPaino($kpl_paino);
 
         if ($uusiraakaaine->onkoKelvollinen()) {
             if ($tila == 'lisaa') {
@@ -111,11 +113,11 @@ class RaakaaineetOhjain {
         }
     }
 
-    public function poista() {
+    public function poista($id) {
         $raakaaine = $_SESSION['raakaaine'];
-        unset($_SESSION['raakaaine']);
         $poistuiko = $raakaaine->poistaKannasta();
         if ($poistuiko) {
+            unset($_SESSION['raakaaine']);
             $_SESSION['ilmoitus'] = "Raaka-aine poistettu onnistuneesti.";
             header('Location: raakaaineet.php');
         } else {

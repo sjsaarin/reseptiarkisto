@@ -26,8 +26,8 @@
         <div class="form-group col-md-3">
             <label for="selectKategoria">Kategoria</label>
             <select class="form-control" id="selectKategoria" name="kategoria">
-                <?php foreach ($data->kategoriat as $asia): ?>
-                    <option value="<?php echo $asia->getId(); ?>" <?php if(isset($data->resepti) && $data->resepti->getKategoria() ==  $asia->getId()) echo 'selected'  ?>><?php echo htmlspecialchars($asia->getNimi()); ?></option>
+                <?php foreach ($data->kategoriat as $kategoria): ?>
+                    <option value="<?php echo $kategoria->getId(); ?>" <?php if(isset($data->resepti) && $data->resepti->getKategoria() ==  $kategoria->getId()) echo 'selected'  ?>><?php echo htmlspecialchars($kategoria->getNimi()); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -37,10 +37,10 @@
     <table class="table-condensed">
     <thead>
         <tr>
-            <th class="col-md-6">Nimi:</th>
+            <th class="col-md-4">Nimi:</th>
             <th class="col-md-1">Määrä:</th>
-            <th class="col-md-2">Yksikkö:</th>
-            <th class="col-md-3"></th>
+            <th class="col-md-1">Yksikkö:</th>
+            <th class="col-md-6"></th>
         </tr>
     </thead>
     <tbody>
@@ -50,8 +50,8 @@
         <div class="form-group">
             <select class="form-control" name="raakaaine[<?php echo $i; ?>]">
                 <option value="-1"> </option>
-                    <?php foreach ($data->raakaaineet as $asia): ?>
-                        <option value="<?php echo $asia->getId(); ?>" <?php if (isset($data->asetetut_raakaaineet[$i]) && ($data->asetetut_raakaaineet[$i] == $asia->getId())) echo 'selected' ; ?>><?php echo htmlspecialchars($asia->getNimi()); ?></option>
+                    <?php foreach ($data->raakaaineet as $raakaaine): ?>
+                        <option value="<?php echo $raakaaine->getId(); ?>" <?php if (isset($data->asetetut_raakaaineet[$i]) && ($data->asetetut_raakaaineet[$i] == $raakaaine->getId())) echo 'selected' ; ?>><?php echo htmlspecialchars($raakaaine->getNimi()); ?></option>
                     <?php endforeach; ?>
             </select>
         </div>
@@ -63,8 +63,8 @@
         </td>
         <td>
         <div class="form-group">
-            <select class="form-control" id="selectYksikko" name="yksikko[<?php echo $i; ?>]" selected="kg">
-                <?php foreach ($data->yksikot as $yksikko): ?>
+            <select class="form-control" id="selectYksikko" name="yksikko[<?php echo $i; ?>]">
+                <?php foreach ($data->yksikot as $yksikko => $arvo): ?>
                     <option value="<?php echo $yksikko; ?>" 
                     <?php if (isset($data->asetetut_raakaaineet[$i]) && isset($data->asetetut_yksikot[$i])): ?>
                         <?php if ($data->asetetut_yksikot[$i] == $yksikko) echo 'selected'; ?> 

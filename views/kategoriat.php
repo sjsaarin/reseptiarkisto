@@ -34,6 +34,8 @@
         <span class="help-inline"><?php echo $data->virheet['nimi']; ?></span>
     <?php endif; ?> 
   </div>
-  <button type="submit" class="btn btn-default">Lisää</button>
+  <div class="form-group">
+    <button type="submit" class="btn btn-default">Lisää</button>
+  </div>
 </form>
 </div>

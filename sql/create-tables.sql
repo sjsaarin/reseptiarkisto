@@ -17,7 +17,9 @@ CREATE TABLE raakaaineet
     hiilarit numeric(6,2),
     proteiinit numeric(6,2),
     rasvat numeric(6,2),
-    hinta numeric(6,2)
+    hinta numeric(6,2),
+    tiheys numeric(6,2),
+    kpl_paino numeric(6,2)
 );
 
 CREATE TABLE kategoriat
@@ -35,7 +37,7 @@ CREATE TABLE reseptit
     paaraakaaine INTEGER REFERENCES raakaaineet(id),
     annoksia INTEGER,
     lahde varchar(100),
-    juomasuositus varchar(50),
+    juomasuositus varchar(100),
     valmistusohje varchar(3000)
 );
 
@@ -60,9 +62,11 @@ CREATE TABLE kuvat
 CREATE TABLE menut
 (
     id SERIAL PRIMARY KEY,
-    alkuruoka INTEGER REFERENCES reseptit(id),
-    valiruoka1 INTEGER REFERENCES reseptit(id),
-    paaruoka INTEGER REFERENCES reseptit(id),
-    valiruoka2 INTEGER REFERENCES reseptit(id),
-    jalkiruoka INTEGER REFERENCES reseptit(id)
+    nimi varchar(30) NOT NULL,
+    alkuruoka INTEGER REFERENCES reseptit(id) ON DELETE CASCADE,
+    valiruoka1 INTEGER REFERENCES reseptit(id) ON DELETE CASCADE,
+    paaruoka INTEGER REFERENCES reseptit(id) ON DELETE CASCADE,
+    valiruoka2 INTEGER REFERENCES reseptit(id) ON DELETE CASCADE,
+    jalkiruoka INTEGER REFERENCES reseptit(id) ON DELETE CASCADE,
+    kuvaus varchar(500)
 );
