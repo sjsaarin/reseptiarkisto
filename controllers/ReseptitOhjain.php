@@ -43,9 +43,19 @@ class ReseptitOhjain {
     /**
      * Näyttää reseptien muokkausnäkymän
      */
-    public function muokkaa($id) {
+    public function muokkaa($id, $muokkaaja) {
 
-        $resepti = Resepti::hae($id);
+        $resepti = Resepti::hae((int)$id);
+        if ($this->saakoMuokataTaiPoistaa($resepti, $muokkaaja)){
+            $this->naytaMuokkaus($resepti);
+        } else {
+            $_SESSION['virhe'] = "Et voi muokata reseptiä, et ole reseptin omistaja";
+            header('Location: reseptit.php?nayta=' . $id);
+        }    
+
+    }
+    
+    private function naytaMuokkaus($resepti){
         $_SESSION['resepti'] = $resepti;
         $kategoriat_lista = Kategoria::haeKaikki();
         $raakaaineet_lista = Raakaaine::haeKaikki();
@@ -64,18 +74,36 @@ class ReseptitOhjain {
         ));
     }
     
+    /**
+    * Poistaa reseptin, vain reseptin omistaja tai admin voi poistaa reseptin
+    */
+    public function poista($id, $poistaja) {
+        $resepti = Resepti::hae((int)$id);
+        if ($this->saakoMuokataTaiPoistaa($resepti, $poistaja)){
+            $resepti->poistaKannasta();
+            $_SESSION['ilmoitus'] = "Resepti poistettu onnistuneesti.";
+            header('Location: reseptit.php');
+        } else {
+            $_SESSION['virhe'] = "Reseptin poisto epäonnistui, et ehkä ole reseptin omistaja!";
+            header('Location: reseptit.php?nayta=' . $id);
+        }
+    }
+    
+    private function saakoMuokataTaiPoistaa($resepti, $muokkaaja){
+        $reseptin_omistaja = $resepti->getOmistaja();
+        return (($reseptin_omistaja === $muokkaaja) || onkoAdmin());
+    }
+    
     public function tallenna($tila, $nimi, $kategoria, $raakaaineet, $maarat, $yksikot, $annoksia, $ohje, $juomasuositus, $lahde){
         
         if ($tila == 'lisays'){
             $resepti = new Resepti(null, null, null, null, null, null, null, null, null);
             $resepti->setOmistaja((int) $_SESSION['kayttajan_id']);
         }
-        
         if ($tila == 'muokkaus'){
             $resepti = $_SESSION['resepti'];
             $resepti->nollaaVirheet();
         }
-        
         $resepti->setNimi($nimi);
         $resepti->setKategoria((int) $kategoria);
         $resepti->setRaakaaineet($raakaaineet, $maarat, $yksikot);
@@ -141,23 +169,7 @@ class ReseptitOhjain {
         ));
     }
 
-    /**
-     * Poistaa reseptin
-     */
-    public function poista($id) {
-        $id = (int) $id;
-        $poistuiko = Resepti::poistaKannasta($id);
-        if ($poistuiko) {
-            $_SESSION['ilmoitus'] = "Resepti poistettu onnistuneesti.";
-            header('Location: reseptit.php');
-        } else {
-            naytaNakyma("views/reseptit.php?nayta=$id", array(
-                'title' => 'Virhe',
-                'sivu' => $this->sivun_nimi,
-                'virhe' => "Reseptin poisto epäonnistui!",
-            ));
-        }
-    }
+
 
     public function hae($sivu, $nimi, $kategoria, $paaraakaaine) {
 

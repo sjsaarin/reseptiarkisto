@@ -8,10 +8,6 @@
         <label class="sr-only" for="inputHakusana">Hae menua: </label>
         <input type="text" class="form-control" id="inputHakusana" name="hae" placeholder="hakusana">
     </div>
-    <div class="form-group">
-        <label class="control-label" for="inputResepti">Resepti:</label>
-        <input type="text" class="form-control" id="inputResepti" name="hae" placeholder="resepti">
-    </div>
     <button type="submit" class="btn btn-default">Hae</button>
 </form>
 <br>
@@ -38,5 +34,20 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+<ul class="pagination pagination-sm">
+<?php if ($data->sivunro == 0): ?>
+    <li class="disabled"><a href="#">&laquo;</a></li>
+<?php else: ?>
+    <li><a href="menut.php?sivu=<?php echo $data->sivunro-1; ?><?php if(!empty($data->nimi)){ echo "&hae=" . $data->nimi; } ?>">&laquo;</a></li>
+<?php endif; ?>
+<?php for($i=0; $i < $data->sivuja; $i++): ?>
+    <li<?php if($i == $data->sivunro){ echo ' class=active'; } ?>><a href="menut.php?sivu=<?php echo $i ?><?php if(!empty($data->nimi)){ echo "&hae=" . $data->nimi; } ?>"><?php echo $i+1; ?></a></li>
+<?php endfor; ?>
+<?php if($data->sivunro == $data->sivuja-1): ?>    
+    <li class="disabled"><a href="#">&raquo;</a></li>
+<?php else: ?>
+    <li><a href="menut.php?sivu=<?php echo $data->sivunro+1; ?><?php if(!empty($data->nimi)){ echo "&hae=" . $data->nimi; } ?>">&raquo;</a></li>
+<?php endif; ?>
+</ul>
 <br>
 <?php if (onkoMuokkaaja()): ?><a href="menut.php?uusi">Lisää uusi menu</a><?php endif; ?>

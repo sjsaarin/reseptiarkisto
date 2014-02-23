@@ -65,8 +65,46 @@ class Menu {
                 $tulokset[] = $menu;
             }
         return $tulokset;
-        
     }
+    
+    /**
+     * Hakee kannasta nimeä vastaavat menut
+     * 
+     * @return type
+     */
+    public static function haeNimella($nimi, $sivu, $montako){
+        $sql = "SELECT id, nimi, alkuruoka, valiruoka1, paaruoka, valiruoka2, jalkiruoka, kuvaus 
+                FROM menut
+                WHERE nimi ILIKE ?
+                ORDER by nimi LIMIT ? OFFSET ?";
+        $kohta = $montako*$sivu;
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$nimi%", $montako, $kohta));
+        $tulokset = array();
+            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+                $menu = new Menu($tulos->id, $tulos->nimi, $tulos->alkuruoka, $tulos->valiruoka1, $tulos->paaruoka, $tulos->valiruoka2, $tulos->jalkiruoka, $tulos->kuvaus); 
+                $tulokset[] = $menu;
+            }
+        return $tulokset; 
+    }
+    
+    public static function menuidenLkm($nimi){
+        $sql = "SELECT COUNT(*) from menut where nimi ILIKE ?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$nimi%"));
+        return $kysely->fetchColumn(0);
+    }
+    /*
+    public static function haeNimella($nimi, $sivu, $montako){
+        $sql = "SELECT * from raakaaineet WHERE nimi ILIKE ? ORDER by nimi LIMIT ? OFFSET ?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        $kohta = $montako*$sivu;
+        $kysely->execute(array("$nimi%", $montako, $kohta));
+        $tulokset = array();
+            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
+                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino); 
+                $tulokset[] = $raakaaine;
+            }
+        return $tulokset;
+    } */
     
     
     public function lisaaKantaan(){

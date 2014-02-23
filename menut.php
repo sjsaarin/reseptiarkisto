@@ -36,8 +36,20 @@ if (onkoKirjautunut()) {
     
         $ohjain->poista($_POST['id']);
     
-    } else {
+    } elseif (isset($_GET['sivu']) && isset($_GET['hae'])) {
+
+        $ohjain->hae($_GET['sivu'], $_GET['hae']);
         
-        $ohjain->lista();
-    }
+    }  else if(isset($_GET['sivu'])){
+    
+        $ohjain->hae($_GET['sivu'], '');
+        
+    } else if(isset($_GET['hae'])){
+    
+        $ohjain->hae(0, $_GET['hae']);
+        
+    }else {
+    
+        $ohjain->hae(0, '');
+    }  
 }

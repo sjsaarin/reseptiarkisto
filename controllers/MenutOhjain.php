@@ -129,5 +129,19 @@ class MenutOhjain{
         
     }
     
+    public function hae($sivu, $nimi){
+        $menut = Menu::haeNimella($nimi, $sivu, 10);
+        $lukumaara = Menu::menuidenLkm($nimi);
+        $sivuja = ceil($lukumaara/10);
+        naytaNakyma("views/menu_listaa.php", array(
+            'sivu' => $this->sivun_nimi,
+            'title' => "Menut",
+            'menut' => $menut,
+            'sivuja' => $sivuja,
+            'sivunro' => $sivu,
+            'nimi' => $nimi
+        ));
+    }
+    
 }
 

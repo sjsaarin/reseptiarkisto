@@ -12,9 +12,9 @@ $ohjain = new KategoriatOhjain();
 session_start();
 if (onkoKirjautunut()) {
     
-     if (!onkoAdmin()){
+     if (!onkoMuokkaaja()){
          
-         //tämän sivun ei tulis näkyä kuin admineille, joten jos ei ole admin ohjataan index.php:n
+         //tämän sivun ei tulis näkyä kuin admineille ja muokkaajille, joten jos ei ole kumpikaan ohjataan index.php:n
          header('Location: index.php');
          
      } 

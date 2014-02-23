@@ -293,7 +293,20 @@ class Resepti {
         return true; 
     }
     
-    public static function poistaKannasta($id){
+    public function poistaKannasta(){
+        
+        $sql = "DELETE from reseptit where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($this->getId()));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
+    }
+    
+    public static function poistaReseptiKannasta($id){
+        
         $sql = "DELETE from reseptit where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); 
         try { 

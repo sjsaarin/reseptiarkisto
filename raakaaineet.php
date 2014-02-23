@@ -55,7 +55,7 @@ if (onkoKirjautunut()) {
         
     }else {
     
-        $ohjain->hae(0, "");
+        $ohjain->hae(0, '');
     }  
     
 }
