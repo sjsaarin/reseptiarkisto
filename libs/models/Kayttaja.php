@@ -23,18 +23,7 @@ class Kayttaja {
         $this->salasana = $salasana;
         $this->rooli = $rooli;
     }
-    
-    public function lisaaKantaan() {
-        $sql = "INSERT INTO kayttajat(etunimi, sukunimi, kayttajatunnus, salasana, rooli) VALUES(?,?,?,?,?) RETURNING id";
-        $kysely = getTietokantayhteys()->prepare($sql);
-
-        $ok = $kysely->execute(array($this->getEtunimi(), $this->getSukunimi(), $this->getKayttajatunnus(), $this->getSalasana(), $this->getRooli()));
-        if ($ok) {
-            $this->id = $kysely->fetchColumn();
-        }
-        return $ok;
-    }
-    
+        
     public static function hae($id){
         $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli 
                 FROM kayttajat
@@ -80,26 +69,6 @@ class Kayttaja {
             return NULL;
         }
     }
-    /*
-    //hakee kayttajatunnusta ja salasanaa (hash) vastaavan kayttajan kannasta
-    private static function haeKayttajaTunnuksellaJaSalasanalla($kayttajatunnus, $salasana){
-        $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli from kayttajat where kayttajatunnus = ? AND salasana = ? LIMIT 1";
-        $kysely = getTietokantayhteys()->prepare($sql);
-        $kysely->execute(array($kayttajatunnus, $salasana));
-        $tulos = $kysely->fetchObject();
-        if (empty($tulos)) {
-            return NULL;
-        } else {
-            $kayttaja = new Kayttaja(); 
-            $kayttaja->id = $tulos->id;
-            $kayttaja->etunimi = $tulos->etunimi;
-            $kayttaja->sukunimi = $tulos->sukunimi;
-            $kayttaja->kayttajatunnus = $tulos->kayttajatunnus;
-            $kayttaja->salasana = $tulos->salasana;
-            $kayttaja->rooli = $tulos->rooli;
-            return $kayttaja;
-        }
-    } */
     
     //hakee kayttajatunnusta vastaavan kayttajan kannasta
     private static function haeKayttajaKayttajatunnuksella($kayttajatunnus) {
@@ -114,16 +83,6 @@ class Kayttaja {
             return $kayttaja;
         }
     }
-        /*
-        $sql = "SELECT salasana from kayttajat where kayttajatunnus = ?";
-        $kysely = getTietokantayhteys()->prepare($sql);
-        $kysely->execute(array($kayttajatunnus));
-        $tulos = $kysely->fetchObject();
-        if (empty($tulos)) {
-            return NULL;
-        } else {
-            return $tulos->salasana;
-        }*/
     
     /**
      * Poistaa kayttajan kannasta, samalla asettaa reseptien jotka poistettava omisti omistajaksi poistajan
@@ -141,14 +100,15 @@ class Kayttaja {
         
     }
     
-    public function vaihdaSalasana($uusisalasana){
-        $this->setSalasana($uusisalasana);
-        //$hash = $this->luoSalasanaHash($salasana);
-        $sql = "UPDATE kayttajat
-                SET salasana = ?
-                WHERE id = ?";
+    public function lisaaKantaan() {
+        $sql = "INSERT INTO kayttajat(etunimi, sukunimi, kayttajatunnus, salasana, rooli) VALUES(?,?,?,?,?) RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);
-        return $kysely->execute(array($this->salasana, $this->id));
+
+        $ok = $kysely->execute(array($this->getEtunimi(), $this->getSukunimi(), $this->getKayttajatunnus(), $this->getSalasana(), $this->getRooli()));
+        if ($ok) {
+            $this->id = $kysely->fetchColumn();
+        }
+        return $ok;
     }
     
     public function paivitaKantaan(){
@@ -158,6 +118,37 @@ class Kayttaja {
         $ok = $kysely->execute(array($this->getEtunimi(), $this->getSukunimi(), $this->getKayttajatunnus(), $this->getSalasana(), $this->getRooli(), $this->getId()));
         return $ok;
         
+    }
+
+     /**
+     * Päivittää salasanan kantaan 
+     * 
+     * @param type $uusisalasana
+     * @return type
+     */
+    public function vaihdaSalasana($uusisalasana){
+        $this->setSalasana($uusisalasana);
+        $sql = "UPDATE kayttajat
+                SET salasana = ?
+                WHERE id = ?";
+        $kysely = getTietokantayhteys()->prepare($sql);
+        return $kysely->execute(array($this->salasana, $this->id));
+    }
+    
+     /**
+     * Tarkistaa onko parametrina saatu salasana käyttäjän salasana
+     * 
+     * @param type $salasana
+     * @return boolean
+     */
+    public function onkoOikeaSalasana($salasana) {
+        if  (!(crypt($salasana, $this->salasana) === $this->salasana)){
+            $this->virheet['salasana'] = "Väärä salasana!";
+            return FALSE;
+        } else {
+            unset($this->virheet['salasana']);
+            return TRUE;
+        }
     }
     
     //palauttaa koko nimen
@@ -245,21 +236,8 @@ class Kayttaja {
         }
     }
     
-     public function onkoOikeaSalasana($salasana) {
-        if  (!(crypt($salasana, $this->salasana) === $this->salasana)){
-            $this->virheet['salasana'] = "Väärä salasana!";
-            return FALSE;
-        } else {
-            unset($this->virheet['salasana']);
-            return TRUE;
-        }
-    }
-    
     private function luoSalasanaHash($salasana){
         $suola = '$2a$11$' . substr(md5(uniqid(rand(), true)), 0, 22);
-        //$suola = '$5$rounds=5000' . substr(md5(uniqid(rand(), true)), 0, 22);
-        //$suola = openssl_random_pseudo_bytes(22);
-        //$suola = '$2a$11$' . strtr($salt, array('_' => '.', '~' => '/'));
         return crypt($salasana, $suola);
     }
     

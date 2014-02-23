@@ -126,7 +126,7 @@ class MenutOhjain{
         $sivuja = ceil($lukumaara/10);
         naytaNakyma("views/menu_listaa.php", array(
             'sivu' => $this->sivun_nimi,
-            'title' => "Menut",
+            'title' => $this->title,
             'menut' => $menut,
             'sivuja' => $sivuja,
             'sivunro' => $sivu,

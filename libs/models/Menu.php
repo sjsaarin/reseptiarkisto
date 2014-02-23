@@ -54,20 +54,7 @@ class Menu {
             return NULL;
         }
     }
-    
-    /*
-    public static function haeKaikki(){
-        $sql = "SELECT id, nimi, alkuruoka, valiruoka1, paaruoka, valiruoka2, jalkiruoka, kuvaus from menut order by nimi";
-        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
-    
-        $tulokset = array();
-            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $menu = new Menu($tulos->id, $tulos->nimi, $tulos->alkuruoka, $tulos->valiruoka1, $tulos->paaruoka, $tulos->valiruoka2, $tulos->jalkiruoka, $tulos->kuvaus); 
-                $tulokset[] = $menu;
-            }
-        return $tulokset;
-    }*/
-    
+     
     /**
      * Hakee kannasta nimeä vastaavat menut
      * 
@@ -88,25 +75,22 @@ class Menu {
         return $tulokset; 
     }
     
+    public static function poistaMenuKannasta($id){
+        $sql = "DELETE from menut where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($id));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
+    }
+    
     public static function menuidenLkm($nimi){
         $sql = "SELECT COUNT(*) from menut where nimi ILIKE ?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$nimi%"));
         return $kysely->fetchColumn(0);
     }
-    /*
-    public static function haeNimella($nimi, $sivu, $montako){
-        $sql = "SELECT * from raakaaineet WHERE nimi ILIKE ? ORDER by nimi LIMIT ? OFFSET ?";
-        $kysely = getTietokantayhteys()->prepare($sql);
-        $kohta = $montako*$sivu;
-        $kysely->execute(array("$nimi%", $montako, $kohta));
-        $tulokset = array();
-            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino); 
-                $tulokset[] = $raakaaine;
-            }
-        return $tulokset;
-    } */
-    
     
     public function lisaaKantaan(){
         $sql = "INSERT INTO menut(nimi, alkuruoka, valiruoka1, paaruoka, valiruoka2, jalkiruoka, kuvaus) VALUES(?,?,?,?,?,?,?) RETURNING id";
@@ -122,17 +106,6 @@ class Menu {
     public function paivitaKantaan(){
         $sql = "UPDATE menut SET nimi, alkuruoka, valiruoka1, paaruoka, valiruoka2, jalkiruoka, kuvaus WHERE id = ?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($this->getId()));
-    }
-    
-    public static function poistaMenuKannasta($id){
-        $sql = "DELETE from menut where id=?";
-        $kysely = getTietokantayhteys()->prepare($sql); 
-        try { 
-            $kysely->execute(array($id));
-        } catch (PDOException $e) { 
-            return false; 
-        } 
-        return true;
     }
     
     /**

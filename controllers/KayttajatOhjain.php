@@ -26,7 +26,7 @@ class KayttajatOhjain {
         $kayttaja = Kayttaja::hae($id);
         if (!empty($kayttaja)){
             naytaNakyma("views/kayttaja_nayta.php", array(
-                'title' => $kayttaja->getNimi(),
+                'title' => $this->title,
                 'sivun' => $this->sivun_nimi,
                 'kayttaja' => $kayttaja 
             ));
@@ -47,7 +47,7 @@ class KayttajatOhjain {
             naytaNakyma('views/kayttaja_nayta.php', array(
                 'virhe' => 'Salasanan vaihto epäonnistui',
                 'sivu' => $this->sivun_nimi,
-                'title' => 'Virhe',
+                'title' => $this->title,
                 'virheet' => $virheet,
                 'kayttaja' => $kayttaja
             ));
@@ -63,7 +63,7 @@ class KayttajatOhjain {
         naytaNakyma("views/kayttaja_lomake.php", array(
             'sivu' => $this->sivun_nimi,
             'tila' => 'lisaa',
-            'title' => "Kayttajan lisäys",
+            'title' => $this->title,
         ));
     }
     
@@ -72,7 +72,7 @@ class KayttajatOhjain {
         if (!empty($kayttaja)){
             naytaNakyma('views/kayttaja_lomake.php', array(
                 'tila' => 'muokkaa',
-                'title' => "Kayttajan muokkaus",
+                'title' => $this->title,
                 'sivu' => $this->sivun_nimi,
                 'kayttaja' => $kayttaja
             ));
@@ -103,7 +103,7 @@ class KayttajatOhjain {
         if (!empty($virheet)){
             naytaNakyma('views/kayttaja_lomake.php', array(
                 'sivu' => $this->sivun_nimi,
-                'title' => 'Virhe',
+                'title' => $this->title,
                 'tila' => $tila,
                 'virhe' => 'Käyttäjän tallennus epäonnistui',
                 'kayttaja' => $kayttaja,

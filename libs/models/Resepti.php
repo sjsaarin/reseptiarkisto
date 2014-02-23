@@ -75,26 +75,16 @@ class Resepti {
     }
     
     
-     /**
-     * Hakee parametrinä annettua nimeä vastaavat reseptit kannasta
+    /**
+     * Palauttaa taulukon jossa on reseptissä käytettävät yksiköt
      * 
-     * @param type $nimi
-     * @return \Rresepti
+     * @return type
      */
-    /*
-    public static function haeNimella($nimi){
-        $sql = "SELECT * from reseptit WHERE nimi ILIKE ? ORDER by nimi";
-        $kysely = getTietokantayhteys()->prepare($sql);
-        $kysely->execute(array("$nimi%"));
-        $tulokset = array();
-            foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
-                $resepti = new Resepti($tulos->id, $tulos->nimi, $tulos->kategoria, $tulos->omistaja, $tulos->lahde, $tulos->juomasuositus, $tulos->valmistusohje, $tulos->annoksia, $tulos->paaraakaaine); 
-                $tulokset[] = $resepti;
-            }
-        return $tulokset;
+    public static function haeYksikot(){
+        return self::$yksikot;
     }
-    */
     
+
     /**
      * Hakee id:tä vastaavan reseptin nimen. Jos reseptiä ei ole palauttaa NULL
      * 
@@ -159,6 +149,16 @@ class Resepti {
         }
     }
     
+    /**
+     * palauttaa listan jossa on hakuparametrejä vastaavat reseptit
+     * 
+     * @param type $nimi
+     * @param type $kategoria
+     * @param type $paaraakaaine
+     * @param type $sivu
+     * @param type $montako
+     * @return type
+     */
     public static function haeReseptitListaan($nimi, $kategoria, $paaraakaaine, $sivu, $montako){
         $sql = "SELECT reseptit.id, reseptit.nimi AS renimi, kategoriat.nimi AS kanimi, raakaaineet.nimi AS ranimi
                 FROM reseptit, kategoriat, raakaaineet
@@ -238,17 +238,6 @@ class Resepti {
         return $tulokset;
     }
     
-    /**
-     * Palauttaa tietokantaan tallennettujen reseptien lukumäärn
-     * 
-     * @return int
-
-    public static function reseptienLkm(){
-        $sql = "SELECT COUNT(*) from reseptit";
-        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
-        return $kysely->fetchColumn(0);
-    }*/
-    
     public function paivitaKantaan(){
         $sql = "UPDATE reseptit SET nimi=?, kategoria=?, lahde=?, juomasuositus=?, valmistusohje=?, annoksia=?, paaraakaaine=? WHERE id=? RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -262,6 +251,17 @@ class Resepti {
             $this->id = $kysely->fetchColumn();
         }
         return $ok;
+    }
+    
+     /**
+     * vaihtaa reseptin omistajan 
+     * 
+     * @param type $omistaja
+     * @param type $uusi_omistaja
+     */
+    public static function vaihdaOmistaja($omistaja, $uusi_omistaja){
+        $sql = "UPDATE reseptit SET omistaja=? WHERE omistaja=?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($uusi_omistaja, $omistaja));
     }
     
     /**
@@ -324,6 +324,7 @@ class Resepti {
         return true;
     }
     
+    
     //poistaa kaikki reseptiin liittyvät raaka-aineet kannasta
     public function poistaRaakaaineetKannasta(){
         $sql = "DELETE from reseptin_raakaaineet where reseptin_id=?";
@@ -336,20 +337,6 @@ class Resepti {
         return true;
     }
     
-    /**
-     * vaihtaa reseptin omistajan 
-     * 
-     * @param type $omistaja
-     * @param type $uusi_omistaja
-     */
-    public static function vaihdaOmistaja($omistaja, $uusi_omistaja){
-        $sql = "UPDATE reseptit SET omistaja=? WHERE omistaja=?";
-        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($uusi_omistaja, $omistaja));
-    }
-    
-    public static function haeYksikot(){
-        return self::$yksikot;
-    }
     
     /**
      * Tarkistaa onko Raaka-aine kelvollinen

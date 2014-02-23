@@ -13,21 +13,6 @@ class Kategoria{
         $this->nimi = $nimi;
     }
     
-    /**
-     * Lisää kategorian kantaan
-     * 
-     * @return 
-     */
-    public function lisaaKantaan(){
-        $sql = "INSERT INTO kategoriat(nimi) VALUES(?) RETURNING id";
-        $kysely = getTietokantayhteys()->prepare($sql);
-
-        $ok = $kysely->execute(array($this->getNimi()));
-        if ($ok) {
-            $this->id = $kysely->fetchColumn();
-        }
-        return $ok;
-    }
     
     /**
      * Hakee kannasta kategorian tunnuksella
@@ -45,19 +30,6 @@ class Kategoria{
             return null;
         }
     }
-    
-    /*
-    public static function haeNimi($id){
-        $sql = "SELECT id, nimi from kategoriat where id=?";
-        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
-        $tulos = $kysely->fetchObject();
-        if (!$tulos == null){
-            return $tulos->nimi;
-        } else {
-            return null;
-        }
-    }
-    */
     
     /**
      * Hakee kannasta kaikki kategoriat
@@ -77,6 +49,38 @@ class Kategoria{
         
     }
     
+     /**
+     * Poistaa kategorian kannasta
+     * 
+     * @return boolean
+     */
+    public static function poistaKannasta($id){
+        $sql = "DELETE from kategoriat where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($id));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
+    }
+    
+     /**
+     * Lisää kategorian kantaan
+     * 
+     * @return 
+     */
+    public function lisaaKantaan(){
+        $sql = "INSERT INTO kategoriat(nimi) VALUES(?) RETURNING id";
+        $kysely = getTietokantayhteys()->prepare($sql);
+
+        $ok = $kysely->execute(array($this->getNimi()));
+        if ($ok) {
+            $this->id = $kysely->fetchColumn();
+        }
+        return $ok;
+    }
+    
     /**
      * Päivittää kategorian kantaan
      * 
@@ -91,22 +95,6 @@ class Kategoria{
             $this->id = $kysely->fetchColumn();
         }
         return $ok;
-    }
-    
-        /**
-     * Poistaa kategorian kannasta
-     * 
-     * @return boolean
-     */
-    public static function poistaKannasta($id){
-        $sql = "DELETE from kategoriat where id=?";
-        $kysely = getTietokantayhteys()->prepare($sql); 
-        try { 
-            $kysely->execute(array($id));
-        } catch (PDOException $e) { 
-            return false; 
-        } 
-        return true;
     }
     
      /**

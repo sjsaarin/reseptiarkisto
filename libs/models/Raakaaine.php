@@ -28,23 +28,6 @@ class Raakaaine {
         $this->kpl_paino = $kpl_paino;
     }
     
-    //CREATE
-    /**
-     * Lisää raaka-aineen kantaan
-     * 
-     * @return type
-     */
-    public function lisaaKantaan(){
-        $sql = "INSERT INTO raakaaineet(nimi, kalorit, hiilarit, proteiinit, rasvat, hinta, tiheys, kpl_paino) VALUES(?,?,?,?,?,?,?,?) RETURNING id";
-        $kysely = getTietokantayhteys()->prepare($sql);
-
-        $ok = $kysely->execute(array($this->getNimi(), $this->getKalorit(), $this->getHiilarit(), $this->getProteiinit(), $this->getRasvat(), $this->getHinta(), $this->getTiheys(), $this->getKplPaino()));
-        if ($ok) {
-            $this->id = $kysely->fetchColumn();
-        }
-        return $ok;
-    }
-    
     //READ
     /**
      * Hakee kaikki raaka-aineet kannasta, aakkosjärjestyksessä nimen mukaan
@@ -91,6 +74,7 @@ class Raakaaine {
             return null;
         }
     }
+    
     /**
      * Hakee yhden sivun raaka-aineita kannasta
      * 
@@ -109,8 +93,7 @@ class Raakaaine {
                 $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino); 
                 $tulokset[] = $raakaaine;
             }
-        return $tulokset;
-        
+        return $tulokset;    
     }
     
     /**
@@ -130,6 +113,45 @@ class Raakaaine {
                 $tulokset[] = $raakaaine;
             }
         return $tulokset;
+    }
+    
+    public static function poistaRaakaaineKannasta($id){
+        $sql = "DELETE from raakaaineet where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($id));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
+    }
+    
+    /**
+     * Palauttaa nimeä vastaavien raaka-aineden lukumääärän kannassa
+     * 
+     * @return int
+     */
+    public static function raakaaineidenLkm($nimi){
+        $sql = "SELECT COUNT(*) from raakaaineet where nimi ILIKE ?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$nimi%"));
+        return $kysely->fetchColumn(0);
+    }
+    
+    //CREATE
+    /**
+     * Lisää raaka-aineen kantaan
+     * 
+     * @return type
+     */
+    public function lisaaKantaan(){
+        $sql = "INSERT INTO raakaaineet(nimi, kalorit, hiilarit, proteiinit, rasvat, hinta, tiheys, kpl_paino) VALUES(?,?,?,?,?,?,?,?) RETURNING id";
+        $kysely = getTietokantayhteys()->prepare($sql);
+
+        $ok = $kysely->execute(array($this->getNimi(), $this->getKalorit(), $this->getHiilarit(), $this->getProteiinit(), $this->getRasvat(), $this->getHinta(), $this->getTiheys(), $this->getKplPaino()));
+        if ($ok) {
+            $this->id = $kysely->fetchColumn();
+        }
+        return $ok;
     }
     
     //UPDATE
@@ -166,36 +188,6 @@ class Raakaaine {
         return true;
     }
     
-    public static function poistaRaakaaineKannasta($id){
-        $sql = "DELETE from raakaaineet where id=?";
-        $kysely = getTietokantayhteys()->prepare($sql); 
-        try { 
-            $kysely->execute(array($id));
-        } catch (PDOException $e) { 
-            return false; 
-        } 
-        return true;
-    }
-    
-    /* 
-    public static function poistaMontaKannasta($poistettavat){
-        $sql = "DELETE from raakaaineet where id=?";
-        $kysely = getTietokantayhteys()->prepare($sql); 
-        return $kysely->execute($poistettavat);
-        //tähän joku tarkistus että poisto(t) todella onnistuivat, nyt palauttaa aina true 
-    }
-    */
-    
-    /**
-     * Palauttaa nimeä vastaavien raaka-aineden lukumääärän kannassa
-     * 
-     * @return int
-     */
-    public static function raakaaineidenLkm($nimi){
-        $sql = "SELECT COUNT(*) from raakaaineet where nimi ILIKE ?";
-        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$nimi%"));
-        return $kysely->fetchColumn(0);
-    }
     
     /**
      * Tarkistaa onko Raakaaine kelvollinen
@@ -206,8 +198,7 @@ class Raakaaine {
         return empty($this->virheet);
     }
     
-    //getters
-    
+    //getters 
     public function getId(){
         return $this->id;
     }
@@ -304,7 +295,6 @@ class Raakaaine {
     private function onkoOkLuku($syote) {
         $ok = is_numeric($syote) && $syote >= 0 && $syote < 10000; 
         return $ok;
-        //return preg_match("/^[0-9]+$/", $syote);
     }
     
     //tarkistaa onko attribuutti kelvollinen, jos ei ole talletta virheilmoituksen attribuuttia vastaavaan kenttään virheet taulukkoon

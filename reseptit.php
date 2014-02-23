@@ -44,12 +44,12 @@ if (onkoKirjautunut()) {
     } elseif (isset($_GET['sivu'])) {
     
         $ohjain->hae($_GET['sivu'], '', -1, -1);
-        
+      
     } elseif (isset($_GET['nimi'])) {
     
         $ohjain->hae(0, $_GET['nimi'], $_GET['kategoria'], $_GET['paaraakaaine']);
-    }
-        else {
+        
+    } else {
         
         $ohjain->hae(0, '', -1, -1);
         

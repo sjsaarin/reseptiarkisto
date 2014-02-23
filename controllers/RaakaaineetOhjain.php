@@ -59,7 +59,7 @@ class RaakaaineetOhjain {
                 $uusiraakaaine->paivitaKantaan();
                 $_SESSION['ilmoitus'] = "Raaka-aineen tiedot päivitetty onnistuneesti.";
             }
-            header('Location: raakaaineet.php');
+            header('Location: raakaaineet.php?nayta=' . $uusiraakaaine->getId());
         } else {
             $virheet = $uusiraakaaine->getVirheet();
             naytaNakyma("views/raakaaine_lomake.php", array(
