@@ -10,15 +10,6 @@ class MenutOhjain{
     private $sivun_nimi = 'menut';
     private $title = 'Menut';
     
-    public function lista(){
-        $menut = Menu::haeKaikki();
-        naytaNakyma('views/menu_listaa.php', array(
-            'sivu' => $this->sivun_nimi,
-            'title' => $this->title,
-            'menut' => $menut
-        ));
-    }
-    
     public function lisaa(){
         $menun_osat = Menu::haeOsat();
         $reseptit = Resepti::haeKaikki();

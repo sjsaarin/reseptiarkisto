@@ -19,5 +19,5 @@
     </table>
     <br>
     <a href="ostoslista.php?tyhjenna">Tyhjennä lista</a>
-<?php endif; ?>
+<?php endif;
 

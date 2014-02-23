@@ -11,7 +11,7 @@
 </ol>
 <h1>Muokka reseptiä: <?php echo $data->resepti->getNimi(); ?></h1>
 <?php endif; ?>
-<form role="form" action="reseptit.php?<?php if ($data->tila == 'lisays') echo 'tallenna' ?><?php if ($data->tila == 'muokkaus') echo 'paivita' ?>" method="POST">
+<form role="form" action="reseptit.php?<?php if ($data->tila == 'lisays') { echo 'tallenna'; } ?><?php if ($data->tila == 'muokkaus') { echo 'paivita'; } ?>" method="POST">
     <div class="row">
         <?php if (!empty($data->virheet['nimi'])): ?>
             <div class="form-group col-md-6 has-error">        
@@ -39,7 +39,7 @@
             <label for="selectKategoria">Kategoria</label>
             <select class="form-control" id="selectKategoria" name="kategoria">
                 <?php foreach ($data->kategoriat as $kategoria): ?>
-                    <option value="<?php echo $kategoria->getId(); ?>" <?php if(isset($data->resepti) && $data->resepti->getKategoria() ==  $kategoria->getId()) echo 'selected'  ?>><?php echo htmlspecialchars($kategoria->getNimi()); ?></option>
+                    <option value="<?php echo $kategoria->getId(); ?>" <?php if(isset($data->resepti) && $data->resepti->getKategoria() ==  $kategoria->getId()) { echo 'selected'; } ?>><?php echo htmlspecialchars($kategoria->getNimi()); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -63,7 +63,7 @@
             <select class="form-control" name="raakaaine[<?php echo $i; ?>]">
                 <option value="-1"> </option>
                     <?php foreach ($data->raakaaineet as $raakaaine): ?>
-                        <option value="<?php echo $raakaaine->getId(); ?>" <?php if (isset($data->asetetut_raakaaineet[$i]) && ($data->asetetut_raakaaineet[$i] == $raakaaine->getId())) echo 'selected' ; ?>><?php echo htmlspecialchars($raakaaine->getNimi()); ?></option>
+                        <option value="<?php echo $raakaaine->getId(); ?>" <?php if (isset($data->asetetut_raakaaineet[$i]) && ($data->asetetut_raakaaineet[$i] == $raakaaine->getId())) { echo 'selected'; } ?>><?php echo htmlspecialchars($raakaaine->getNimi()); ?></option>
                     <?php endforeach; ?>
             </select>
         </div>
@@ -79,7 +79,7 @@
                 <?php foreach ($data->yksikot as $yksikko => $arvo): ?>
                     <option value="<?php echo $yksikko; ?>" 
                     <?php if (isset($data->asetetut_raakaaineet[$i]) && isset($data->asetetut_yksikot[$i])): ?>
-                        <?php if ($data->asetetut_yksikot[$i] == $yksikko) echo 'selected'; ?> 
+                        <?php if ($data->asetetut_yksikot[$i] == $yksikko) { echo 'selected'; } ?> 
                     <?php endif; ?>
                     ><?php echo $yksikko; ?></option>
                 <?php endforeach; ?>
@@ -87,7 +87,7 @@
         </div>
         </td>
         <td>
-            <?php if($i==0 && empty($data->virheet['raakaaineet'][$i])) echo "<p>Pääraaka-aine</p>"; ?>
+            <?php if($i==0 && empty($data->virheet['raakaaineet'][$i])) { echo "<p>Pääraaka-aine</p>"; } ?>
             <?php if (!empty($data->virheet['raakaaineet'][$i])): ?>
                 <p class="alert-danger"><?php echo $data->virheet['raakaaineet'][$i] ?></p>
             <?php endif; ?>
@@ -100,7 +100,7 @@
     <div class="row">
         <div class="form-group col-md-1">
             <label for="inputAnnoksia">Annoksia</label>
-            <input type="number" class="form-control" id="inputAnnoksia" placeholder=1 name="annoksia" value="<?php if (isset($data->resepti)) echo $data->resepti->getAnnoksia(); else echo 4 ?>">
+            <input type="number" class="form-control" id="inputAnnoksia" placeholder=1 name="annoksia" value="<?php if (isset($data->resepti)) { echo $data->resepti->getAnnoksia(); } else { echo 4; } ?>">
             <?php if (!empty($data->virheet['annoksia'])): ?>
                 <span class="help-inline alert-danger"><?php echo $data->virheet['annoksia']; ?></span>
             <?php endif; ?>
@@ -109,19 +109,19 @@
     <div class="row">
         <div class="form-group col-md-8">
             <label for="inputOhje">Valmistusohje</label>
-            <textarea class="form-control" id="inputOhje" name="ohje" rows="10"><?php if (isset($data->resepti)) echo htmlspecialchars($data->resepti->getValmistusohje()); ?></textarea>
+            <textarea class="form-control" id="inputOhje" name="ohje" rows="10"><?php if (isset($data->resepti)) { echo htmlspecialchars($data->resepti->getValmistusohje()); } ?></textarea>
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-6">
             <label for="inputJuomasuositus">Juomasuositus</label>
-            <input type="text" class="form-control" id="inputJuomasuositus" name="juomasuositus" placeholder="Juomasuositus" value="<?php if (isset($data->resepti)) echo htmlspecialchars($data->resepti->getJuomasuositus()); ?>">
+            <input type="text" class="form-control" id="inputJuomasuositus" name="juomasuositus" placeholder="Juomasuositus" value="<?php if (isset($data->resepti)) { echo htmlspecialchars($data->resepti->getJuomasuositus()); } ?>">
         </div>
     </div>
     <div class="row">
         <div class="form-group col-md-6">
             <label for="inputLahde">Tekijä / Lähde</label>
-            <input type="text" class="form-control" id="inputLahde" name="lahde" placeholder="Lähde" value="<?php if (isset($data->resepti)) echo htmlspecialchars($data->resepti->getLahde()); ?>">
+            <input type="text" class="form-control" id="inputLahde" name="lahde" placeholder="Lähde" value="<?php if (isset($data->resepti)) { echo htmlspecialchars($data->resepti->getLahde()); } ?>">
         </div>
     </div>
     <div class="row">

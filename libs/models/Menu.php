@@ -55,6 +55,7 @@ class Menu {
         }
     }
     
+    /*
     public static function haeKaikki(){
         $sql = "SELECT id, nimi, alkuruoka, valiruoka1, paaruoka, valiruoka2, jalkiruoka, kuvaus from menut order by nimi";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
@@ -65,7 +66,7 @@ class Menu {
                 $tulokset[] = $menu;
             }
         return $tulokset;
-    }
+    }*/
     
     /**
      * Hakee kannasta nimeä vastaavat menut

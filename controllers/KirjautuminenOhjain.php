@@ -26,10 +26,8 @@ class KirjautuminenOhjain {
                 ));
             exit();
         }
-        //$salasana_hash = Kayttaja::haeSalasanaKayttajatunnuksella($kayttajatunnus);
         
         $kayttaja = Kayttaja::haeKayttajaTunnuksilla($kayttajatunnus, $salasana);
-
             
         if (!empty($kayttaja)){
             session_start();
@@ -49,10 +47,6 @@ class KirjautuminenOhjain {
     }
     
     public function kirjauduUlos(){
-        /*
-        unset($_SESSION['kayttaja']);
-        unset($_SESSION['kayttajan_rooli']);
-        unset($_SESSION['kayttajan_id']); */
         $_SESSION = array();
         session_destroy();
         header('Location: kirjautuminen.php');

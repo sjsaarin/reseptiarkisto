@@ -74,12 +74,14 @@ class Resepti {
         return $tulokset;
     }
     
+    
      /**
      * Hakee parametrinä annettua nimeä vastaavat reseptit kannasta
      * 
      * @param type $nimi
      * @return \Rresepti
      */
+    /*
     public static function haeNimella($nimi){
         $sql = "SELECT * from reseptit WHERE nimi ILIKE ? ORDER by nimi";
         $kysely = getTietokantayhteys()->prepare($sql);
@@ -91,6 +93,7 @@ class Resepti {
             }
         return $tulokset;
     }
+    */
     
     /**
      * Hakee id:tä vastaavan reseptin nimen. Jos reseptiä ei ole palauttaa NULL
@@ -123,6 +126,12 @@ class Resepti {
         return $tulokset;
     }
     
+    /**
+     * Paluttaa taulukon jossa on reseptin raakaaineet hintatiedolla varustettuna
+     * 
+     * @param type $id
+     * @return type
+     */
     public static function haeRaakaaineetHinnalla($id){
         $sql = "SELECT nimi, maara, yksikko, hinta
                 FROM raakaaineet, reseptin_raakaaineet
@@ -154,6 +163,7 @@ class Resepti {
         $sql = "SELECT reseptit.id, reseptit.nimi AS renimi, kategoriat.nimi AS kanimi, raakaaineet.nimi AS ranimi
                 FROM reseptit, kategoriat, raakaaineet
                 WHERE reseptit.nimi ILIKE ? AND ";
+        //todo: seuraavat olis ehkä mahdollista siirtää erilliseen funktioon (samat kuin haeResptienLukumaarassa).
         $parametrit = array("$nimi%");
         if (!($kategoria == -1)){
             $sql .= "reseptit.kategoria = ? AND ";
@@ -163,6 +173,7 @@ class Resepti {
             $sql .= "reseptit.paaraakaaine = ? AND ";
             array_push($parametrit, $paaraakaaine);
         }
+        //------------------------------------------------
         $kohta = $montako*$sivu;
         array_push($parametrit, $montako);
         array_push($parametrit, $kohta);
@@ -179,6 +190,7 @@ class Resepti {
         $sql = "SELECT count(reseptit.id)
                 FROM reseptit, kategoriat, raakaaineet
                 WHERE reseptit.nimi ILIKE ? AND ";
+        //todo: seuraavat olis ehkä mahdollista siirtää erilliseen funktioon (samat kuin haeResptitListaan funktiossa)
         $parametrit = array("$nimi%");
         if (!($kategoria == -1)){
             $sql .= "reseptit.kategoria = ? AND ";
@@ -188,11 +200,15 @@ class Resepti {
             $sql .= "reseptit.paaraakaaine = ? AND ";
             array_push($parametrit, $paaraakaaine);
         }
+        //---------------------------------------------------------
         $sql .= "reseptit.kategoria = kategoriat.id AND reseptit.paaraakaaine = raakaaineet.id";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute($parametrit);
         return $kysely->fetchColumn(0);
     }
     
+    /*
+     * ei toimi!
+     * 
     private static function koostaKyselyJaParametritHakuun($sql, $nimi, $kategoria, $paaraakaaine){
         $tulos = array("$nimi%");
         if (!($kategoria == -1)){
@@ -204,7 +220,7 @@ class Resepti {
             array_push($tulos, $paaraakaaine);
         }
         return $tulos;
-    }
+    }*/
     
     /**
      * Hakee kaikki reseptien paaraaka-aineet
@@ -226,22 +242,13 @@ class Resepti {
      * Palauttaa tietokantaan tallennettujen reseptien lukumäärn
      * 
      * @return int
-     */
+
     public static function reseptienLkm(){
         $sql = "SELECT COUNT(*) from reseptit";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
         return $kysely->fetchColumn(0);
-    }
+    }*/
     
-    /**
-     * Lisää raakaineen reseptiin
-     * 
-     * @param type $id
-
-    public static function lisaaRaakaaine($id){
-        $sql = "INSERT into reseptin_raakaaineet";
-    }
-    */
     public function paivitaKantaan(){
         $sql = "UPDATE reseptit SET nimi=?, kategoria=?, lahde=?, juomasuositus=?, valmistusohje=?, annoksia=?, paaraakaaine=? WHERE id=? RETURNING id";
         $kysely = getTietokantayhteys()->prepare($sql);

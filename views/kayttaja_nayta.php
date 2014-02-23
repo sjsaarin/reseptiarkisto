@@ -6,7 +6,7 @@
     </tr>
     <tr>
         <td><b>Rooli:</b></td>
-        <td><?php if ($data->kayttaja->getRooli() === 0) { echo "ylläpitäjä"; } elseif ( $data->kayttaja->getRooli() === 1) { echo "muokkaaja"; } else { echo "käyttäjä"; } ?></td>
+        <td><?php if ($data->kayttaja->getRooli() === 0) { echo "ylläpitäjä"; } elseif ( $data->kayttaja->getRooli() === 1) { echo "muokkaaja"; } else { echo "selaaja"; } ?></td>
     </tr>
 </table>
 <br>

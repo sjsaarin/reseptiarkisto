@@ -42,19 +42,6 @@ class KayttajatOhjain {
         if ($kayttaja->onkoOikeaSalasana($salasana)){
             $kayttaja->setSalasana($uusisalasana1, $uusisalasana2);
         }
-        /*/todo: siirrä salasanan verifoinnit Kayttaja malliin
-        if (!($kayttaja->onkoOikeaSalasana($salasana))){
-            $virheet['salasana'] = "Annoit väärän salasanan";
-        } elseif (empty($uusisalasana1)){
-            $virheet['uusisalasana1'] = "Et antanut uutta salasanaa";
-        } elseif (!($this->onkoOkSalasana($uusisalasana1))){
-            $virheet['uusisalasana1'] = "Salasanan pitää olla vähintään kymmenen merkkiä pitkä, sisältää yksi iso ja yksi pieni kirjain sekä yksi numero";
-        } 
-        elseif (!($uusisalasana1 === $uusisalasana2)){
-            $virheet['uusisalasana1'] = "Salasanat eivät täsmää";
-            $virheet['uusisalasana2'] = "Salasanat eivät täsmää";
-        }
-        //-------------------------------------------------------*/
         $virheet = $kayttaja->getVirheet();
         if (!(empty($virheet))){
             naytaNakyma('views/kayttaja_nayta.php', array(
@@ -65,7 +52,6 @@ class KayttajatOhjain {
                 'kayttaja' => $kayttaja
             ));
         } else {
-            //$kayttaja->vaihdaSalasana($uusisalasana1);
             $kayttaja->paivitaKantaan();
             $_SESSION['kayttaja'] = $kayttaja;
             $_SESSION['ilmoitus'] = "Salasana vaihdettu onnistuneesti";

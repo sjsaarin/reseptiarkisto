@@ -24,12 +24,12 @@
 <h3>Lisää kategoria:</h3>
 <form role="form" action="kategoriat.php?lisaa" method="POST">
   <?php if (!empty($data->virheet['nimi'])): ?>
-  <div class="form-group has-error">        
+    <div class="form-group has-error">        
   <?php else: ?>
-  <div class="form-group">
+    <div class="form-group">
   <?php endif; ?> 
-    <!--label for="inputNimi">Kategorian nimi</label-->
-    <input type="text" class="form-control" id="inputNimi" name="nimi" placeholder="Kategorian nimi" value="<?php if (isset($data->kategoria)){ echo $data->kategoria->getNimi(); }; ?>">
+  <!--label for="inputNimi">Kategorian nimi</label-->
+    <input type="text" class="form-control" id="inputNimi" name="nimi" placeholder="Kategorian nimi" value="<?php if (isset($data->kategoria)){ echo $data->kategoria->getNimi(); } ?>">
     <?php if (!empty($data->virheet['nimi'])): ?>
         <span class="help-inline"><?php echo $data->virheet['nimi']; ?></span>
     <?php endif; ?> 

@@ -80,7 +80,7 @@ class Kayttaja {
             return NULL;
         }
     }
-    
+    /*
     //hakee kayttajatunnusta ja salasanaa (hash) vastaavan kayttajan kannasta
     private static function haeKayttajaTunnuksellaJaSalasanalla($kayttajatunnus, $salasana){
         $sql = "SELECT id, etunimi, sukunimi, kayttajatunnus, salasana, rooli from kayttajat where kayttajatunnus = ? AND salasana = ? LIMIT 1";
@@ -99,7 +99,7 @@ class Kayttaja {
             $kayttaja->rooli = $tulos->rooli;
             return $kayttaja;
         }
-    }
+    } */
     
     //hakee kayttajatunnusta vastaavan kayttajan kannasta
     private static function haeKayttajaKayttajatunnuksella($kayttajatunnus) {

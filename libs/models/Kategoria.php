@@ -46,6 +46,7 @@ class Kategoria{
         }
     }
     
+    /*
     public static function haeNimi($id){
         $sql = "SELECT id, nimi from kategoriat where id=?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($id));
@@ -56,6 +57,7 @@ class Kategoria{
             return null;
         }
     }
+    */
     
     /**
      * Hakee kannasta kaikki kategoriat

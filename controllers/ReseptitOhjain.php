@@ -16,21 +16,18 @@ class ReseptitOhjain {
 
     private $resepti;
     private $sivun_nimi = "reseptit";
+    private $title = "Reseptit";
 
-    /**
-     * Näyttää reseptin tietonäkymän
-     */
+
     public function nayta($id) {
 
-        $id = (int) $id;
-
-        $resepti = Resepti::hae($id);
+        $resepti = Resepti::hae((int)$id);
         if ($resepti != null) {
             $raakaaineet = $resepti->haeRaakaaineet();
             $_SESSION['resepti'] = $resepti;
             naytaNakyma("views/resepti_nayta.php", array(
                 'sivu' => $this->sivun_nimi,
-                'title' => htmlspecialchars($resepti->getNimi()),
+                'title' => $this->title,
                 'resepti' => $resepti,
                 'raakaaineet' => $raakaaineet
             ));
@@ -40,9 +37,6 @@ class ReseptitOhjain {
         }
     }
 
-    /**
-     * Näyttää reseptien muokkausnäkymän
-     */
     public function muokkaa($id, $muokkaaja) {
 
         $resepti = Resepti::hae((int)$id);
@@ -52,9 +46,9 @@ class ReseptitOhjain {
             $_SESSION['virhe'] = "Et voi muokata reseptiä, et ole reseptin omistaja";
             header('Location: reseptit.php?nayta=' . $id);
         }    
-
     }
     
+    //näyttää reseptien muokkaus näkymän
     private function naytaMuokkaus($resepti){
         $_SESSION['resepti'] = $resepti;
         $kategoriat_lista = Kategoria::haeKaikki();
@@ -63,7 +57,7 @@ class ReseptitOhjain {
         naytaNakyma("views/resepti_lomake.php", array(
             'tila' => 'muokkaus',
             'sivu' => $this->sivun_nimi,
-            'title' => htmlspecialchars($resepti->getNimi()),
+            'title' => $this->title,
             'resepti' => $resepti,
             'kategoriat' => $kategoriat_lista,
             'raakaaineet' => $raakaaineet_lista,
@@ -89,6 +83,7 @@ class ReseptitOhjain {
         }
     }
     
+    //tarkistaa saako käyttäjä muokata tai poistaa reseptiä
     private function saakoMuokataTaiPoistaa($resepti, $muokkaaja){
         $reseptin_omistaja = $resepti->getOmistaja();
         return (($reseptin_omistaja === $muokkaaja) || onkoAdmin());
@@ -125,13 +120,15 @@ class ReseptitOhjain {
         }
 
     }
-
+    
+    //kutsutaan jos reseptin tallennus onnistui
     private function naytaOk($resepti) {
         $_SESSION['ilmoitus'] = "Resepti tallennettu onnistuneesti.";
         unset($_SESSION['resepti']);
         header('Location: reseptit.php?nayta=' . $resepti->getId());
     }
 
+    //kutsutaan jos reseptin tallennus ei onnistunut
     private function naytaEiOk($tila, $resepti) {
         $kategoriat_lista = Kategoria::haeKaikki();
         $raakaaineet_lista = Raakaaine::haeKaikki();
@@ -140,7 +137,7 @@ class ReseptitOhjain {
             'tila' => $tila,
             'virhe' => 'Reseptin tallennus epäonnistui',
             'sivu' => $this->sivun_nimi,
-            'title' => htmlspecialchars($resepti->getNimi()),
+            'title' => $this->title,
             'kategoriat' => $kategoriat_lista,
             'raakaaineet' => $raakaaineet_lista,
             'yksikot' => $yksikot_lista,
@@ -152,16 +149,13 @@ class ReseptitOhjain {
         ));
     }
 
-    /**
-     * Näyttää reseptien lisäys näkymän
-     */
     public function lisaa() {
         $kategoriat = Kategoria::haeKaikki();
         $raakaaineet = Raakaaine::haeKaikki();
         $yksikot = Resepti::haeYksikot();
         naytaNakyma("views/resepti_lomake.php", array(
             'sivu' => $this->sivun_nimi,
-            'title' => 'Reseptin lisäys',
+            'title' => $this->title,
             'tila' => 'lisays',
             'kategoriat' => $kategoriat,
             'raakaaineet' => $raakaaineet,
@@ -172,7 +166,6 @@ class ReseptitOhjain {
 
 
     public function hae($sivu, $nimi, $kategoria, $paaraakaaine) {
-
         $reseptit = Resepti::haeReseptitListaan($nimi, (int) $kategoria, (int) $paaraakaaine, (int)$sivu, 10);
         $lukumaara = Resepti::haeReseptienLukumaara($nimi, (int) $kategoria, (int) $paaraakaaine);
         $kategoriat = Kategoria::haeKaikki();
@@ -181,7 +174,7 @@ class ReseptitOhjain {
         $sivuja = ceil($lukumaara/10);
         naytaNakyma("views/resepti_listaa.php", array(
             'sivu' => $this->sivun_nimi,
-            'title' => "Reseptit",
+            'title' => $this->title,
             'reseptit' => $reseptit,
             'kategoriat' => $kategoriat,
             'paaraakaaineet' => $paaraakaineet,

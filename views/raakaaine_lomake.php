@@ -119,7 +119,7 @@
             <div class="col-sm-2">
                 <input id="inputKplPaino" class="form-control" name="kpl_paino" type="text" placeholder="0" value="<?php if (isset($data->raakaaine)){ echo $data->raakaaine->getKplPaino(); } else { echo 0; } ?>"> 
             </div>
-            <?php if (!empty($data->virheet['tiheys'])): ?>
+            <?php if (!empty($data->virheet['kpl_paino'])): ?>
                 <p class="help-block"><?php echo $data->virheet['kpl_paino']; ?></p>
             <?php endif; ?>
         </div>
