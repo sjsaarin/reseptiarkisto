@@ -3,6 +3,10 @@
 </ol>
 
 <h1>Reseptit</h1>
+<?php if (onkoMuokkaaja()): ?>
+<a class="btn btn-success btn-xs" href="reseptit.php?uusi" role="button">Lisää uusi</a>
+<?php endif; ?>
+<br>
 <br>
 <form class="form-inline" role="form" action="reseptit.php" method="GET"> 
     <div class="form-group">
@@ -63,4 +67,3 @@
     <li><a href="reseptit.php?sivu=<?php echo $data->sivunro+1 . "&nimi=" . $data->hakusanat[0] . "&kategoria=" . $data->hakusanat[1] . "&paaraakaaine=" . $data->hakusanat[2]; ?>">&raquo;</a></li>
 <?php endif; ?>
 </ul>
-<?php if (onkoMuokkaaja()): ?><p><a href="reseptit.php?lisaa">Lisää uusi resepti</a></p><?php endif; ?>

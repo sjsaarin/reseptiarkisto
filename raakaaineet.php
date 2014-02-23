@@ -19,7 +19,7 @@ if (onkoKirjautunut()) {
         $ohjain->nayta($_GET['nayta']);
 
     // raakaaineet.php?lisaa, jos kirjautunut käyttäjä ei ole admin ei näytetä
-    } elseif (isset($_GET['lisaa']) && onkoMuokkaaja()) {
+    } elseif (isset($_GET['uusi']) && onkoMuokkaaja()) {
         
         $ohjain->lisaa();
         

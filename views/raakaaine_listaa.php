@@ -2,6 +2,10 @@
   <li class="active">Haku</li>
 </ol>
 <h1>Raaka-aineet</h1>
+<?php if (onkoMuokkaaja()): ?>
+<a class="btn btn-success btn-xs" href="raakaaineet.php?uusi" role="button">Lisää uusi</a>
+<?php endif; ?>
+<br>
 <br>
 <form class="form-inline" role="form" action="raakaaineet.php" method="GET">
     <div class="form-group">
@@ -50,7 +54,3 @@
     <li><a href="raakaaineet.php?sivu=<?php echo $data->sivunro+1; ?><?php if(!empty($data->nimi)){ echo "&hae=" . $data->nimi; } ?>">&raquo;</a></li>
 <?php endif; ?>
 </ul>
-<br>
-<?php if (onkoMuokkaaja()): ?>
-<p><a href="raakaaineet.php?lisaa">Lisää uusi raaka-aine</a></p>
-<?php endif; ?>

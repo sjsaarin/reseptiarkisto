@@ -2,6 +2,8 @@
   <li class="active">Haku</li>
 </ol>
 <h1>Käyttäjät</h1>
+<a class="btn btn-success btn-xs" href="kayttajat.php?uusi" role="button">Lisää uusi</a>
+<br>
 <br>
 <form class="form-inline" role="form" action="kayttajat.php" method="GET">
     <div class="form-group">
@@ -43,5 +45,3 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<br>
-<a href="kayttajat.php?uusi">Lisää uusi käyttäjä</a> 

@@ -2,6 +2,10 @@
   <li class="active">Haku</li>
 </ol>
 <h1>Menut</h1>
+<?php if (onkoMuokkaaja()): ?>
+<a class="btn btn-success btn-xs" href="menut.php?uusi" role="button">Lisää uusi</a>
+<?php endif; ?>
+<br>
 <br>
 <form class="form-inline" role="form" action="menut.php" method="GET">
     <div class="form-group">
@@ -49,5 +53,3 @@
     <li><a href="menut.php?sivu=<?php echo $data->sivunro+1; ?><?php if(!empty($data->nimi)){ echo "&hae=" . $data->nimi; } ?>">&raquo;</a></li>
 <?php endif; ?>
 </ul>
-<br>
-<?php if (onkoMuokkaaja()): ?><a href="menut.php?uusi">Lisää uusi menu</a><?php endif; ?>

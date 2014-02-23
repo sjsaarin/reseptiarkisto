@@ -20,20 +20,18 @@
 </div>
 <br>
 <?php if (onkoMuokkaaja()): ?>
-    <table>
-        <tr>
-            <td>
-                <form action='menut.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
-                    <input type="hidden" name="id" value="<?php echo $data->menu->getId(); ?>">
-                    <input type="submit" class="btn btn-danger btn-xs" value="Poista menu">
-                </form>
-            </td>
-            <td>
-                <form action='menut.php' method="get">
-                    <input type="hidden" name="muokkaa" value="<?php echo $data->menu->getId(); ?>">
-                    <input type="submit" class="btn btn-primary btn-xs" value="Muokkaa menuta">
-                </form>
-            </td>
-        </tr>
-    </table>
+    <div class="row">
+        <div class="col-md-2">
+            <form action='menut.php' method="get">
+                <input type="hidden" name="muokkaa" value="<?php echo $data->menu->getId(); ?>">
+                <input type="submit" class="btn btn-info btn-sm" value="Muokkaa menuta">
+            </form>
+        </div>
+        <div class="col-md-2">
+            <form action='menut.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
+                <input type="hidden" name="id" value="<?php echo $data->menu->getId(); ?>">
+                <input type="submit" class="btn btn-danger btn-sm" value="Poista menu">
+            </form>
+        </div>
+    </div>
 <?php endif; ?>

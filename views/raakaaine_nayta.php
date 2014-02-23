@@ -41,23 +41,19 @@
     </table>
     <br>
 <?php if (onkoMuokkaaja()): ?>
-    <table>
-        <tbody>
-        <tr>
-            <td>
-                <form action='raakaaineet.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
-                    <input type="hidden" name="id" value="<?php echo $data->raakaaine->getId(); ?>">
-                    <input type="submit" class="btn btn-danger btn-xs" value="Poista raaka-aine">
-                </form>
-            </td>
-            <td>
-                <form action='raakaaineet.php' method="get">
-                    <input type="hidden" name="muokkaa" value="<?php echo $data->raakaaine->getId(); ?>">
-                    <input type="submit" class="btn btn-primary btn-xs" value="Muokkaa raaka-ainetta">
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            <div class="row">
+                <div class="col-md-2">
+                    <form action='raakaaineet.php' method="get">
+                        <input type="hidden" name="muokkaa" value="<?php echo $data->raakaaine->getId(); ?>">
+                        <input type="submit" class="btn btn-info btn-sm" value="Muokkaa raaka-ainetta">
+                    </form>
+                </div>
+                <div class="col-md-2">
+                    <form action='raakaaineet.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
+                        <input type="hidden" name="id" value="<?php echo $data->raakaaine->getId(); ?>">
+                        <input type="submit" class="btn btn-danger btn-sm" value="Poista raaka-aine">
+                    </form>
+                </div>
+            </div>
 <?php endif; ?>
 <?php endif;

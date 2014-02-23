@@ -27,21 +27,19 @@
 <p>Lähde: <?php echo htmlspecialchars($data->resepti->getLahde()); ?></p>
 <br>
 <br>
-<?php if (onkoMuokkaaja()): ?>
-    <table>
-        <tr>
-            <td class="col-sm-1">
-                <form action='reseptit.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
-                    <input type="hidden" name="id" value="<?php echo $data->resepti->getId(); ?>">
-                    <input type="submit" class="btn btn-danger btn-xs" value="Poista resepti">
-                </form>
-            </td>
-            <td class="col-sm-1">
-                <form action='reseptit.php' method="get">
-                    <input type="hidden" name="muokkaa" value="<?php echo $data->resepti->getId(); ?>">
-                    <input type="submit" class="btn btn-primary btn-xs" value="Muokkaa reseptiä">
-                </form>
-            </td>
-        </tr>
-    </table>
+<?php if (onkoAdmin() || (onkoMuokkaaja() && ($data->resepti->getId() === $_SESSION['kayttajan_id']))): ?>
+<div class="row">
+    <div class="col-md-2">
+        <form action='reseptit.php' method="get">
+            <input type="hidden" name="muokkaa" value="<?php echo $data->resepti->getId(); ?>">
+            <input type="submit" class="btn btn-info btn-sm" value="Muokkaa reseptiä">
+        </form>
+    </div>
+    <div class="col-md-2">
+        <form action='reseptit.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
+            <input type="hidden" name="id" value="<?php echo $data->resepti->getId(); ?>">
+            <input type="submit" class="btn btn-danger btn-sm" value="Poista resepti">
+        </form>
+    </div>
+</div>
 <?php endif; ?>
