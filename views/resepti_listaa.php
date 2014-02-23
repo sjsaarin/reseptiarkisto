@@ -48,5 +48,19 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<p>Reseptejä yhteensä: <?php echo $data->lkm ?></p>
+<ul class="pagination pagination-sm">
+<?php if ($data->sivunro == 0): ?>
+    <li class="disabled"><a href="#">&laquo;</a></li>
+<?php else: ?>
+    <li><a href="reseptit.php?sivu=<?php echo $data->sivunro-1 . "&nimi=" . $data->hakusanat[0] . "&kategoria=" . $data->hakusanat[1] . "&paaraakaaine=" . $data->hakusanat[2]; ?>">&laquo;</a></li>
+<?php endif; ?>
+<?php for($i=0; $i < $data->sivuja; $i++): ?>
+    <li<?php if($i == $data->sivunro){ echo ' class=active'; } ?>><a href="reseptit.php?sivu=<?php echo $i . "&nimi=" . $data->hakusanat[0] . "&kategoria=" . $data->hakusanat[1] . "&paaraakaaine=" . $data->hakusanat[2]; ?>"><?php echo $i+1; ?></a></li>
+<?php endfor; ?>
+<?php if($data->sivunro == $data->sivuja-1): ?>    
+    <li class="disabled"><a href="#">&raquo;</a></li>
+<?php else: ?>
+    <li><a href="reseptit.php?sivu=<?php echo $data->sivunro+1 . "&nimi=" . $data->hakusanat[0] . "&kategoria=" . $data->hakusanat[1] . "&paaraakaaine=" . $data->hakusanat[2]; ?>">&raquo;</a></li>
+<?php endif; ?>
+</ul>
 <?php if (onkoMuokkaaja()): ?><p><a href="reseptit.php?lisaa">Lisää uusi resepti</a></p><?php endif; ?>

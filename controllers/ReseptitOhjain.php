@@ -159,18 +159,26 @@ class ReseptitOhjain {
         }
     }
 
-    public function lista($nimi, $kategoria, $paaraakaaine) {
+    public function hae($sivu, $nimi, $kategoria, $paaraakaaine) {
 
-        $reseptit = Resepti::haeReseptitListaan($nimi, (int) $kategoria, (int) $paaraakaaine);
+        $reseptit = Resepti::haeReseptitListaan($nimi, (int) $kategoria, (int) $paaraakaaine, (int)$sivu, 10);
+        $lukumaara = Resepti::haeReseptienLukumaara($nimi, (int) $kategoria, (int) $paaraakaaine);
         $kategoriat = Kategoria::haeKaikki();
         $paaraakaineet = Resepti::haePaaRaakaaineet();
+        $hakusanat = array($nimi, $kategoria, $paaraakaaine);
+        $sivuja = ceil($lukumaara/10);
         naytaNakyma("views/resepti_listaa.php", array(
             'sivu' => $this->sivun_nimi,
             'title' => "Reseptit",
             'reseptit' => $reseptit,
             'kategoriat' => $kategoriat,
             'paaraakaaineet' => $paaraakaineet,
-            'lkm' => count($reseptit)
+            'sivuja' => $sivuja,
+            'sivunro' => $sivu,
+            'nimi' => $nimi,
+            'kategoria' => $kategoria,
+            'paaraakaaine' => $paaraakaaine,
+            'hakusanat' => $hakusanat
         ));
     }
 

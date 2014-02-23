@@ -150,7 +150,7 @@ class Resepti {
         }
     }
     
-    public static function haeReseptitListaan($nimi, $kategoria, $paaraakaaine){
+    public static function haeReseptitListaan($nimi, $kategoria, $paaraakaaine, $sivu, $montako){
         $sql = "SELECT reseptit.id, reseptit.nimi AS renimi, kategoriat.nimi AS kanimi, raakaaineet.nimi AS ranimi
                 FROM reseptit, kategoriat, raakaaineet
                 WHERE reseptit.nimi ILIKE ? AND ";
@@ -163,14 +163,47 @@ class Resepti {
             $sql .= "reseptit.paaraakaaine = ? AND ";
             array_push($parametrit, $paaraakaaine);
         }
-        $sql .= "reseptit.kategoria = kategoriat.id AND reseptit.paaraakaaine = raakaaineet.id order by renimi";
+        $kohta = $montako*$sivu;
+        array_push($parametrit, $montako);
+        array_push($parametrit, $kohta);
+        $sql .= "reseptit.kategoria = kategoriat.id AND reseptit.paaraakaaine = raakaaineet.id order by renimi LIMIT ? OFFSET ?";
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute($parametrit);
         $tulokset = array();
         foreach ($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
             $tulokset[] = array($tulos->id, $tulos->renimi, $tulos->kanimi, $tulos->ranimi);
         }
         return $tulokset;
+    }
     
+    public static function haeReseptienLukumaara($nimi, $kategoria, $paaraakaaine){
+        $sql = "SELECT count(reseptit.id)
+                FROM reseptit, kategoriat, raakaaineet
+                WHERE reseptit.nimi ILIKE ? AND ";
+        $parametrit = array("$nimi%");
+        if (!($kategoria == -1)){
+            $sql .= "reseptit.kategoria = ? AND ";
+            array_push($parametrit, $kategoria);
+        }
+        if (!($paaraakaaine == -1)){
+            $sql .= "reseptit.paaraakaaine = ? AND ";
+            array_push($parametrit, $paaraakaaine);
+        }
+        $sql .= "reseptit.kategoria = kategoriat.id AND reseptit.paaraakaaine = raakaaineet.id";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute($parametrit);
+        return $kysely->fetchColumn(0);
+    }
+    
+    private static function koostaKyselyJaParametritHakuun($sql, $nimi, $kategoria, $paaraakaaine){
+        $tulos = array("$nimi%");
+        if (!($kategoria == -1)){
+            $sql .= "reseptit.kategoria = ? AND ";
+            array_push($tulos, $kategoria);
+        }
+        if (!($paaraakaaine == -1)){
+            $sql .= "reseptit.paaraakaaine = ? AND ";
+            array_push($tulos, $paaraakaaine);
+        }
+        return $tulos;
     }
     
     /**

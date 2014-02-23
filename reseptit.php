@@ -37,13 +37,21 @@ if (onkoKirjautunut()) {
         
         $ohjain->poista($_POST['id']);
         
+    } elseif (isset($_GET['sivu']) && isset($_GET['nimi'])) {
+    
+        $ohjain->hae($_GET['sivu'], $_GET['nimi'], $_GET['kategoria'], $_GET['paaraakaaine']);
+        
+    } elseif (isset($_GET['sivu'])) {
+    
+        $ohjain->hae($_GET['sivu'], '', -1, -1);
+        
     } elseif (isset($_GET['nimi'])) {
     
-        $ohjain->lista($_GET['nimi'],$_GET['kategoria'],$_GET['paaraakaaine']);
+        $ohjain->hae(0, $_GET['nimi'], $_GET['kategoria'], $_GET['paaraakaaine']);
     }
         else {
         
-        $ohjain->lista("", -1, -1);
+        $ohjain->hae(0, '', -1, -1);
         
     }
 }
