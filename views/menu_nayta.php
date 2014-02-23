@@ -1,3 +1,7 @@
+<ol class="breadcrumb">
+  <li><a href="menut.php">Haku</a></li>
+  <li class="active">Menu</li>
+</ol>
 <div class="row">
     <h1><?php echo htmlspecialchars($data->menu->getNimi()); ?></h1>
     <br>
@@ -19,7 +23,7 @@
     <table>
         <tr>
             <td>
-                <form action='menut.php' method="post" onsubmit="return confirm('Oletko varma?')">
+                <form action='menut.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
                     <input type="hidden" name="id" value="<?php echo $data->menu->getId(); ?>">
                     <input type="submit" class="btn btn-danger btn-xs" value="Poista menu">
                 </form>

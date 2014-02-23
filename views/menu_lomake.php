@@ -1,5 +1,16 @@
-<?php if ($data->tila === 'lisaa'): ?><h1>Luo uusi menu</h1><?php endif; ?>
-<?php if ($data->tila === 'muokkaa'): ?><h1>Muokkaa menuta <?php echo htmlspecialchars($data->menu->getNimi()); ?></h1><?php endif; ?>
+<ol class="breadcrumb">
+    <li><a href="menut.php">Haku</a></li>
+<?php if ($data->tila === 'lisaa'): ?>
+    <li class="active">Lisää</li>
+</ol>    
+<h1>Luo uusi menu</h1>
+<?php endif; ?>
+<?php if ($data->tila === 'muokkaa'): ?>
+    <li><a href="menut.php?nayta=<?php echo $data->menu->getId(); ?>">Menu</a></li>
+    <li class="active">Muokkaa</li>
+</ol>
+<h1>Muokkaa menuta: <?php echo htmlspecialchars($data->menu->getNimi()); ?></h1>
+<?php endif; ?>
 <form role="form" class="form-horizontal" action="menut.php?lisaa" method="POST">
     <br>
     <div class="form-group<?php if (isset($data->virheet['nimi'])){ echo ' has-error'; } ?>">

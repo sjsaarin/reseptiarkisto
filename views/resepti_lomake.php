@@ -1,4 +1,16 @@
-<h1><?php if ($data->tila == 'lisays') echo 'Lisää resepti' ?><?php if ($data->tila == 'muokkaus') echo 'Muokkaa reseptiä: ' . $data->resepti->getNimi(); ?></h1>
+<ol class="breadcrumb">
+    <li><a href="reseptit.php">Haku</a></li>
+<?php if ($data->tila === 'lisays'): ?>
+    <li class="active">Lisäys</li>
+</ol>
+<h1>Lisää resepti</h1>
+<?php endif; ?>
+<?php if ($data->tila === 'muokkaus'): ?>
+    <li><a href="reseptit.php?nayta=<?php echo $data->resepti->getId(); ?>">Resepti</a></li>
+    <li class="active">Muokkaus</li>
+</ol>
+<h1>Muokka reseptiä: <?php echo $data->resepti->getNimi(); ?></h1>
+<?php endif; ?>
 <form role="form" action="reseptit.php?<?php if ($data->tila == 'lisays') echo 'tallenna' ?><?php if ($data->tila == 'muokkaus') echo 'paivita' ?>" method="POST">
     <div class="row">
         <?php if (!empty($data->virheet['nimi'])): ?>
@@ -7,7 +19,7 @@
             <div class="form-group col-md-6">
         <?php endif; ?>
             <label for="inputNimi">Reseptin nimi</label>
-            <input type="text" class="form-control" id="inputNimi" placeholder="Reseptin nimi" name="nimi" value="<?php if(isset($data->resepti)) echo htmlspecialchars($data->resepti->getNimi()); ?>">
+            <input type="text" class="form-control" id="inputNimi" placeholder="Reseptin nimi" name="nimi" value="<?php if(isset($data->resepti)) { echo htmlspecialchars($data->resepti->getNimi()); }?>">
             <?php if (!empty($data->virheet['nimi'])): ?>
                 <span class="help-inline alert-danger"><?php echo $data->virheet['nimi']; ?></span>
             <?php endif; ?>

@@ -1,3 +1,6 @@
+<ol class="breadcrumb">
+  <li class="active">Haku</li>
+</ol>
 <h1>Käyttäjät</h1>
 <br>
 <form class="form-inline" role="form" action="kayttajat.php" method="GET">

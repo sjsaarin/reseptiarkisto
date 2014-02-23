@@ -28,10 +28,14 @@ if (onkoKirjautunut()) {
 
         $ohjain->tallenna('muokkaa', $_POST['nimi'], $_POST['alkuruoka'], $_POST['valiruoka1'], $_POST['paaruoka'], $_POST['valiruoka2'], $_POST['jalkiruoka'], $_POST['kuvaus']);
     
-    }elseif (isset($_GET['nayta'])) {
+    } elseif (isset($_GET['nayta'])) {
 
         $ohjain->nayta($_GET['nayta']);
         
+    } elseif (isset($_GET['poista']) && isset($_POST['id']) && onkoMuokkaaja()) {
+    
+        $ohjain->poista($_POST['id']);
+    
     } else {
         
         $ohjain->lista();

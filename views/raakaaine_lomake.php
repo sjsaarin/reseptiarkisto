@@ -1,8 +1,15 @@
-<?php if ($data->tila == 'lisaa'): ?>
+<ol class="breadcrumb">
+    <li><a href="raakaaineet.php">Haku</a></li>
+<?php if ($data->tila === 'lisaa'): ?>
+    <li class="active">Lisäys</li>
+</ol>
 <h1>Lisää raaka-aine</h1>
 <?php endif; ?>
-<?php if ($data->tila == 'muokkaa'): ?>
-<h1>Muokkaa raaka-ainetta</h1>
+<?php if ($data->tila === 'muokkaa'): ?>
+    <li><a href="raakaaineet.php?nayta=<?php echo $data->raakaaine->getId(); ?>">Raaka-aine</a></li>
+    <li class="active">Muokkaus</li>
+</ol>
+<h1>Muokkaa raaka-ainetta: <?php echo htmlspecialchars($data->raakaaine->getNimi()); ?></h1>
 <?php endif; ?>
 <form class="form-horizontal" role="form" action="raakaaineet.php?<?php if ($data->tila === 'lisaa') { echo 'tallenna'; } ?><?php if ($data->tila === 'muokkaa') { echo 'paivita=' . $_SESSION['raakaaine']->getId(); } ?>" method="POST">
         <?php if (!empty($data->virheet['nimi'])): ?>

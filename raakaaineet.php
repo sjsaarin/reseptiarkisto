@@ -14,9 +14,9 @@ if (onkoKirjautunut()) {
 
     
     // raakaaineet.php?id
-    if (isset($_GET['id'])) {
+    if (isset($_GET['nayta'])) {
         
-        $ohjain->nayta($_GET['id']);
+        $ohjain->nayta($_GET['nayta']);
 
     // raakaaineet.php?lisaa, jos kirjautunut käyttäjä ei ole admin ei näytetä
     } elseif (isset($_GET['lisaa']) && onkoMuokkaaja()) {
@@ -41,17 +41,21 @@ if (onkoKirjautunut()) {
         
         $ohjain->poista($_POST['id']);
     
-    } elseif (isset($_GET['hae'])) {
+    } elseif (isset($_GET['sivu']) && isset($_GET['hae'])) {
 
-        $ohjain->hae($_GET['hae']);
+        $ohjain->hae($_GET['sivu'], $_GET['hae']);
         
-    }  else {
-        if (isset($_GET['sivu'])){
-            $sivu = (int)$_GET['sivu'];
-        } else {
-            $sivu = 0;
-        }
-        $ohjain->lista($sivu);
+    }  else if(isset($_GET['sivu'])){
+    
+        $ohjain->hae($_GET['sivu'], "");
+        
+    } else if(isset($_GET['hae'])){
+    
+        $ohjain->hae(0, $_GET['hae']);
+        
+    }else {
+    
+        $ohjain->hae(0, "");
     }  
     
 }

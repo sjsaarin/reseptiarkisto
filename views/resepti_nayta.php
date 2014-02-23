@@ -1,3 +1,8 @@
+<ol class="breadcrumb">
+  <li><a href="reseptit.php">Haku</a></li>
+  <li class="active">Resepti</li>
+</ol>
+
 <h1><?php echo htmlspecialchars($data->resepti->getNimi()); ?></h1>
 <br>
 <table class="table">
@@ -26,7 +31,7 @@
     <table>
         <tr>
             <td class="col-sm-1">
-                <form action='reseptit.php' method="post" onsubmit="return confirm('Oletko varma?')">
+                <form action='reseptit.php?poista' method="post" onsubmit="return confirm('Oletko varma?')">
                     <input type="hidden" name="id" value="<?php echo $data->resepti->getId(); ?>">
                     <input type="submit" class="btn btn-danger btn-xs" value="Poista resepti">
                 </form>

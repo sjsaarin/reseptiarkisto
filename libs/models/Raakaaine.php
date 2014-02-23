@@ -119,10 +119,11 @@ class Raakaaine {
      * @param type $nimi
      * @return \Raakaaine
      */
-    public static function haeNimella($nimi){
-        $sql = "SELECT * from raakaaineet WHERE nimi ILIKE ? ORDER by nimi";
+    public static function haeNimella($nimi, $sivu, $montako){
+        $sql = "SELECT * from raakaaineet WHERE nimi ILIKE ? ORDER by nimi LIMIT ? OFFSET ?";
         $kysely = getTietokantayhteys()->prepare($sql);
-        $kysely->execute(array("$nimi%"));
+        $kohta = $montako*$sivu;
+        $kysely->execute(array("$nimi%", $montako, $kohta));
         $tulokset = array();
             foreach($kysely->fetchAll(PDO::FETCH_OBJ) as $tulos) {
                 $raakaaine = new Raakaaine($tulos->id, $tulos->nimi, $tulos->kalorit, $tulos->hiilarit, $tulos->proteiinit, $tulos->rasvat, $tulos->hinta, $tulos->tiheys, $tulos->kpl_paino); 
@@ -186,13 +187,13 @@ class Raakaaine {
     */
     
     /**
-     * Palauttaa raaka-aineden lukumääärän kannassa
+     * Palauttaa nimeä vastaavien raaka-aineden lukumääärän kannassa
      * 
      * @return int
      */
-    public static function raakaaineidenLkm(){
-        $sql = "SELECT COUNT(*) from raakaaineet";
-        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute();
+    public static function raakaaineidenLkm($nimi){
+        $sql = "SELECT COUNT(*) from raakaaineet where nimi ILIKE ?";
+        $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array("$nimi%"));
         return $kysely->fetchColumn(0);
     }
     

@@ -1,4 +1,15 @@
-<h2><?php if ($data->tila === 'lisaa') { echo 'Lisää uusi kayttaja:'; } elseif ($data->tila === 'muokkaa'){ echo 'Muokkaa käyttäjän tietoja'; } ?></h2>
+<ol class="breadcrumb">
+    <li><a href="kayttajat.php">Haku</a></li>
+<?php if ($data->tila === 'lisaa'): ?>
+    <li class="active">Lisää</li>
+</ol>
+<h2>Lisää uusi käyttäjä</h2>
+<?php endif; ?>
+<?php if ($data->tila === 'muokkaa'): ?>
+    <li class="active">Muokkaa</li>
+</ol>
+<h2>Muokkaa käyttäjän tietoja</h2>
+<?php endif; ?>
 <br>
 <form class="form-horizontal" role="form"  action="kayttajat.php?<?php if ($data->tila === 'lisaa') { echo 'lisaa'; } elseif ($data->tila === 'muokkaa'){ echo 'paivita=' . $data->kayttaja->getId(); } ?>" method="POST">
     <?php if ($data->tila === 'muokkaa'): ?>

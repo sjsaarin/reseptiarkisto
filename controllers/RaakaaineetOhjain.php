@@ -22,23 +22,21 @@ class RaakaaineetOhjain {
                 'raakaaine' => $raakaaine
             ));
         } else {
-            naytaNakyma("views/raakaaine_nayta.php", array(
-                'sivu' => $this->sivun_nimi,
-                'title' => "Virhe!",
-                'raakaaine' => null,
-                'virhe' => 'Raaka-ainetta ei löytynyt'
-            ));
+            $_SESSION['virhe'] = "Raaka-ainetta (id: ". $id .") ei löytynyt";
+            header('Location: raakaaineet.php');   
         }
     }
 
     public function lista($sivu) {
         $raakaaineet = Raakaaine::haeSivu($sivu, 10);
         $lukumaara = Raakaaine::raakaaineidenLkm();
+        $sivuja = ceil($lukumaara/10);
         naytaNakyma("views/raakaaine_listaa.php", array(
             'sivu' => $this->sivun_nimi,
             'title' => "Raaka-aineet",
             'raakaaineet' => $raakaaineet,
-            'lkm' => $lukumaara
+            'sivuja' => $sivuja,
+            'sivunro' => $sivu
         ));
     }
 
@@ -104,12 +102,8 @@ class RaakaaineetOhjain {
                 'raakaaine' => $raakaaine
             ));
         } else {
-            naytaNakyma("views/raakaaine_nayta.php", array(
-                'sivu' => $this->sivun_nimi,
-                'title' => "Virhe!",
-                'raakaaine' => null,
-                'virhe' => 'Raaka-ainetta ei löytynyt'
-            ));
+            $_SESSION['virhe'] = 'Raaka-ainetta ei löytynyt';
+            header('Location: raakaaineet.php');
         }
     }
 
@@ -129,14 +123,18 @@ class RaakaaineetOhjain {
         }
     }
 
-    public function hae($nimi) {
+    public function hae($sivu, $nimi) {
 
-        $raakaaineet = Raakaaine::haeNimella($nimi);
+        $raakaaineet = Raakaaine::haeNimella($nimi, $sivu, 10);
+        $lukumaara = Raakaaine::raakaaineidenLkm($nimi);
+        $sivuja = ceil($lukumaara/10);
         naytaNakyma("views/raakaaine_listaa.php", array(
             'sivu' => $this->sivun_nimi,
             'title' => "Raaka-aineet",
             'raakaaineet' => $raakaaineet,
-            'lkm' => count($raakaaineet)
+            'sivuja' => $sivuja,
+            'sivunro' => $sivu,
+            'nimi' => $nimi
         ));
     }
 

@@ -1,3 +1,6 @@
+<ol class="breadcrumb">
+  <li class="active">Haku</li>
+</ol>
 
 <h1>Reseptit</h1>
 <br>

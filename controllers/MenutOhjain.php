@@ -117,7 +117,15 @@ class MenutOhjain{
         
     }
     
-    public function poista(){
+    public function poista($id){
+        $poistuiko = Menu::poistaMenuKannasta((int)$id);
+        if ($poistuiko){
+            $_SESSION['ilmoitus'] = "Menu poistettu onnistuneesti";
+            header('Location: menut.php');
+        } else {
+            $_SESSION['virhe'] = "Menun poisto epäonnistui";
+            header('Location: menut.php?nayta=' . $id);
+        }
         
     }
     

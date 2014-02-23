@@ -35,12 +35,8 @@ class ReseptitOhjain {
                 'raakaaineet' => $raakaaineet
             ));
         } else {
-            naytaNakyma("views/resepti_nayta.php", array(
-                'sivu' => $this->sivun_nimi,
-                'title' => "Virhe!",
-                'raakaaine' => null,
-                'virhe' => 'Reseptiä ei löytynyt'
-            ));
+            $_SESSION['virhe'] = "Reseptiä (id: " .$id. "ei löytynyt";
+            header('Location: reseptit.php');
         }
     }
 

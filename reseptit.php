@@ -33,9 +33,9 @@ if (onkoKirjautunut()) {
         $ohjain->tallenna('lisays', $_POST['nimi'], $_POST['kategoria'], 
                 $_POST['raakaaine'], $_POST['maara'], $_POST['yksikko'], $_POST['annoksia'], $_POST['ohje'], $_POST['juomasuositus'], $_POST['lahde']);
         
-    } elseif (isset($_POST['id']) && (onkoAdmin() || onkoMuokkaaja()) ){
+    } elseif (isset($_GET['poista']) && isset($_POST['id']) && (onkoMuokkaaja()) ){
         
-        $ohjain->poista($_POST['id'] && (onkoAdmin() || onkoMuokkaaja()));
+        $ohjain->poista($_POST['id']);
         
     } elseif (isset($_GET['nimi'])) {
     

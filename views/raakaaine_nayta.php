@@ -1,3 +1,7 @@
+<ol class="breadcrumb">
+  <li><a href="raakaaineet.php">Haku</a></li>
+  <li class="active">Raaka-aine</li>
+</ol>
 <?php if (!$data->raakaaine == null): ?>
     <h2><?php echo htmlspecialchars($data->raakaaine->getNimi()); ?></h2>
     <br>

@@ -85,12 +85,15 @@ class Menu {
         $kysely = getTietokantayhteys()->prepare($sql); $kysely->execute(array($this->getId()));
     }
     
-    public function poistaKannasta(){
-        
-    }
-    
     public static function poistaMenuKannasta($id){
-        
+        $sql = "DELETE from menut where id=?";
+        $kysely = getTietokantayhteys()->prepare($sql); 
+        try { 
+            $kysely->execute(array($id));
+        } catch (PDOException $e) { 
+            return false; 
+        } 
+        return true;
     }
     
     /**
